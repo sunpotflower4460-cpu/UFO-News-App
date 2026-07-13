@@ -1,0 +1,41 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+*.xcuserdatad/
+xcuserdata/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Packages/
+
+# Secrets / environment
+.env
+.env.local
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+AuthKey_*.p8
+
+# Python (tooling)
+__pycache__/
+*.pyc
+.venv/
+
+# Node (admin, later phases)
+node_modules/
+.next/
+
+# Logs / scratch
+*.log
+/scratch/

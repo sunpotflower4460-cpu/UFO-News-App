@@ -1,0 +1,30 @@
+{
+  "sourceLanguage" : "ja",
+  "strings" : {
+    "tab.today" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "今日" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Today" } }
+      }
+    },
+    "tab.map" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "地図" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Map" } }
+      }
+    },
+    "tab.research" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "探す" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Explore" } }
+      }
+    },
+    "tab.settings" : {
+      "localizations" : {
+        "ja" : { "stringUnit" : { "state" : "translated", "value" : "設定" } },
+        "en" : { "stringUnit" : { "state" : "translated", "value" : "Settings" } }
+      }
+    }
+  },
+  "version" : "1.0"
+}
