@@ -1,0 +1,41 @@
+# V3 Implementation Log — Clarity / Trust / Editorial Depth
+
+正本は `SKYTRACE_UIUX_V3_WORLD_CLASS_DIRECTIVE.md`。作業ブランチ `uiux/v3-clarity-trust`（main から作成）。
+実CI（`ios.yml`, macOS / Swift 6 / iOS 17 simulator）で build + unit tests green を各フェーズで確認。
+
+## Phase V3-0 — Baseline
+- `docs/uiux/V3_BASELINE_REVIEW.md` 作成：P0各項目を実在コードへ対応づけ、非目標を明文化。
+- ベースラインは merged main（PR #2/#3/#4 反映済み、CI green）。
+
+## Phase V3-1 — Trust & Interaction P0（実装済み・CI green: 879645b）
+
+| P0 | 実装 | 主な変更ファイル |
+|----|------|------------------|
+| P0-01 | `AppRouter`（tab selection）導入。Today「地図で見る」CTA→Mapタブ遷移。 | `App/AppRouter.swift`(新), `App/RootTabView.swift`, `App/SkyTraceApp.swift`, `Features/Today/TodayV2View.swift`, `DesignSystem/Components/WorldSkyPulse.swift` |
+| P0-02 | WorldSkyPulseのVoiceOver分離（要約=1要素／CTA=独立ボタン）。文言「地図で見る」。 | `DesignSystem/Components/WorldSkyPulse.swift`, `Resources/SkyStrings.swift` |
+| P0-03 | CaseCardをV2ステータス語彙（`CaseStatusLabel/Glyph`+`v2Status`）へ統一。a11yも。 | `DesignSystem/Components/CaseCard.swift` |
+| P0-04 | Search：300ms debounce＋Task cancel、空検索スキップ、実際の`matchReason`、facetsは`allCases`から。 | `Features/Research/ResearchViewModel.swift`, `Features/Research/SearchV2View.swift`, `Resources/SkyStrings.swift` |
+| P0-05 | Evidence（記録）とSources（引用）を分離。`EvidenceItem`を記録性のある出典から導出。二重表示解消。 | `Domain/Models/EvidenceItem.swift`(新), `Domain/Models/UAPCase+V2.swift`, `DesignSystem/Components/EvidenceItemRow.swift`(新), `Features/CaseDetail/CaseDetailV2View.swift` |
+| P0-06 | Related Casesを`NavigationLink`で遷移可能に（関連理由をa11yに含む）。 | `Features/CaseDetail/CaseDetailV2View.swift` |
+| P0-07 | LongFormを`article.blocks`順に走査。最初のgatedでロック挿入、順序不変。 | `Features/LongForm/LongFormView.swift` |
+| P0-08 | Map：detent選択をstate化、選択でSheet`.medium`＋一覧スクロール、クラスタは範囲フィット、7pt廃止。 | `Features/Map/MapV2View.swift` |
+| P0-09 | Settings：キャッシュ削除を実動（確認＋件数＋成功haptic）、通知は`UNUserNotificationCenter`実権限連動。 | `Features/Settings/SettingsView.swift`, `Services/NotificationService.swift`(新), `Data/Repositories/LibraryStore.swift`, `Domain/Repositories/Repositories.swift` |
+| P0-10 | Today：`Loadable`で状態UI（skeleton／cached・offline／partial／error+retry）。既存の`SkeletonCard`/`InlineBanner`/`ErrorStateView`を活用。 | `Features/Today/TodayV2View.swift` |
+
+- ユニットテスト追加：`AppRouterTests`（tab切替）。
+- CI設定：`ios.yml`を`uiux/**`のpushでも実行。
+- CI検出バグ修正：`NotificationService`で非Sendableな`UNNotificationSettings`が@MainActor境界を越える問題→continuationで`authorizationStatus`のみ取得。
+
+## Decisions
+- **D-V3-001**：Evidence/Sources役割分離（Evidenceは記録性のある出典から導出。実データ接続時は直接投入）。
+- **D-V3-002**：通知トグルをOS権限（未設定/拒否/許可）に連動。
+
+## 完了条件（V3-1）達成状況
+- 動かないCTA無し（P0-01/06）／検索一致理由の流用無し（P0-04）／出典重複無し（P0-05）／premium gateで記事順不変（P0-07）／Map選択がSheetへ反映（P0-08）／7pt廃止（P0-08）／unit tests green（CI）。✅
+
+## 残（次フェーズ）
+- **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
+- **Phase V3-2**（World Pulse metrics / executive summary / section navigator / citation drawer / lead visual / state containers）
+- **Phase V3-3**（Map/Explore同期・facets・recent searches）
+- **Phase V3-4**（Long-form reading・contextual gate・Paywall preview・Trust Center・notification permission連携UI）
+- **Phase V3-5**（Dark/Light・AX・Reduce Motion/Transparency・Instruments・App Store surface）
