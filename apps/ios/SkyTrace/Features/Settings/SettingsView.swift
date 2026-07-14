@@ -133,6 +133,11 @@ struct SettingsView: View {
             Picker(SkyStrings.t("settings.dev.previewState"), selection: previewStateBinding) {
                 ForEach(PreviewStateOverride.allCases) { Text($0.label).tag($0) }
             }
+            NavigationLink {
+                DesignGalleryView()
+            } label: {
+                Label("Design Gallery", systemImage: "swatchpalette")
+            }
         }
     }
 

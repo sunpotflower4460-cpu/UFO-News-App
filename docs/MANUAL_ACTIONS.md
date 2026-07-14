@@ -43,3 +43,12 @@ Claude Codeが実行できない、または資格情報・契約・実機が必
 ## AI（Phase 5）
 
 - **M-040** LLMプロバイダーのAPIキー（サーバ側`.env`のみ。iOSへは埋め込まない）。未設定時は`FakeLLMProvider`で動作。
+
+## V2 UI/UX（追加）
+
+- **M-050 Widget拡張ターゲットの追加（Xcode必須）**
+  `apps/ios/SkyTrace/Widgets/SkyWidgets.swift` に Widget content views・`TimelineProvider`・`StaticConfiguration`（`SkyTodayWidget`）を実装済み。ただし実際にホーム/ロック画面へ出すには、Xcodeで **Widget Extension ターゲット**を追加し、その `@main WidgetBundle` から `SkyTodayWidget` を参照する必要がある（extensionのInfo.plist/capability/App Groupはコード生成では追加できない）。content viewsは共有可能。
+- **M-051 実機/Simulator確認（macOS必須）**
+  V2画面のVoiceOver読み上げ順・Dynamic Type AX5・Reduce Motion/Transparency・スクリーンショット（`docs/uiux/`のScreenshot Story）・Instruments計測。`docs/uiux/UI_REVIEW_REPORT.md`の🟡項目。
+- **M-052 タブのV2/旧切替**
+  現在`RootTabView`はV2画面を表示。旧Phase 1画面（`TodayView`等）はコード内に残置。必要なら内部フラグ化して切替可能。
