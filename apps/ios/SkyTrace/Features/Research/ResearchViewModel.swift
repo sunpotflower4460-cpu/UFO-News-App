@@ -12,6 +12,9 @@ final class ResearchViewModel {
     var updatedThisWeek: [UAPCase] = []
     /// True while a debounced search is in flight (keeps prior results visible).
     var isRunning = false
+    /// Discovery load state for the initial screen (skeleton → ready / failed).
+    var didLoad = false
+    var loadFailed = false
     private var allCases: [UAPCase] = []
     private var searchTask: Task<Void, Never>?
 
@@ -31,13 +34,21 @@ final class ResearchViewModel {
     }
 
     func load() async {
-        allCases = (try? await caseRepo.allCases()) ?? []
+        do {
+            allCases = try await caseRepo.allCases()
+            loadFailed = false
+        } catch {
+            loadFailed = true
+            didLoad = true
+            return
+        }
         let recentIDs = await library.recentlyViewedIDs()
         recentlyViewed = recentIDs.compactMap { id in allCases.first { $0.id == id } }
         let savedIDs = Set(await library.bookmarkedIDs())
         saved = allCases.filter { savedIDs.contains($0.id) }
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: FixtureClock.today)!
         updatedThisWeek = allCases.filter { $0.hasRecentUpdate && $0.updatedAt >= weekAgo }
+        didLoad = true
         // Do not run an empty search on load — discovery is shown instead.
     }
 

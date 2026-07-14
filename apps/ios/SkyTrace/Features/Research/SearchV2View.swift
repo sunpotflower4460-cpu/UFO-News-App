@@ -12,8 +12,18 @@ struct SearchV2View: View {
     var body: some View {
         Group {
             if let model {
-                if model.isSearching { results(model) } else { discover(model) }
-            } else { ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity) }
+                if model.loadFailed {
+                    ErrorStateView { Task { await model.load() } }
+                } else if !model.didLoad {
+                    discoverSkeleton
+                } else if model.isSearching {
+                    results(model)
+                } else {
+                    discover(model)
+                }
+            } else {
+                discoverSkeleton
+            }
         }
         .background(SkyColor.canvas)
         .navigationTitle(SkyStrings.t("research.title"))
@@ -36,6 +46,16 @@ struct SearchV2View: View {
 
     private var searchBinding: Binding<String> {
         Binding(get: { model?.query ?? "" }, set: { model?.query = $0; model?.onQueryChange() })
+    }
+
+    private var discoverSkeleton: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: SkySpacing.x6) {
+                ForEach(0..<3, id: \.self) { _ in SkeletonCard() }
+            }
+            .padding(.horizontal, SkySpacing.screenEdge).padding(.vertical, SkySpacing.x4)
+        }
+        .accessibilityLabel(SkyStrings.t("state.loading"))
     }
 
     // MARK: Discovery root
