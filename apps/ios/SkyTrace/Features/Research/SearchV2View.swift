@@ -35,7 +35,7 @@ struct SearchV2View: View {
     }
 
     private var searchBinding: Binding<String> {
-        Binding(get: { model?.query ?? "" }, set: { model?.query = $0; Task { await model?.runSearch() } })
+        Binding(get: { model?.query ?? "" }, set: { model?.query = $0; model?.onQueryChange() })
     }
 
     // MARK: Discovery root
@@ -64,17 +64,16 @@ struct SearchV2View: View {
         }
     }
 
-    // Phenomena/theme chips built from shape tags (type-grouped discovery).
-    private func phenomena(_ model: ResearchViewModel) -> some View {
-        let tags = Array(Set(DemoCases.all.flatMap(\.shapeTags))).sorted().prefix(10)
-        return EditorialSection(title: SkyStrings.t("research.collections"), systemImage: "tag") {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), spacing: SkySpacing.x2)], alignment: .leading,
-                      spacing: SkySpacing.x2) {
-                ForEach(Array(tags), id: \.self) { tag in
-                    Button {
-                        model.query = tag; Task { await model.runSearch() }
-                    } label: { SkyChip(text: tag, systemImage: "number") }
-                    .buttonStyle(.plain)
+    // Phenomena/theme chips built from loaded data facets (not a fixture).
+    @ViewBuilder private func phenomena(_ model: ResearchViewModel) -> some View {
+        if !model.phenomenaTags.isEmpty {
+            EditorialSection(title: SkyStrings.t("research.collections"), systemImage: "tag") {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), spacing: SkySpacing.x2)], alignment: .leading,
+                          spacing: SkySpacing.x2) {
+                    ForEach(model.phenomenaTags, id: \.self) { tag in
+                        Button { model.selectTag(tag) } label: { SkyChip(text: tag, systemImage: "number") }
+                            .buttonStyle(.plain)
+                    }
                 }
             }
         }
@@ -98,6 +97,7 @@ struct SearchV2View: View {
                 HStack {
                     Text(SkyStrings.t("research.resultCount", String(model.results.count)))
                         .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
+                    if model.isRunning { ProgressView().controlSize(.mini) }
                     Spacer()
                     if model.filter.isActive {
                         Button(SkyStrings.t("research.clearFilters")) { model.clearFilters() }
@@ -114,7 +114,7 @@ struct SearchV2View: View {
                         .frame(maxWidth: .infinity)
                     }
                 } else {
-                    ForEach(model.results) { row($0, showReason: true) }
+                    ForEach(model.results) { c in row(c, reason: model.matchReason(for: c)) }
                 }
             }
             .padding(.horizontal, SkySpacing.screenEdge).padding(.vertical, SkySpacing.x4)
@@ -123,7 +123,7 @@ struct SearchV2View: View {
 
     // MARK: Result row (status geometry + reason)
 
-    private func row(_ c: UAPCase, showReason: Bool = false) -> some View {
+    private func row(_ c: UAPCase, reason: String? = nil) -> some View {
         NavigationLink { CaseDetailV2View(caseID: c.id) } label: {
             HStack(alignment: .top, spacing: SkySpacing.x3) {
                 CaseStatusGlyph(status: c.v2Status, size: 22, showsUpdateIndicator: c.hasRecentUpdate)
@@ -135,9 +135,10 @@ struct SearchV2View: View {
                         Text(c.localityName ?? c.regionName)
                         if let occurred = c.occurredAtStart { Text(SkyFormat.dateOnly(occurred)) }
                     }
-                    .font(.caption2).foregroundStyle(SkyColor.textTertiary)
-                    if showReason, let reason = c.priorityReason {
-                        Text(reason).font(.caption2).foregroundStyle(SkyColor.signalWarm).lineLimit(1)
+                    .font(SkyTypography.metadata).foregroundStyle(SkyColor.textTertiary)
+                    if let reason {
+                        Label(reason, systemImage: "text.magnifyingglass")
+                            .font(SkyTypography.metadata).foregroundStyle(SkyColor.signalWarm).lineLimit(1)
                     }
                 }
                 Spacer(minLength: 0)
