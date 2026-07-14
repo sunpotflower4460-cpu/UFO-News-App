@@ -34,6 +34,7 @@
 		1CCC9E976AEC2B6AF2C20997 /* SourceRow.swift */ = {isa = PBXBuildFile; fileRef = AE00F27F249F268EF350BC65 /* SourceRow.swift */; };
 		F235D1E4C7348ED35BF853DD /* StateViews.swift */ = {isa = PBXBuildFile; fileRef = D4F8E0B8CD6FC800F848DDD6 /* StateViews.swift */; };
 		6D5B2F7BD7C448AA216C96F7 /* TimelineEntryView.swift */ = {isa = PBXBuildFile; fileRef = 7FAB4D73C73FA4A6806F9DA9 /* TimelineEntryView.swift */; };
+		CFCB92D68DC9FD1D9237DACB /* WorldSkyPulse.swift */ = {isa = PBXBuildFile; fileRef = B5D936553FB6968DDA01668C /* WorldSkyPulse.swift */; };
 		9C55297DB09B2020D5B95792 /* Surfaces.swift */ = {isa = PBXBuildFile; fileRef = F22E25AFE2046C0B6718ABBE /* Surfaces.swift */; };
 		25502EC47932917657565599 /* CaseStatusGlyph.swift */ = {isa = PBXBuildFile; fileRef = 239E11430AA34E2C3275831B /* CaseStatusGlyph.swift */; };
 		B4847BF933B68F5F0D3BD5AD /* SkyCaseStatus.swift */ = {isa = PBXBuildFile; fileRef = B8BBBC557E03A69C5F5D0AFF /* SkyCaseStatus.swift */; };
@@ -67,6 +68,7 @@
 		5A634BBEEBE6AEE547265408 /* LegalPages.swift */ = {isa = PBXBuildFile; fileRef = 4310F744AF2D3503C5DC1BDC /* LegalPages.swift */; };
 		5AF368370CA911576A731428 /* SettingsView.swift */ = {isa = PBXBuildFile; fileRef = 33A7889D5E04A3171FA34D33 /* SettingsView.swift */; };
 		2568589966A2117B57A68702 /* PaywallView.swift */ = {isa = PBXBuildFile; fileRef = 00DD5986FB7249035FBF68F2 /* PaywallView.swift */; };
+		C7E4412322E3BCB476359062 /* TodayV2View.swift */ = {isa = PBXBuildFile; fileRef = BE0AA9FF0453596FC117B980 /* TodayV2View.swift */; };
 		41E7AD58EECBA9810935F17D /* TodayView.swift */ = {isa = PBXBuildFile; fileRef = 0EF501FD018D95EADDB090B4 /* TodayView.swift */; };
 		D44BCFA7CB57BB2CCB378B4A /* TodayViewModel.swift */ = {isa = PBXBuildFile; fileRef = DBE33AB44DFE73C049ADF70B /* TodayViewModel.swift */; };
 		C7DE86A3B54CDE55DB66192B /* WelcomeFlow.swift */ = {isa = PBXBuildFile; fileRef = E29EC6477F19C1DFB49DC626 /* WelcomeFlow.swift */; };
@@ -117,6 +119,7 @@
 		AE00F27F249F268EF350BC65 /* SourceRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SourceRow.swift"; sourceTree = "<group>"; };
 		D4F8E0B8CD6FC800F848DDD6 /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StateViews.swift"; sourceTree = "<group>"; };
 		7FAB4D73C73FA4A6806F9DA9 /* TimelineEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEntryView.swift"; sourceTree = "<group>"; };
+		B5D936553FB6968DDA01668C /* WorldSkyPulse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WorldSkyPulse.swift"; sourceTree = "<group>"; };
 		F22E25AFE2046C0B6718ABBE /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Surfaces.swift"; sourceTree = "<group>"; };
 		239E11430AA34E2C3275831B /* CaseStatusGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseStatusGlyph.swift"; sourceTree = "<group>"; };
 		B8BBBC557E03A69C5F5D0AFF /* SkyCaseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyCaseStatus.swift"; sourceTree = "<group>"; };
@@ -150,6 +153,7 @@
 		4310F744AF2D3503C5DC1BDC /* LegalPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LegalPages.swift"; sourceTree = "<group>"; };
 		33A7889D5E04A3171FA34D33 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 		00DD5986FB7249035FBF68F2 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
+		BE0AA9FF0453596FC117B980 /* TodayV2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayV2View.swift"; sourceTree = "<group>"; };
 		0EF501FD018D95EADDB090B4 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayView.swift"; sourceTree = "<group>"; };
 		DBE33AB44DFE73C049ADF70B /* TodayViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TodayViewModel.swift"; sourceTree = "<group>"; };
 		E29EC6477F19C1DFB49DC626 /* WelcomeFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WelcomeFlow.swift"; sourceTree = "<group>"; };
@@ -255,6 +259,7 @@
 				0FE476E531A0AF1638E56ABE,
 				AE00F27F249F268EF350BC65,
 				7FAB4D73C73FA4A6806F9DA9,
+				B5D936553FB6968DDA01668C,
 			);
 			path = "Components";
 			sourceTree = "<group>";
@@ -399,6 +404,7 @@
 		4D1B30875A5041E09B9DF8D2 /* Today */ = {
 			isa = PBXGroup;
 			children = (
+				BE0AA9FF0453596FC117B980,
 				0EF501FD018D95EADDB090B4,
 				DBE33AB44DFE73C049ADF70B,
 			);
@@ -531,6 +537,7 @@
 				1CCC9E976AEC2B6AF2C20997 /* SourceRow.swift */,
 				F235D1E4C7348ED35BF853DD /* StateViews.swift */,
 				6D5B2F7BD7C448AA216C96F7 /* TimelineEntryView.swift */,
+				CFCB92D68DC9FD1D9237DACB /* WorldSkyPulse.swift */,
 				9C55297DB09B2020D5B95792 /* Surfaces.swift */,
 				25502EC47932917657565599 /* CaseStatusGlyph.swift */,
 				B4847BF933B68F5F0D3BD5AD /* SkyCaseStatus.swift */,
@@ -564,6 +571,7 @@
 				5A634BBEEBE6AEE547265408 /* LegalPages.swift */,
 				5AF368370CA911576A731428 /* SettingsView.swift */,
 				2568589966A2117B57A68702 /* PaywallView.swift */,
+				C7E4412322E3BCB476359062 /* TodayV2View.swift */,
 				41E7AD58EECBA9810935F17D /* TodayView.swift */,
 				D44BCFA7CB57BB2CCB378B4A /* TodayViewModel.swift */,
 				C7DE86A3B54CDE55DB66192B /* WelcomeFlow.swift */,

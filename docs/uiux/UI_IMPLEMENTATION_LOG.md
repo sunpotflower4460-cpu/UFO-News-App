@@ -46,7 +46,16 @@
 - 本ログ作成。ベースラインは merged main（CI green）。
 
 ### Phase 1 — Design foundation & fixtures
-- Status: in progress
+- Status: complete（実CI green）— Aetherトークン、8ステータス幾何、AtmosphereCanvas、EditorialSurface、モーション、Design Gallery。
+
+### モデル進化（Phase 6下地）
+- Status: complete（実CI green）— AssessmentDimension/CaseChangeEntry/ConfirmedFact/RelatedCaseRef、UAPCase+V2導出、編集ロー。
+
+### Phase 6 — Case Detail V2（12節）
+- Status: complete（実CI green, 24698aa）— Header/What Changed/What Happened/Assessment/Confirmed Facts/Agreement/Contradictions/Evidence/Explanations/Timeline/Sources/Related。Design Galleryから到達。
+
+### Phase 3 — Today V2（World Sky Pulse）
+- Status: in progress — WorldSkyPulse + Briefing lead + Priority Case + Since Your Last Visit + Case Stream。Design Galleryから到達。
 
 ## Decisions / Deviations
 - D-V2-001: deployment target は iOS 17 を維持（既存の意図的下限）。V2のiOS 26推奨に対する逸脱理由を記録。

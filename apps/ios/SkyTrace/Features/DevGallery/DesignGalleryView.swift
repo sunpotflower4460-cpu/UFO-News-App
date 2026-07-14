@@ -8,6 +8,12 @@ struct DesignGalleryView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: SkySpacing.x8) {
                 NavigationLink {
+                    TodayV2View()
+                } label: {
+                    Label("Today V2 (World Sky Pulse)", systemImage: "sun.max")
+                        .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
+                }
+                NavigationLink {
                     CaseDetailV2View(caseID: DemoCases.northSeaNotable.id)
                 } label: {
                     Label("Case Detail V2 (12 sections)", systemImage: "doc.richtext")
