@@ -8,12 +8,20 @@ final class MapViewModel {
     var allCases: [UAPCase] = []
     var filter = CaseFilter()
     var longitudeSpan: Double = 200
+    var didLoad = false
+    var loadFailed = false
 
     private let caseRepo: any CaseRepository
     init(caseRepo: any CaseRepository) { self.caseRepo = caseRepo }
 
     func load() async {
-        allCases = (try? await caseRepo.allCases()) ?? []
+        do {
+            allCases = try await caseRepo.allCases()
+            loadFailed = false
+        } catch {
+            loadFailed = true
+        }
+        didLoad = true
     }
 
     var filteredCases: [UAPCase] {

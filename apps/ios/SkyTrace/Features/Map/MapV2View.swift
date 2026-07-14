@@ -18,7 +18,15 @@ struct MapV2View: View {
 
     var body: some View {
         mapLayer
-            .overlay(alignment: .top) { filterBar }
+            .overlay(alignment: .top) {
+                VStack(spacing: SkySpacing.x2) {
+                    filterBar
+                    if let model, model.loadFailed {
+                        InlineBanner(kind: .offline) { Task { await model.load() } }
+                            .padding(.horizontal, SkySpacing.screenEdge)
+                    }
+                }
+            }
             .background(SkyColor.canvas)
             .navigationTitle(SkyStrings.t("map.title"))
             .navigationBarTitleDisplayMode(.inline)

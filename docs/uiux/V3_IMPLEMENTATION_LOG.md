@@ -33,6 +33,18 @@
 ## 完了条件（V3-1）達成状況
 - 動かないCTA無し（P0-01/06）／検索一致理由の流用無し（P0-04）／出典重複無し（P0-05）／premium gateで記事順不変（P0-07）／Map選択がSheetへ反映（P0-08）／7pt廃止（P0-08）／unit tests green（CI）。✅
 
+## Phase V3-2 — Today & Case Clarity（進行中・実CI green）
+
+| 項目 | 実装 | ファイル |
+|------|------|----------|
+| World Pulse metrics | 3指標（新規報告/統合事例/評価更新）＋カバレッジ常時可視化＋可読性スクリム。数字はmonospaced-digit、VoiceOverは3指標を集約。 | `DesignSystem/Components/WorldSkyPulse.swift`, `Features/Today/TodayV2View.swift` |
+| Case Executive Summary | Case Detail最上部に「現時点」ブロック（現状＋有力な説明候補＋未解決点）。`currentAssessment`/説明候補matchScore/gapsから導出。 | `Domain/Models/UAPCase+V2.swift`, `DesignSystem/Components/CaseExecutiveSummary.swift`(新), `Features/CaseDetail/CaseDetailV2View.swift` |
+| Search 状態コンテナ（P0-10継続） | 初期ロードにSkeletonCard、失敗時ErrorStateView。`didLoad`/`loadFailed`でtry?の握り潰しを廃止。 | `Features/Research/ResearchViewModel.swift`, `Features/Research/SearchV2View.swift` |
+| Map 状態コンテナ（P0-10継続） | 読み込み失敗時にoffline InlineBanner（再試行）。`MapViewModel`に`didLoad`/`loadFailed`。 | `Features/Map/MapViewModel.swift`, `Features/Map/MapV2View.swift` |
+
+### V3-2 残
+- CaseSectionNavigator（sticky section chips）、Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual、CaseDetailの状態UI（loading skeleton）。
+
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
 - **Phase V3-2**（World Pulse metrics / executive summary / section navigator / citation drawer / lead visual / state containers）

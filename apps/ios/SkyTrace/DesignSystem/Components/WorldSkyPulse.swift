@@ -20,8 +20,11 @@ struct WorldSkyPulse: View {
                 AtmosphereCanvas(dayFraction: 0.2, signals: signals,
                                  parallax: CGSize(width: 0, height: geo.frame(in: .global).minY * 0.06))
             }
-            LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.66)],
-                           startPoint: .center, endPoint: .bottom)
+            // Legibility scrim: keeps the metrics/labels readable over bright
+            // atmosphere signals behind them.
+            LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.45),
+                                    SkyColor.aetherZenith.opacity(0.85)],
+                           startPoint: .init(x: 0.5, y: 0.28), endPoint: .bottom)
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
                 // The world summary is one VoiceOver element…
                 VStack(alignment: .leading, spacing: SkySpacing.x2) {
