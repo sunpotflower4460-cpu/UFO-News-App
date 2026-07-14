@@ -52,7 +52,11 @@ struct ArticleBlockView: View {
     /// back to a plain footnote so a block never loses its provenance.
     @ViewBuilder private var citations: some View {
         let numbered = block.sourceIDs.compactMap { id in citationNumber(id).map { (id, $0) } }
-        if !numbered.isEmpty {
+        // Ids that don't resolve to a real source still get a plain footnote so
+        // a block never silently loses provenance — even when other ids in the
+        // same block do resolve to tappable markers.
+        let unresolved = block.sourceIDs.filter { citationNumber($0) == nil }
+        if !numbered.isEmpty || !unresolved.isEmpty {
             HStack(spacing: SkySpacing.x1) {
                 ForEach(numbered, id: \.0) { id, n in
                     Button { onCite(id) } label: {
@@ -66,10 +70,11 @@ struct ArticleBlockView: View {
                     .accessibilityLabel(SkyStrings.t("citation.marker", String(n)))
                     .accessibilityHint(SkyStrings.t("citation.hint"))
                 }
+                if !unresolved.isEmpty {
+                    Text("— " + unresolved.map { "[\($0)]" }.joined(separator: " "))
+                        .font(.caption2).foregroundStyle(SkyColor.signalCyan)
+                }
             }
-        } else if !block.sourceIDs.isEmpty {
-            Text("— " + block.sourceIDs.map { "[\($0)]" }.joined(separator: " "))
-                .font(.caption2).foregroundStyle(SkyColor.signalCyan)
         }
     }
 }
