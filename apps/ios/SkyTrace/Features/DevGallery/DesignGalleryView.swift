@@ -37,6 +37,7 @@ struct DesignGalleryView: View {
                     Label("Case Detail V2 (12 sections)", systemImage: "doc.richtext")
                         .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
                 }
+                aetherOrb
                 atmosphere
                 statuses
                 assessment
@@ -49,6 +50,17 @@ struct DesignGalleryView: View {
         .background(SkyColor.canvas)
         .navigationTitle("Design Gallery")
         .navigationBarTitleDisplayMode(.inline)
+    }
+
+    private var aetherOrb: some View {
+        EditorialSection(title: "AetherOrb (observation lens)", systemImage: "circle.hexagongrid") {
+            HStack(spacing: SkySpacing.x4) {
+                AetherOrb(seed: 11).frame(width: 150, height: 150)
+                AetherOrb(seed: 4).frame(width: 150, height: 150)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, SkySpacing.x2)
+        }
     }
 
     private var atmosphere: some View {

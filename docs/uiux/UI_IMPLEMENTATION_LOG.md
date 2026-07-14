@@ -63,6 +63,15 @@
 - Long-form: complete（実CI green, a20390a）— LongFormView（Editorial reading, Plusゲート, disclosure）。Case Detail V2 と Gallery から到達。
 - Widgets: content views + TimelineProvider + StaticConfiguration をアプリターゲットに実装（in progress）。**extensionターゲット化は M-050（Xcode必須）**。Gallery に content preview。
 
+### Phase 9 — Aether depth pass（起動/Welcome + Today ヒーローの立体・神秘化）
+- Status: in progress — ユーザー要望「開いた瞬間の分かりやすさ＋UFOを思わせる立体的で神秘的なデザイン」を**バランス型**で反映。
+  - トークン追加：`aetherZenith`/`auroraViolet`/`auroraCyan`/`starField`/`aetherGlow`（装飾専用、情報の唯一の担い手にしない）。
+  - `AtmosphereCanvas`：深い天頂グラデ＋決定論的スターフィールド＋オーロラ帯＋強調シグナルの発光ハロー＋`parallax`。Reduce Motion/Transparency/Low Power で静止フォールバック（スナップショット安全）。
+  - `AetherOrb`（新規）：リムライト球＋同心オービットリング＋横切る光点＋ハローの「観測レンズ」。非具象（円盤/宇宙人にしない）。Reduce Motion で静止。
+  - `WelcomeFlow`：全面Atmosphere背景＋ビネット＋AetherOrb（微float）＋見出し微光＋ガラスのポリシーカード。文言・コントラスト維持。
+  - `WorldSkyPulse`：スクロール視差＋トップのリムライト＋深度シャドウ。
+  - Design Gallery に AetherOrb を追加。原則（可読性/色単独不可/非扇情/パーティクル不使用）厳守。
+
 ### 残（人手/macOS）
 - VoiceOver実機・AX5・Reduce Motion/Transparency確認、スクリーンショット、Instruments（M-051）。
 - Widget extension ターゲット（M-050）。実データ接続（Phase 11）、App Store提出（Phase 12）。
