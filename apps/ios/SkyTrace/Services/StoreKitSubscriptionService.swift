@@ -24,8 +24,12 @@ actor StoreKitSubscriptionService: SubscriptionProviding {
     }
 
     func purchase(productID: String) async -> PurchaseOutcome {
-        guard let product = productsByID[productID]
-            ?? (try? await Product.products(for: [productID]))?.first else {
+        // Note: `await` cannot live inside the `??` autoclosure, so resolve first.
+        var product = productsByID[productID]
+        if product == nil {
+            product = (try? await Product.products(for: [productID]))?.first
+        }
+        guard let product else {
             return .failed(message: "商品を取得できませんでした。")
         }
         do {
