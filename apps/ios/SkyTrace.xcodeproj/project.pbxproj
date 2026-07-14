@@ -18,9 +18,11 @@
 		882626D249A6644BCC439455 /* FixtureBuilders.swift */ = {isa = PBXBuildFile; fileRef = 10F89EE1022E58536191BA96 /* FixtureBuilders.swift */; };
 		2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */ = {isa = PBXBuildFile; fileRef = 19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */; };
 		702BBE8AFB5590330AE22EDD /* LibraryStore.swift */ = {isa = PBXBuildFile; fileRef = 6208EC69C22BDD34798DDC60 /* LibraryStore.swift */; };
+		3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */ = {isa = PBXBuildFile; fileRef = 9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */; };
 		39D4328698BB1FBC922FDCBA /* Badges.swift */ = {isa = PBXBuildFile; fileRef = 6773B15442645C38C95F0771 /* Badges.swift */; };
 		DFBCE17F55A976C1066BE02E /* CaseCard.swift */ = {isa = PBXBuildFile; fileRef = 83342F3181619CADEB5CA9B9 /* CaseCard.swift */; };
 		04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */ = {isa = PBXBuildFile; fileRef = 5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */; };
+		2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */ = {isa = PBXBuildFile; fileRef = 91B71D08AD149440583B2649 /* EditorialSurface.swift */; };
 		E2C6113D4218884A9D8B3D32 /* EvidenceSection.swift */ = {isa = PBXBuildFile; fileRef = 2353474FBA45FDE4BCF697B0 /* EvidenceSection.swift */; };
 		EBD5DD6D09BE56E652EF9222 /* ExplanationCandidateCard.swift */ = {isa = PBXBuildFile; fileRef = 7740DD12CA011FC7C6F67E57 /* ExplanationCandidateCard.swift */; };
 		C37F2C5730E6C8B4F24093FA /* GlobalSummaryHero.swift */ = {isa = PBXBuildFile; fileRef = 2782B09EC1AE20F5EA7A5997 /* GlobalSummaryHero.swift */; };
@@ -32,9 +34,12 @@
 		F235D1E4C7348ED35BF853DD /* StateViews.swift */ = {isa = PBXBuildFile; fileRef = D4F8E0B8CD6FC800F848DDD6 /* StateViews.swift */; };
 		6D5B2F7BD7C448AA216C96F7 /* TimelineEntryView.swift */ = {isa = PBXBuildFile; fileRef = 7FAB4D73C73FA4A6806F9DA9 /* TimelineEntryView.swift */; };
 		9C55297DB09B2020D5B95792 /* Surfaces.swift */ = {isa = PBXBuildFile; fileRef = F22E25AFE2046C0B6718ABBE /* Surfaces.swift */; };
+		25502EC47932917657565599 /* CaseStatusGlyph.swift */ = {isa = PBXBuildFile; fileRef = 239E11430AA34E2C3275831B /* CaseStatusGlyph.swift */; };
+		B4847BF933B68F5F0D3BD5AD /* SkyCaseStatus.swift */ = {isa = PBXBuildFile; fileRef = B8BBBC557E03A69C5F5D0AFF /* SkyCaseStatus.swift */; };
 		A5051B4C6C6F3AD4CDC1A8AA /* Formatters.swift */ = {isa = PBXBuildFile; fileRef = 8D2D1B5CA6DD6C87900D4283 /* Formatters.swift */; };
 		BC9F3A73643A40167A3A5F4D /* SkyColor.swift */ = {isa = PBXBuildFile; fileRef = 8984A65202CF399CD597BDD8 /* SkyColor.swift */; };
 		1161AC362A3C98941BFD3811 /* SkyMetrics.swift */ = {isa = PBXBuildFile; fileRef = B38D0A7A9F65E7B3454D0941 /* SkyMetrics.swift */; };
+		C87BCDADC2C55A85C1766DC5 /* SkyMotion.swift */ = {isa = PBXBuildFile; fileRef = 945F1CF01FDF10EE3393B55F /* SkyMotion.swift */; };
 		0E7D0251022F4107B201D5C0 /* ArticleBlock.swift */ = {isa = PBXBuildFile; fileRef = 5FABB78C89EE9309368DDC70 /* ArticleBlock.swift */; };
 		AD09BF87F16AF0DDC265789F /* CaseEnums.swift */ = {isa = PBXBuildFile; fileRef = 52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */; };
 		1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */ = {isa = PBXBuildFile; fileRef = EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */; };
@@ -49,6 +54,7 @@
 		ED11B7798C9EA2B7D8DD6646 /* CaseDetailView.swift */ = {isa = PBXBuildFile; fileRef = 46EB7C3DEADAA027A178DA0D /* CaseDetailView.swift */; };
 		BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */ = {isa = PBXBuildFile; fileRef = B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */; };
 		2F778D595193C1659B895EDB /* CaseNavigation.swift */ = {isa = PBXBuildFile; fileRef = 05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */; };
+		3753C107A274107F4D4E8D77 /* DesignGalleryView.swift */ = {isa = PBXBuildFile; fileRef = 55A3843AB902AC6103DBC46E /* DesignGalleryView.swift */; };
 		D71F3BE96CCEF79A6FCF3070 /* MapClustering.swift */ = {isa = PBXBuildFile; fileRef = 6C2A2013F25D35BC93508A04 /* MapClustering.swift */; };
 		62A56F036BF0C6F3B3D2824E /* MapView.swift */ = {isa = PBXBuildFile; fileRef = E2A40C314D1E8691A228DA28 /* MapView.swift */; };
 		5E27C5CA5F42C4DF02AB10CD /* MapViewModel.swift */ = {isa = PBXBuildFile; fileRef = 4A9BA9736EAC25F760284B90 /* MapViewModel.swift */; };
@@ -91,9 +97,11 @@
 		10F89EE1022E58536191BA96 /* FixtureBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureBuilders.swift"; sourceTree = "<group>"; };
 		19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureRepositories.swift"; sourceTree = "<group>"; };
 		6208EC69C22BDD34798DDC60 /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStore.swift"; sourceTree = "<group>"; };
+		9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AtmosphereCanvas.swift"; sourceTree = "<group>"; };
 		6773B15442645C38C95F0771 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badges.swift"; sourceTree = "<group>"; };
 		83342F3181619CADEB5CA9B9 /* CaseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseCard.swift"; sourceTree = "<group>"; };
 		5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyBriefingCard.swift"; sourceTree = "<group>"; };
+		91B71D08AD149440583B2649 /* EditorialSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorialSurface.swift"; sourceTree = "<group>"; };
 		2353474FBA45FDE4BCF697B0 /* EvidenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceSection.swift"; sourceTree = "<group>"; };
 		7740DD12CA011FC7C6F67E57 /* ExplanationCandidateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExplanationCandidateCard.swift"; sourceTree = "<group>"; };
 		2782B09EC1AE20F5EA7A5997 /* GlobalSummaryHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlobalSummaryHero.swift"; sourceTree = "<group>"; };
@@ -105,9 +113,12 @@
 		D4F8E0B8CD6FC800F848DDD6 /* StateViews.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StateViews.swift"; sourceTree = "<group>"; };
 		7FAB4D73C73FA4A6806F9DA9 /* TimelineEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimelineEntryView.swift"; sourceTree = "<group>"; };
 		F22E25AFE2046C0B6718ABBE /* Surfaces.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Surfaces.swift"; sourceTree = "<group>"; };
+		239E11430AA34E2C3275831B /* CaseStatusGlyph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseStatusGlyph.swift"; sourceTree = "<group>"; };
+		B8BBBC557E03A69C5F5D0AFF /* SkyCaseStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyCaseStatus.swift"; sourceTree = "<group>"; };
 		8D2D1B5CA6DD6C87900D4283 /* Formatters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatters.swift"; sourceTree = "<group>"; };
 		8984A65202CF399CD597BDD8 /* SkyColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyColor.swift"; sourceTree = "<group>"; };
 		B38D0A7A9F65E7B3454D0941 /* SkyMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyMetrics.swift"; sourceTree = "<group>"; };
+		945F1CF01FDF10EE3393B55F /* SkyMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyMotion.swift"; sourceTree = "<group>"; };
 		5FABB78C89EE9309368DDC70 /* ArticleBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArticleBlock.swift"; sourceTree = "<group>"; };
 		52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseEnums.swift"; sourceTree = "<group>"; };
 		EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseScores.swift"; sourceTree = "<group>"; };
@@ -122,6 +133,7 @@
 		46EB7C3DEADAA027A178DA0D /* CaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailView.swift"; sourceTree = "<group>"; };
 		B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailViewModel.swift"; sourceTree = "<group>"; };
 		05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseNavigation.swift"; sourceTree = "<group>"; };
+		55A3843AB902AC6103DBC46E /* DesignGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignGalleryView.swift"; sourceTree = "<group>"; };
 		6C2A2013F25D35BC93508A04 /* MapClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapClustering.swift"; sourceTree = "<group>"; };
 		E2A40C314D1E8691A228DA28 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView.swift"; sourceTree = "<group>"; };
 		4A9BA9736EAC25F760284B90 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewModel.swift"; sourceTree = "<group>"; };
@@ -220,9 +232,11 @@
 			isa = PBXGroup;
 			children = (
 				FCD719C4C33318EF49B871BE,
+				9061F9AB7FFDBAA24FBF9699,
 				6773B15442645C38C95F0771,
 				83342F3181619CADEB5CA9B9,
 				5F6BC68C43341D3669581D93,
+				91B71D08AD149440583B2649,
 				2353474FBA45FDE4BCF697B0,
 				7740DD12CA011FC7C6F67E57,
 				2782B09EC1AE20F5EA7A5997,
@@ -244,12 +258,22 @@
 			path = "Modifiers";
 			sourceTree = "<group>";
 		};
+		8696FE4985115B514433F569 /* Status */ = {
+			isa = PBXGroup;
+			children = (
+				239E11430AA34E2C3275831B,
+				B8BBBC557E03A69C5F5D0AFF,
+			);
+			path = "Status";
+			sourceTree = "<group>";
+		};
 		5B535CA2D9A2DEFB76ABCC6B /* Tokens */ = {
 			isa = PBXGroup;
 			children = (
 				8D2D1B5CA6DD6C87900D4283,
 				8984A65202CF399CD597BDD8,
 				B38D0A7A9F65E7B3454D0941,
+				945F1CF01FDF10EE3393B55F,
 			);
 			path = "Tokens";
 			sourceTree = "<group>";
@@ -259,6 +283,7 @@
 			children = (
 				365D3CC3EA26C84EC53CBEE3,
 				0EB914AE8464557D17F934CD,
+				8696FE4985115B514433F569,
 				5B535CA2D9A2DEFB76ABCC6B,
 			);
 			path = "DesignSystem";
@@ -313,6 +338,14 @@
 				05AC1A7E251EF597BA23C133,
 			);
 			path = "CaseDetail";
+			sourceTree = "<group>";
+		};
+		76CC0D1E8C909668D908D216 /* DevGallery */ = {
+			isa = PBXGroup;
+			children = (
+				55A3843AB902AC6103DBC46E,
+			);
+			path = "DevGallery";
 			sourceTree = "<group>";
 		};
 		B7F95DB0D05DBEB9A7967EF3 /* Map */ = {
@@ -373,6 +406,7 @@
 			children = (
 				7CB1D3B1CC01255B3C24D7AC,
 				3E5A8F18CE7B15471C48F354,
+				76CC0D1E8C909668D908D216,
 				B7F95DB0D05DBEB9A7967EF3,
 				8BCF6F07BFF34C125CA41B54,
 				7D1C411494653E132D7C6F75,
@@ -469,9 +503,11 @@
 				882626D249A6644BCC439455 /* FixtureBuilders.swift */,
 				2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */,
 				702BBE8AFB5590330AE22EDD /* LibraryStore.swift */,
+				3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */,
 				39D4328698BB1FBC922FDCBA /* Badges.swift */,
 				DFBCE17F55A976C1066BE02E /* CaseCard.swift */,
 				04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */,
+				2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */,
 				E2C6113D4218884A9D8B3D32 /* EvidenceSection.swift */,
 				EBD5DD6D09BE56E652EF9222 /* ExplanationCandidateCard.swift */,
 				C37F2C5730E6C8B4F24093FA /* GlobalSummaryHero.swift */,
@@ -483,9 +519,12 @@
 				F235D1E4C7348ED35BF853DD /* StateViews.swift */,
 				6D5B2F7BD7C448AA216C96F7 /* TimelineEntryView.swift */,
 				9C55297DB09B2020D5B95792 /* Surfaces.swift */,
+				25502EC47932917657565599 /* CaseStatusGlyph.swift */,
+				B4847BF933B68F5F0D3BD5AD /* SkyCaseStatus.swift */,
 				A5051B4C6C6F3AD4CDC1A8AA /* Formatters.swift */,
 				BC9F3A73643A40167A3A5F4D /* SkyColor.swift */,
 				1161AC362A3C98941BFD3811 /* SkyMetrics.swift */,
+				C87BCDADC2C55A85C1766DC5 /* SkyMotion.swift */,
 				0E7D0251022F4107B201D5C0 /* ArticleBlock.swift */,
 				AD09BF87F16AF0DDC265789F /* CaseEnums.swift */,
 				1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */,
@@ -500,6 +539,7 @@
 				ED11B7798C9EA2B7D8DD6646 /* CaseDetailView.swift */,
 				BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */,
 				2F778D595193C1659B895EDB /* CaseNavigation.swift */,
+				3753C107A274107F4D4E8D77 /* DesignGalleryView.swift */,
 				D71F3BE96CCEF79A6FCF3070 /* MapClustering.swift */,
 				62A56F036BF0C6F3B3D2824E /* MapView.swift */,
 				5E27C5CA5F42C4DF02AB10CD /* MapViewModel.swift */,

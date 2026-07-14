@@ -29,6 +29,37 @@ enum SkyColor {
     static let signalGreen = dynamic(dark: 0x79D4A3, light: 0x1F8A5B)
     static let signalRed = dynamic(dark: 0xEF9292, light: 0xC0453F)
 
+    // MARK: - Aether Editorial System (V2 tokens)
+    // Values from docs/uiux/02_DESIGN_SYSTEM_SPEC.md §2.2 / §2.3.
+
+    /// Atmosphere layer (World Sky Pulse, map context, launch continuity).
+    static let atmosphereTop = dynamic(dark: 0x0B1621, light: 0xEAF4F8)
+    static let atmosphereBottom = dynamic(dark: 0x091018, light: 0xF8FAF7)
+    /// Raised/selected editorial surface.
+    static let surfaceElevated = dynamic(dark: 0x182631, light: 0xE5EEF1)
+    static let separator = dynamic(dark: 0x2A3945, light: 0xCBD7DC)
+
+    /// Primary atmospheric accent (controls, links, selection).
+    static let accentPrimary = dynamic(dark: 0x5FD4C8, light: 0x087A73)
+    /// Secondary accent (location, map, secondary links).
+    static let accentSecondary = dynamic(dark: 0x78BDF2, light: 0x176FA3)
+    /// Warm signal: time, meaningful change, historic note.
+    static let signalWarm = dynamic(dark: 0xE2C17B, light: 0x8B651C)
+
+    static let error = signalRed
+    static let warning = dynamic(dark: 0xF1B765, light: 0x8A5A00)
+    static let success = dynamic(dark: 0x73D39B, light: 0x257A4E)
+
+    // Status colours (paired with geometry + label; never the sole carrier).
+    static let statusNew = dynamic(dark: 0x8CD9FF, light: 0x1E7FB8)
+    static let statusReview = dynamic(dark: 0x78BDF2, light: 0x176FA3)
+    static let statusInsufficient = dynamic(dark: 0xF1B765, light: 0x8A5A00)
+    static let statusLikelyKnown = dynamic(dark: 0x9FD9B4, light: 0x2C7C57)
+    static let statusExplained = dynamic(dark: 0x73D39B, light: 0x257A4E)
+    static let statusDisputed = dynamic(dark: 0xEF9292, light: 0xC0453F)
+    static let statusCorrected = dynamic(dark: 0xE2C17B, light: 0x8B651C)
+    static let statusArchived = dynamic(dark: 0x7C8995, light: 0x687985)
+
     /// Maps a semantic signal role to its token.
     static func signal(_ role: SignalRole) -> Color {
         switch role {

@@ -34,10 +34,22 @@ enum SkyStrings {
     private struct Pair { let ja: String; let en: String }
 
     private static let table: [String: Pair] = merged(
-        general, tabs, status, scores, evidence, sourceKinds, ai,
+        general, tabs, status, statusV2, scores, evidence, sourceKinds, ai,
         explanation, today, briefing, map, research, caseDetail,
         paywall, settings, states, welcome, filters, location, article
     )
+
+    /// V2 (Aether) 8-status vocabulary labels.
+    private static let statusV2: [String: Pair] = [
+        "v2.status.newReport": .init(ja: "新規報告", en: "New report"),
+        "v2.status.underReview": .init(ja: "調査継続", en: "Under review"),
+        "v2.status.informationInsufficient": .init(ja: "情報不足", en: "Information insufficient"),
+        "v2.status.knownExplanationLikely": .init(ja: "既知現象の可能性", en: "Known explanation likely"),
+        "v2.status.explained": .init(ja: "説明済み", en: "Explained"),
+        "v2.status.disputed": .init(ja: "争点あり", en: "Disputed"),
+        "v2.status.corrected": .init(ja: "訂正済み", en: "Corrected"),
+        "v2.status.archived": .init(ja: "アーカイブ", en: "Archived"),
+    ]
 
     private static func merged(_ dicts: [String: Pair]...) -> [String: Pair] {
         var out: [String: Pair] = [:]
