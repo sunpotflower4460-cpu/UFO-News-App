@@ -41,6 +41,10 @@ final class NotificationService {
     private(set) var state: NotificationAuthorizationState = .notDetermined
 
     func refresh() async {
+        // Skip the live system read under UI tests — the ephemeral CI simulator
+        // can't reliably service UNUserNotificationCenter, which stalls/kills the
+        // app. Production keeps the real read.
+        guard !UITestFlags.disableAnimations else { state = .notDetermined; return }
         state = NotificationAuthorizationState(await Self.currentStatus())
     }
 
