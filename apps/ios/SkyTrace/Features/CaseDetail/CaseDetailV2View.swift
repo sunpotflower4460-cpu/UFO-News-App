@@ -173,20 +173,14 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 8. Evidence (grouped by source type)
+    // MARK: 8. Evidence (records the case rests on — not the citation list)
 
     @ViewBuilder private func evidence(_ c: UAPCase) -> some View {
-        if !c.sources.isEmpty {
+        let items = c.evidenceItems
+        if !items.isEmpty {
             EditorialSection(title: SkyStrings.t("case.evidence"), systemImage: "doc.on.doc") {
-                let groups = Dictionary(grouping: c.sources, by: { $0.sourceType })
                 VStack(alignment: .leading, spacing: SkySpacing.x3) {
-                    ForEach(groups.keys.sorted(by: { $0.rawValue < $1.rawValue }), id: \.self) { type in
-                        Text(SkyStrings.t(type.labelKey))
-                            .font(.caption.weight(.semibold)).foregroundStyle(SkyColor.textTertiary)
-                        ForEach(groups[type] ?? []) { s in
-                            SourceRow(source: s) { url in linkToOpen = IdentifiedURL(url: url) }
-                        }
-                    }
+                    ForEach(items) { EvidenceItemRow(item: $0) }
                 }
             }
         }

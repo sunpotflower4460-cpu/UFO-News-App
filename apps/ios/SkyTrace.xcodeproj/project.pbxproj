@@ -26,6 +26,7 @@
 		DFBCE17F55A976C1066BE02E /* CaseCard.swift */ = {isa = PBXBuildFile; fileRef = 83342F3181619CADEB5CA9B9 /* CaseCard.swift */; };
 		04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */ = {isa = PBXBuildFile; fileRef = 5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */; };
 		2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */ = {isa = PBXBuildFile; fileRef = 91B71D08AD149440583B2649 /* EditorialSurface.swift */; };
+		B30E7E698B69CF26392402AB /* EvidenceItemRow.swift */ = {isa = PBXBuildFile; fileRef = FDBD1BD08EAE977E33851A00 /* EvidenceItemRow.swift */; };
 		E2C6113D4218884A9D8B3D32 /* EvidenceSection.swift */ = {isa = PBXBuildFile; fileRef = 2353474FBA45FDE4BCF697B0 /* EvidenceSection.swift */; };
 		EBD5DD6D09BE56E652EF9222 /* ExplanationCandidateCard.swift */ = {isa = PBXBuildFile; fileRef = 7740DD12CA011FC7C6F67E57 /* ExplanationCandidateCard.swift */; };
 		C37F2C5730E6C8B4F24093FA /* GlobalSummaryHero.swift */ = {isa = PBXBuildFile; fileRef = 2782B09EC1AE20F5EA7A5997 /* GlobalSummaryHero.swift */; };
@@ -49,6 +50,7 @@
 		AD09BF87F16AF0DDC265789F /* CaseEnums.swift */ = {isa = PBXBuildFile; fileRef = 52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */; };
 		1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */ = {isa = PBXBuildFile; fileRef = EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */; };
 		9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */ = {isa = PBXBuildFile; fileRef = E311A9C20D969DA9437EDA1C /* Entitlement.swift */; };
+		10EE74A5A4626B002A3A27F0 /* EvidenceItem.swift */ = {isa = PBXBuildFile; fileRef = 13F0034AB3F38584080E9EA0 /* EvidenceItem.swift */; };
 		146298FC6CD67380CBF8A4A7 /* Feed.swift */ = {isa = PBXBuildFile; fileRef = 9557D1D22E32F83AB2015EF4 /* Feed.swift */; };
 		0DFEEA459DE263793BC7A674 /* SupportingModels.swift */ = {isa = PBXBuildFile; fileRef = 5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */; };
 		B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */ = {isa = PBXBuildFile; fileRef = ADFC785175071519EE5B3055 /* UAPCase+V2.swift */; };
@@ -120,6 +122,7 @@
 		83342F3181619CADEB5CA9B9 /* CaseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseCard.swift"; sourceTree = "<group>"; };
 		5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyBriefingCard.swift"; sourceTree = "<group>"; };
 		91B71D08AD149440583B2649 /* EditorialSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorialSurface.swift"; sourceTree = "<group>"; };
+		FDBD1BD08EAE977E33851A00 /* EvidenceItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceItemRow.swift"; sourceTree = "<group>"; };
 		2353474FBA45FDE4BCF697B0 /* EvidenceSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceSection.swift"; sourceTree = "<group>"; };
 		7740DD12CA011FC7C6F67E57 /* ExplanationCandidateCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExplanationCandidateCard.swift"; sourceTree = "<group>"; };
 		2782B09EC1AE20F5EA7A5997 /* GlobalSummaryHero.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "GlobalSummaryHero.swift"; sourceTree = "<group>"; };
@@ -143,6 +146,7 @@
 		52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseEnums.swift"; sourceTree = "<group>"; };
 		EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseScores.swift"; sourceTree = "<group>"; };
 		E311A9C20D969DA9437EDA1C /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entitlement.swift"; sourceTree = "<group>"; };
+		13F0034AB3F38584080E9EA0 /* EvidenceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceItem.swift"; sourceTree = "<group>"; };
 		9557D1D22E32F83AB2015EF4 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed.swift"; sourceTree = "<group>"; };
 		5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupportingModels.swift"; sourceTree = "<group>"; };
 		ADFC785175071519EE5B3055 /* UAPCase+V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UAPCase+V2.swift"; sourceTree = "<group>"; };
@@ -270,6 +274,7 @@
 				83342F3181619CADEB5CA9B9,
 				5F6BC68C43341D3669581D93,
 				91B71D08AD149440583B2649,
+				FDBD1BD08EAE977E33851A00,
 				2353474FBA45FDE4BCF697B0,
 				7740DD12CA011FC7C6F67E57,
 				2782B09EC1AE20F5EA7A5997,
@@ -331,6 +336,7 @@
 				52CBF32A3AF0C8D6724C0A93,
 				EF3D59873D02EAFAFDBC61B3,
 				E311A9C20D969DA9437EDA1C,
+				13F0034AB3F38584080E9EA0,
 				9557D1D22E32F83AB2015EF4,
 				5F9E8EAF63A7C4DD889DACB7,
 				ADFC785175071519EE5B3055,
@@ -572,6 +578,7 @@
 				DFBCE17F55A976C1066BE02E /* CaseCard.swift */,
 				04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */,
 				2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */,
+				B30E7E698B69CF26392402AB /* EvidenceItemRow.swift */,
 				E2C6113D4218884A9D8B3D32 /* EvidenceSection.swift */,
 				EBD5DD6D09BE56E652EF9222 /* ExplanationCandidateCard.swift */,
 				C37F2C5730E6C8B4F24093FA /* GlobalSummaryHero.swift */,
@@ -595,6 +602,7 @@
 				AD09BF87F16AF0DDC265789F /* CaseEnums.swift */,
 				1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */,
 				9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */,
+				10EE74A5A4626B002A3A27F0 /* EvidenceItem.swift */,
 				146298FC6CD67380CBF8A4A7 /* Feed.swift */,
 				0DFEEA459DE263793BC7A674 /* SupportingModels.swift */,
 				B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */,

@@ -68,6 +68,16 @@ extension UAPCase {
         agreements.map { ConfirmedFact(id: "\(id)_fact_\($0.id)", text: $0.text, sourceIDs: $0.supportingSourceIDs) }
     }
 
+    /// Evidence *records* (distinct from Sources/citations): the record-bearing
+    /// sources reframed as evidence. See docs/DECISIONS.md D-V3-001.
+    var evidenceItems: [EvidenceItem] {
+        sources.compactMap { s in
+            guard let kind = EvidenceKind(s.sourceType) else { return nil }
+            return EvidenceItem(id: "\(id)_ev_\(s.id)", kind: kind, title: s.title,
+                                capturedAt: s.publishedAt ?? s.retrievedAt, sourceID: s.id)
+        }
+    }
+
     /// Priority reason for Today's lead, derived from the latest meaningful change.
     var priorityReason: String? {
         guard let latest = whatChanged.first else { return nil }

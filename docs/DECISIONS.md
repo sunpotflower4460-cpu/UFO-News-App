@@ -19,3 +19,7 @@
 
 ## 未解決/要ユーザー判断
 - 正式アプリ名・Bundle ID・商品ID（現在プレースホルダー`com.example.skytrace.*`）。App Store Connect登録前に一元変更（`project.yml`／`SubscriptionIDs`／`.storekit`）。
+
+## V3 UI/UX
+- **D-V3-001 Evidence と Sources の役割分離（P0-05）**: 専用の証拠データがfixtureに無いため、`EvidenceItem` を「記録性のある出典（official/scientific/database/openData）」から導出し、Evidence節は"記録"（種別＋記録日）として表示、Sources節は引用一覧のまま。press/socialは引用のみ。両節が同じ `SourceRow` を二重表示する重複を解消。実データ接続時はEvidenceを直接投入する。
+- **D-V3-002 通知トグルの権限連動（P0-09）**: ローカル`@AppStorage`のみだったトグルを`UNUserNotificationCenter`の実権限（未設定/拒否/許可）に連動。未設定は要求ボタン、拒否はシステム設定導線、許可時のみ個別トグル。
