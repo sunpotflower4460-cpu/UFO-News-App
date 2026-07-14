@@ -18,6 +18,7 @@
 		882626D249A6644BCC439455 /* FixtureBuilders.swift */ = {isa = PBXBuildFile; fileRef = 10F89EE1022E58536191BA96 /* FixtureBuilders.swift */; };
 		2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */ = {isa = PBXBuildFile; fileRef = 19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */; };
 		702BBE8AFB5590330AE22EDD /* LibraryStore.swift */ = {isa = PBXBuildFile; fileRef = 6208EC69C22BDD34798DDC60 /* LibraryStore.swift */; };
+		8E6C70290C51845F1688E836 /* AetherOrb.swift */ = {isa = PBXBuildFile; fileRef = D8C3A7B95843ABFD36E1BECF /* AetherOrb.swift */; };
 		22A3234D11CDFD2A401C42F3 /* AssessmentRows.swift */ = {isa = PBXBuildFile; fileRef = B790B7282DDBB71DE5225C6F /* AssessmentRows.swift */; };
 		3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */ = {isa = PBXBuildFile; fileRef = 9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */; };
 		39D4328698BB1FBC922FDCBA /* Badges.swift */ = {isa = PBXBuildFile; fileRef = 6773B15442645C38C95F0771 /* Badges.swift */; };
@@ -108,6 +109,7 @@
 		10F89EE1022E58536191BA96 /* FixtureBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureBuilders.swift"; sourceTree = "<group>"; };
 		19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureRepositories.swift"; sourceTree = "<group>"; };
 		6208EC69C22BDD34798DDC60 /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStore.swift"; sourceTree = "<group>"; };
+		D8C3A7B95843ABFD36E1BECF /* AetherOrb.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AetherOrb.swift"; sourceTree = "<group>"; };
 		B790B7282DDBB71DE5225C6F /* AssessmentRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssessmentRows.swift"; sourceTree = "<group>"; };
 		9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AtmosphereCanvas.swift"; sourceTree = "<group>"; };
 		6773B15442645C38C95F0771 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badges.swift"; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 			isa = PBXGroup;
 			children = (
 				FCD719C4C33318EF49B871BE,
+				D8C3A7B95843ABFD36E1BECF,
 				B790B7282DDBB71DE5225C6F,
 				9061F9AB7FFDBAA24FBF9699,
 				6773B15442645C38C95F0771,
@@ -552,6 +555,7 @@
 				882626D249A6644BCC439455 /* FixtureBuilders.swift */,
 				2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */,
 				702BBE8AFB5590330AE22EDD /* LibraryStore.swift */,
+				8E6C70290C51845F1688E836 /* AetherOrb.swift */,
 				22A3234D11CDFD2A401C42F3 /* AssessmentRows.swift */,
 				3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */,
 				39D4328698BB1FBC922FDCBA /* Badges.swift */,

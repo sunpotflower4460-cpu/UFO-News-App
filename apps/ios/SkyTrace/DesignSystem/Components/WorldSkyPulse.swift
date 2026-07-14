@@ -14,8 +14,12 @@ struct WorldSkyPulse: View {
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
-            AtmosphereCanvas(dayFraction: 0.2, signals: signals)
-            LinearGradient(colors: [.clear, SkyColor.canvas.opacity(0.55)],
+            // Parallax: the sky drifts slightly as the hero scrolls, adding depth.
+            GeometryReader { geo in
+                AtmosphereCanvas(dayFraction: 0.2, signals: signals,
+                                 parallax: CGSize(width: 0, height: geo.frame(in: .global).minY * 0.06))
+            }
+            LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.66)],
                            startPoint: .center, endPoint: .bottom)
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
                 Text(SkyFormat.dateOnly(date))
@@ -42,8 +46,13 @@ struct WorldSkyPulse: View {
         }
         .frame(height: 250)
         .clipShape(RoundedRectangle(cornerRadius: SkyRadius.hero, style: .continuous))
+        // Rim light on the top edge → a lit, dimensional pane.
         .overlay(RoundedRectangle(cornerRadius: SkyRadius.hero, style: .continuous)
-            .strokeBorder(SkyColor.borderSubtle, lineWidth: 1))
+            .strokeBorder(
+                LinearGradient(colors: [SkyColor.aetherGlow.opacity(0.5), SkyColor.borderSubtle, .clear],
+                               startPoint: .top, endPoint: .bottom),
+                lineWidth: 1))
+        .shadow(color: SkyColor.aetherZenith.opacity(0.6), radius: 18, y: 10)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(a11ySummary)
         .accessibilityHint(SkyStrings.t("map.altList"))

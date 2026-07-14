@@ -50,6 +50,20 @@ enum SkyColor {
     static let warning = dynamic(dark: 0xF1B765, light: 0x8A5A00)
     static let success = dynamic(dark: 0x73D39B, light: 0x257A4E)
 
+    // MARK: - Aether depth (dimensional sky: launch/Welcome + World Sky Pulse)
+    // Adds atmosphere and a quiet sense of the observed unknown, without
+    // sensationalism. Decorative only — never the sole carrier of information.
+
+    /// Deepest sky, near the zenith. Sits above `atmosphereTop`.
+    static let aetherZenith = dynamic(dark: 0x04070E, light: 0xDCEAF2)
+    /// Aurora wash near the horizon (paired hues, kept low-opacity in use).
+    static let auroraViolet = dynamic(dark: 0x6E5CC8, light: 0x8E7BE0)
+    static let auroraCyan = dynamic(dark: 0x3FA9C9, light: 0x6FC2DA)
+    /// Distant starfield points (decorative; deterministic).
+    static let starField = dynamic(dark: 0xCED8EC, light: 0x9AA9C4)
+    /// Luminous halo around an emphasised/observed signal.
+    static let aetherGlow = dynamic(dark: 0x7FE6DC, light: 0x2FB6AA)
+
     // Status colours (paired with geometry + label; never the sole carrier).
     static let statusNew = dynamic(dark: 0x8CD9FF, light: 0x1E7FB8)
     static let statusReview = dynamic(dark: 0x78BDF2, light: 0x176FA3)
