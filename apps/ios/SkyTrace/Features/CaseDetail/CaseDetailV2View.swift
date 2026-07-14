@@ -95,11 +95,7 @@ struct CaseDetailV2View: View {
 
     private func header(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
         VStack(alignment: .leading, spacing: SkySpacing.x3) {
-            AtmosphereCanvas(dayFraction: 0.2, signals: [
-                .init(x: 0.5, y: 0.45, color: c.v2Status.color, emphasized: true)
-            ])
-            .frame(height: 128)
-            .clipShape(RoundedRectangle(cornerRadius: SkyRadius.hero))
+            CaseLeadVisual(status: c.v2Status)
             CaseStatusLabel(status: c.v2Status, showsUpdateIndicator: c.hasRecentUpdate)
             Text(c.title).font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
             HStack(spacing: SkySpacing.x2) {

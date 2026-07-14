@@ -57,8 +57,12 @@
 - `sources` が無い文脈（デバッグギャラリー等）ではプレーンな脚注へフォールバックし、出典表示が消えない。
 - 変更ファイル：`Domain/…`不要。`Features/CaseDetail/ArticleBlockView.swift`, `DesignSystem/Components/CitationDrawer.swift`(新), `Features/LongForm/LongFormView.swift`, `Features/CaseDetail/CaseDetailV2View.swift`（`LongFormView` に `sources` を受け渡し）, `Resources/SkyStrings.swift`（citation.*）。
 
+### V3-2 追加（Case Lead Visual）
+- CaseDetail ヘッダーの素の atmosphere ブロックを **CaseLeadVisual** に置換。ステータス色で染めた大気＋焦点となるステータスグリフ（立体的な影・ハロー）で、各事例に非扇情的で識別可能なヒーローを付与（未許諾写真に依存しない・CLAUDE.md §7）。ステータスは色だけでなく形で区別、装飾要素なので VoiceOver からは隠し、下のテキストが状態/タイトル/場所を説明。Reduce Transparency 尊重。
+- 変更ファイル：`DesignSystem/Components/CaseLeadVisual.swift`(新), `Features/CaseDetail/CaseDetailV2View.swift`。
+
 ### V3-2 残
-- adaptive time metadata、Case Lead Visual。
+- adaptive time metadata。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
