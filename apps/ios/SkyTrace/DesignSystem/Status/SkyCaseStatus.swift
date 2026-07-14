@@ -72,7 +72,9 @@ enum SkyCaseStatus: String, Codable, Sendable, CaseIterable, Identifiable {
         case .underReview: self = .underReview
         case .notableUnresolved: self = .underReview
         case .disputed: self = .disputed
-        case .withdrawn: self = .archived
+        // A withdrawn/retracted report reads as a correction (consistent with
+        // `UAPCase.whatChanged`, which treats `.withdrawn` as `.correction`).
+        case .withdrawn: self = .corrected
         }
     }
 }

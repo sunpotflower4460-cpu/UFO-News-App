@@ -23,7 +23,6 @@ struct LongFormView: View {
                     ForEach(free) { ArticleBlockView(block: $0) }
                     if isPlus {
                         ForEach(gated) { ArticleBlockView(block: $0) }
-                        if let note = article.correctionNote { correction(note) }
                     } else if !gated.isEmpty {
                         PremiumLockView(
                             title: SkyStrings.t("briefing.readFull"),
@@ -32,6 +31,8 @@ struct LongFormView: View {
                             ctaTitle: SkyStrings.t("paywall.cta"),
                             onUnlock: { paywall = PaywallContext(trigger: .synthesis) })
                     }
+                    // Corrections stay free — always shown when present, regardless of Plus.
+                    if let note = article.correctionNote { correction(note) }
                     disclosureFooter
                 }
             }

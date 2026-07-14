@@ -60,12 +60,11 @@ struct MapV2View: View {
             }
         } label: {
             if cluster.isCluster {
-                let newCount = cluster.cases.filter { $0.v2Status == .newReport }.count
                 let updated = cluster.cases.filter(\.hasRecentUpdate).count
                 VStack(spacing: 0) {
                     Text("\(cluster.cases.count)").font(.caption.weight(.bold)).foregroundStyle(SkyColor.canvas)
-                    if newCount + updated > 0 {
-                        Text("新\(newCount)・更\(updated)").font(.system(size: 7)).foregroundStyle(SkyColor.canvas)
+                    if updated > 0 {
+                        Text("更\(updated)").font(.system(size: 7)).foregroundStyle(SkyColor.canvas)
                     }
                 }
                 .padding(6)
@@ -105,7 +104,7 @@ struct MapV2View: View {
                         SkyChip(text: SkyStrings.t(model.filter.dateWindow.labelKey), systemImage: "calendar",
                                 isSelected: model.filter.dateWindow != .anyTime)
                     }
-                    ForEach(SkyCaseStatus.allCases) { status in
+                    ForEach(presentStatuses) { status in
                         Button { toggle(status, m) } label: {
                             HStack(spacing: 4) {
                                 CaseStatusGlyph(status: status, size: 13)
@@ -172,6 +171,14 @@ struct MapV2View: View {
     }
     private func isOn(_ s: SkyCaseStatus, _ m: MapViewModel) -> Bool {
         CaseStatus.allCases.contains { SkyCaseStatus($0) == s && m.filter.statuses.contains($0) }
+    }
+
+    /// Only the statuses that actually occur in the loaded cases, in the V2
+    /// vocabulary order — so no filter chip is a dead no-op.
+    private var presentStatuses: [SkyCaseStatus] {
+        guard let model else { return [] }
+        let present = Set(model.allCases.map { SkyCaseStatus($0.status) })
+        return SkyCaseStatus.allCases.filter { present.contains($0) }
     }
 }
 

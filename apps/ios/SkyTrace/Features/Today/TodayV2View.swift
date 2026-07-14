@@ -8,7 +8,6 @@ struct TodayV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
     @State private var model: TodayViewModel?
-    @State private var paywall: PaywallContext?
 
     var body: some View {
         Group {
@@ -26,7 +25,6 @@ struct TodayV2View: View {
             }
             await model?.load()
         }
-        .sheet(item: $paywall) { PaywallView(context: $0) }
     }
 
     private func content(_ model: TodayViewModel, _ feed: TodayFeed) -> some View {
@@ -63,9 +61,9 @@ struct TodayV2View: View {
                     AIDisclosureBadge(disclosure: feed.briefing.disclosure)
                 }
                 .font(.caption2).foregroundStyle(SkyColor.textTertiary)
-                Button {
-                    if !env.subscription.isPlus { paywall = PaywallContext(trigger: .briefing) }
-                } label: {
+                // Everyone can open the briefing; BriefingDetailView shows the
+                // free lead + Plus lock for non-subscribers (no dead CTA).
+                NavigationLink { BriefingDetailView(date: feed.date) } label: {
                     Label(env.subscription.isPlus ? SkyStrings.t("action.readMore") : SkyStrings.t("briefing.readFull"),
                           systemImage: env.subscription.isPlus ? "arrow.right" : "lock.fill")
                         .font(SkyTypography.supporting.weight(.semibold))
