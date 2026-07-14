@@ -42,8 +42,11 @@
 | Search 状態コンテナ（P0-10継続） | 初期ロードにSkeletonCard、失敗時ErrorStateView。`didLoad`/`loadFailed`でtry?の握り潰しを廃止。 | `Features/Research/ResearchViewModel.swift`, `Features/Research/SearchV2View.swift` |
 | Map 状態コンテナ（P0-10継続） | 読み込み失敗時にoffline InlineBanner（再試行）。`MapViewModel`に`didLoad`/`loadFailed`。 | `Features/Map/MapViewModel.swift`, `Features/Map/MapV2View.swift` |
 
+### V3-2 追加（実装済み・CI green: 38fce5b）
+- **CaseSectionNavigator**（sticky section chips：概要/評価/資料/経緯/出典）。`ScrollViewReader`＋アンカーで各グループへジャンプ。12節維持、Dynamic Type/VoiceOver対応。
+
 ### V3-2 残
-- CaseSectionNavigator（sticky section chips）、Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual、CaseDetailの状態UI（loading skeleton）。
+- Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual、CaseDetailの状態UI（loading skeleton）。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
