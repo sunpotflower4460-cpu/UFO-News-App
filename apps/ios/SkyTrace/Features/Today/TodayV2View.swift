@@ -7,6 +7,7 @@ import SwiftUI
 struct TodayV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
+    @Environment(AppRouter.self) private var router
     @State private var model: TodayViewModel?
 
     var body: some View {
@@ -32,7 +33,8 @@ struct TodayV2View: View {
             LazyVStack(alignment: .leading, spacing: SkySpacing.x8) {
                 WorldSkyPulse(date: feed.date, summary: feed.summary,
                               signals: WorldSkyPulse.signals(from: feed.topCases + feed.recentUpdates),
-                              lastUpdated: feed.lastUpdatedAt)
+                              lastUpdated: feed.lastUpdatedAt,
+                              onOpenMap: { router.openMap() })
                 briefingLead(feed)
                 priorityCase(feed)
                 sinceLastVisit(model)
@@ -131,4 +133,5 @@ struct TodayV2View: View {
     NavigationStack { TodayV2View() }
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
+        .environment(AppRouter())
 }

@@ -61,15 +61,21 @@ struct MapV2View: View {
         } label: {
             if cluster.isCluster {
                 let updated = cluster.cases.filter(\.hasRecentUpdate).count
-                VStack(spacing: 0) {
-                    Text("\(cluster.cases.count)").font(.caption.weight(.bold)).foregroundStyle(SkyColor.canvas)
-                    if updated > 0 {
-                        Text("更\(updated)").font(.system(size: 7)).foregroundStyle(SkyColor.canvas)
+                // Count in a legible style; "has updates" shown as a warm ring
+                // dot rather than 7pt text (Dynamic-Type safe).
+                Text("\(cluster.cases.count)")
+                    .font(.caption.weight(.bold)).foregroundStyle(SkyColor.canvas)
+                    .padding(7)
+                    .background(SkyColor.accentPrimary, in: Circle())
+                    .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1))
+                    .overlay(alignment: .topTrailing) {
+                        if updated > 0 {
+                            Circle().fill(SkyColor.signalWarm)
+                                .frame(width: 10, height: 10)
+                                .overlay(Circle().strokeBorder(SkyColor.canvas, lineWidth: 1.5))
+                                .offset(x: 3, y: -3)
+                        }
                     }
-                }
-                .padding(6)
-                .background(SkyColor.accentPrimary, in: Circle())
-                .overlay(Circle().strokeBorder(.white.opacity(0.7), lineWidth: 1))
             } else {
                 CaseStatusGlyph(status: cluster.cases.first?.v2Status ?? .underReview, size: 22,
                                 showsUpdateIndicator: cluster.cases.first?.hasRecentUpdate ?? false)
@@ -78,7 +84,7 @@ struct MapV2View: View {
                     .overlay(Circle().strokeBorder(SkyColor.borderSubtle, lineWidth: 1))
             }
         }
-        .accessibilityLabel(annotationTitle(cluster))
+        .accessibilityLabel(clusterA11yLabel(cluster))
     }
 
     private func annotationTitle(_ cluster: MapCluster) -> String {
@@ -86,9 +92,34 @@ struct MapV2View: View {
                           : (cluster.cases.first?.title ?? "")
     }
 
+    private func clusterA11yLabel(_ cluster: MapCluster) -> String {
+        guard cluster.isCluster else { return cluster.cases.first?.title ?? "" }
+        let updated = cluster.cases.filter(\.hasRecentUpdate).count
+        var label = SkyStrings.t("map.results", String(cluster.cases.count))
+        if updated > 0 { label += "、" + SkyStrings.t("label.updatedCount", String(updated)) }
+        return label
+    }
+
+    /// Zoom to fit all member points (with padding) rather than a fixed span.
     private func region(around cluster: MapCluster) -> MKCoordinateRegion {
-        MKCoordinateRegion(center: cluster.coordinate,
-                           span: MKCoordinateSpan(latitudeDelta: 12, longitudeDelta: 12))
+        let coords = cluster.cases.map {
+            CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+        }
+        guard let first = coords.first else {
+            return MKCoordinateRegion(center: cluster.coordinate,
+                                      span: MKCoordinateSpan(latitudeDelta: 12, longitudeDelta: 12))
+        }
+        var minLat = first.latitude, maxLat = first.latitude
+        var minLon = first.longitude, maxLon = first.longitude
+        for c in coords {
+            minLat = min(minLat, c.latitude); maxLat = max(maxLat, c.latitude)
+            minLon = min(minLon, c.longitude); maxLon = max(maxLon, c.longitude)
+        }
+        let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
+                                            longitude: (minLon + maxLon) / 2)
+        let span = MKCoordinateSpan(latitudeDelta: max((maxLat - minLat) * 1.6, 2),
+                                    longitudeDelta: max((maxLon - minLon) * 1.6, 2))
+        return MKCoordinateRegion(center: center, span: span)
     }
 
     @ViewBuilder private var filterBar: some View {

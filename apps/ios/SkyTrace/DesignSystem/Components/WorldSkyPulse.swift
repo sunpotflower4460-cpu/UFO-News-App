@@ -22,25 +22,32 @@ struct WorldSkyPulse: View {
             LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.66)],
                            startPoint: .center, endPoint: .bottom)
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
-                Text(SkyFormat.dateOnly(date))
-                    .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
-                Text(SkyStrings.t("today.heroTitle"))
-                    .font(SkyTypography.sectionHeading).foregroundStyle(SkyColor.textPrimary)
-                Text(SkyStrings.t("today.mergeSummary",
-                                  String(summary.newReportCount), String(summary.mergedCaseCount)))
-                    .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: SkySpacing.x3) {
-                    legendDot(SkyColor.statusNew, SkyStrings.t("v2.status.newReport"))
-                    legendDot(SkyColor.signalWarm, SkyStrings.t("label.updated"))
-                    Spacer()
-                    Button(action: onOpenMap) {
-                        Label(SkyStrings.t("action.seeDetail"), systemImage: "map")
-                            .font(SkyTypography.metadata.weight(.semibold))
+                // The world summary is one VoiceOver element…
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    Text(SkyFormat.dateOnly(date))
+                        .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
+                    Text(SkyStrings.t("today.heroTitle"))
+                        .font(SkyTypography.sectionHeading).foregroundStyle(SkyColor.textPrimary)
+                    Text(SkyStrings.t("today.mergeSummary",
+                                      String(summary.newReportCount), String(summary.mergedCaseCount)))
+                        .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    HStack(spacing: SkySpacing.x3) {
+                        legendDot(SkyColor.statusNew, SkyStrings.t("v2.status.newReport"))
+                        legendDot(SkyColor.signalWarm, SkyStrings.t("label.updated"))
                     }
-                    .buttonStyle(.plain).foregroundStyle(SkyColor.accentPrimary)
+                    StaleBadge(date: lastUpdated)
                 }
-                StaleBadge(date: lastUpdated)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(a11ySummary)
+
+                // …and "地図で見る" is a separate, reachable button.
+                Button(action: onOpenMap) {
+                    Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                        .font(SkyTypography.metadata.weight(.semibold))
+                }
+                .buttonStyle(.plain).foregroundStyle(SkyColor.accentPrimary)
+                .accessibilityLabel(SkyStrings.t("action.viewOnMap"))
             }
             .padding(SkySpacing.x4)
         }
@@ -53,9 +60,6 @@ struct WorldSkyPulse: View {
                                startPoint: .top, endPoint: .bottom),
                 lineWidth: 1))
         .shadow(color: SkyColor.aetherZenith.opacity(0.6), radius: 18, y: 10)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(a11ySummary)
-        .accessibilityHint(SkyStrings.t("map.altList"))
     }
 
     private func legendDot(_ color: Color, _ text: String) -> some View {

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E8B05B13D27CCFB0AE40C64C /* AppEnvironment.swift */ = {isa = PBXBuildFile; fileRef = D034D7A656139DF2EA84E907 /* AppEnvironment.swift */; };
+		5791E487F6C85AA8F375EC2E /* AppRouter.swift */ = {isa = PBXBuildFile; fileRef = 9220F3D538D868A42806EBD6 /* AppRouter.swift */; };
 		E8E3B9420D62F7C5790033E9 /* AppSettings.swift */ = {isa = PBXBuildFile; fileRef = 4E58A008DE6F25F187931063 /* AppSettings.swift */; };
 		7E3C4AD8331C5C3C41382576 /* RootTabView.swift */ = {isa = PBXBuildFile; fileRef = 8BB9D265772FD51C29865ED0 /* RootTabView.swift */; };
 		DA0D8050BB225AC2083B44A4 /* SafariView.swift */ = {isa = PBXBuildFile; fileRef = 3D67979DA0EB347607B8857A /* SafariView.swift */; };
@@ -89,6 +90,7 @@
 		6FF2A954737ABB916CB43988 /* Localizable.xcstrings */ = {isa = PBXBuildFile; fileRef = D76E0D051F3DB668D3D0B1BA /* Localizable.xcstrings */; };
 		776E9EA7831D4A85B312FCAC /* PrivacyInfo.xcprivacy */ = {isa = PBXBuildFile; fileRef = C25FA98399DA0303A937DCF4 /* PrivacyInfo.xcprivacy */; };
 		AED950E3DF32C2795BE528AD /* SkyTrace.storekit */ = {isa = PBXBuildFile; fileRef = 20DBA63436282DE22FACB8D4 /* SkyTrace.storekit */; };
+		8D1B9F836347904C3EF4F24E /* AppRouterTests.swift */ = {isa = PBXBuildFile; fileRef = 13975A5823F70A9195F12AC8 /* AppRouterTests.swift */; };
 		A457EC5A1BD2D9D910532834 /* FixtureIntegrityTests.swift */ = {isa = PBXBuildFile; fileRef = 18ACF36804C857B91B90BC77 /* FixtureIntegrityTests.swift */; };
 		0167D1921604EF17AED67F8C /* RepositoryAndAuditTests.swift */ = {isa = PBXBuildFile; fileRef = 314C27D4C8519C7E612C3CCC /* RepositoryAndAuditTests.swift */; };
 		C294105E5787FB56E9881B00 /* SearchAndFilterTests.swift */ = {isa = PBXBuildFile; fileRef = 8F838BB9A3B881E61ABFE410 /* SearchAndFilterTests.swift */; };
@@ -99,6 +101,7 @@
 
 /* Begin PBXFileReference section */
 		D034D7A656139DF2EA84E907 /* AppEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppEnvironment.swift"; sourceTree = "<group>"; };
+		9220F3D538D868A42806EBD6 /* AppRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppRouter.swift"; sourceTree = "<group>"; };
 		4E58A008DE6F25F187931063 /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppSettings.swift"; sourceTree = "<group>"; };
 		8BB9D265772FD51C29865ED0 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootTabView.swift"; sourceTree = "<group>"; };
 		3D67979DA0EB347607B8857A /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafariView.swift"; sourceTree = "<group>"; };
@@ -180,6 +183,7 @@
 		D76E0D051F3DB668D3D0B1BA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Localizable.xcstrings"; sourceTree = "<group>"; };
 		C25FA98399DA0303A937DCF4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
 		20DBA63436282DE22FACB8D4 /* SkyTrace.storekit */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstorekit; path = "SkyTrace.storekit"; sourceTree = "<group>"; };
+		13975A5823F70A9195F12AC8 /* AppRouterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppRouterTests.swift"; sourceTree = "<group>"; };
 		18ACF36804C857B91B90BC77 /* FixtureIntegrityTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureIntegrityTests.swift"; sourceTree = "<group>"; };
 		314C27D4C8519C7E612C3CCC /* RepositoryAndAuditTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RepositoryAndAuditTests.swift"; sourceTree = "<group>"; };
 		8F838BB9A3B881E61ABFE410 /* SearchAndFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchAndFilterTests.swift"; sourceTree = "<group>"; };
@@ -207,6 +211,7 @@
 			isa = PBXGroup;
 			children = (
 				D034D7A656139DF2EA84E907,
+				9220F3D538D868A42806EBD6,
 				4E58A008DE6F25F187931063,
 				8BB9D265772FD51C29865ED0,
 				3D67979DA0EB347607B8857A,
@@ -510,6 +515,7 @@
 		7942B3FB02E1C06C4D70FBDE /* SkyTraceTests */ = {
 			isa = PBXGroup;
 			children = (
+				13975A5823F70A9195F12AC8,
 				18ACF36804C857B91B90BC77,
 				314C27D4C8519C7E612C3CCC,
 				8F838BB9A3B881E61ABFE410,
@@ -545,6 +551,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8B05B13D27CCFB0AE40C64C /* AppEnvironment.swift */,
+				5791E487F6C85AA8F375EC2E /* AppRouter.swift */,
 				E8E3B9420D62F7C5790033E9 /* AppSettings.swift */,
 				7E3C4AD8331C5C3C41382576 /* RootTabView.swift */,
 				DA0D8050BB225AC2083B44A4 /* SafariView.swift */,
@@ -629,6 +636,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8D1B9F836347904C3EF4F24E /* AppRouterTests.swift */,
 				A457EC5A1BD2D9D910532834 /* FixtureIntegrityTests.swift */,
 				0167D1921604EF17AED67F8C /* RepositoryAndAuditTests.swift */,
 				C294105E5787FB56E9881B00 /* SearchAndFilterTests.swift */,

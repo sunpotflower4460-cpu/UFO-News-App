@@ -238,16 +238,26 @@ struct CaseDetailV2View: View {
                 VStack(alignment: .leading, spacing: SkySpacing.x3) {
                     ForEach(related) { ref in
                         if let rc = allCases.first(where: { $0.id == ref.id }) {
-                            HStack(spacing: SkySpacing.x3) {
-                                CaseStatusGlyph(status: rc.v2Status, size: 20)
-                                VStack(alignment: .leading, spacing: 1) {
-                                    Text(rc.title).font(SkyTypography.supporting.weight(.medium))
-                                        .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
-                                    Text(SkyStrings.t(ref.relation.labelKey))
-                                        .font(.caption2).foregroundStyle(SkyColor.accentSecondary)
+                            NavigationLink { CaseDetailV2View(caseID: rc.id) } label: {
+                                HStack(spacing: SkySpacing.x3) {
+                                    CaseStatusGlyph(status: rc.v2Status, size: 20)
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text(rc.title).font(SkyTypography.supporting.weight(.medium))
+                                            .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
+                                        Text(SkyStrings.t(ref.relation.labelKey))
+                                            .font(SkyTypography.metadata).foregroundStyle(SkyColor.accentSecondary)
+                                    }
+                                    Spacer(minLength: 0)
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption).foregroundStyle(SkyColor.textTertiary)
                                 }
-                                Spacer(minLength: 0)
+                                .contentShape(Rectangle())
                             }
+                            .buttonStyle(.plain)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(rc.title + "。" + SkyStrings.t(ref.relation.labelKey))
+                            .accessibilityHint(SkyStrings.t("action.openDetail"))
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
                 }

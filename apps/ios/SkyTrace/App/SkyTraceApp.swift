@@ -4,6 +4,7 @@ import SwiftUI
 struct SkyTraceApp: App {
     @State private var environment: AppEnvironment
     @State private var settings = AppSettings()
+    @State private var router = AppRouter()
 
     init() {
         // Fixture-backed by default; real StoreKit provider drives purchases via
@@ -16,6 +17,7 @@ struct SkyTraceApp: App {
             RootView()
                 .environment(environment)
                 .environment(settings)
+                .environment(router)
                 .tint(SkyColor.signalCyan)
                 .preferredColorScheme(settings.appearance.colorScheme)
                 .task { await environment.subscription.refresh() }
