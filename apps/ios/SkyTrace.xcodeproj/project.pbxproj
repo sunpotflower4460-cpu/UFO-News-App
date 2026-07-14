@@ -18,6 +18,7 @@
 		882626D249A6644BCC439455 /* FixtureBuilders.swift */ = {isa = PBXBuildFile; fileRef = 10F89EE1022E58536191BA96 /* FixtureBuilders.swift */; };
 		2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */ = {isa = PBXBuildFile; fileRef = 19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */; };
 		702BBE8AFB5590330AE22EDD /* LibraryStore.swift */ = {isa = PBXBuildFile; fileRef = 6208EC69C22BDD34798DDC60 /* LibraryStore.swift */; };
+		22A3234D11CDFD2A401C42F3 /* AssessmentRows.swift */ = {isa = PBXBuildFile; fileRef = B790B7282DDBB71DE5225C6F /* AssessmentRows.swift */; };
 		3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */ = {isa = PBXBuildFile; fileRef = 9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */; };
 		39D4328698BB1FBC922FDCBA /* Badges.swift */ = {isa = PBXBuildFile; fileRef = 6773B15442645C38C95F0771 /* Badges.swift */; };
 		DFBCE17F55A976C1066BE02E /* CaseCard.swift */ = {isa = PBXBuildFile; fileRef = 83342F3181619CADEB5CA9B9 /* CaseCard.swift */; };
@@ -41,11 +42,13 @@
 		1161AC362A3C98941BFD3811 /* SkyMetrics.swift */ = {isa = PBXBuildFile; fileRef = B38D0A7A9F65E7B3454D0941 /* SkyMetrics.swift */; };
 		C87BCDADC2C55A85C1766DC5 /* SkyMotion.swift */ = {isa = PBXBuildFile; fileRef = 945F1CF01FDF10EE3393B55F /* SkyMotion.swift */; };
 		0E7D0251022F4107B201D5C0 /* ArticleBlock.swift */ = {isa = PBXBuildFile; fileRef = 5FABB78C89EE9309368DDC70 /* ArticleBlock.swift */; };
+		B9940A7CA2EA7C112E3E98F2 /* AssessmentDimension.swift */ = {isa = PBXBuildFile; fileRef = B7B9C73358B68E74E58DF80F /* AssessmentDimension.swift */; };
 		AD09BF87F16AF0DDC265789F /* CaseEnums.swift */ = {isa = PBXBuildFile; fileRef = 52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */; };
 		1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */ = {isa = PBXBuildFile; fileRef = EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */; };
 		9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */ = {isa = PBXBuildFile; fileRef = E311A9C20D969DA9437EDA1C /* Entitlement.swift */; };
 		146298FC6CD67380CBF8A4A7 /* Feed.swift */ = {isa = PBXBuildFile; fileRef = 9557D1D22E32F83AB2015EF4 /* Feed.swift */; };
 		0DFEEA459DE263793BC7A674 /* SupportingModels.swift */ = {isa = PBXBuildFile; fileRef = 5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */; };
+		B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */ = {isa = PBXBuildFile; fileRef = ADFC785175071519EE5B3055 /* UAPCase+V2.swift */; };
 		9551F0C97DA0B2EFE924160A /* UAPCase.swift */ = {isa = PBXBuildFile; fileRef = 6433740CC22FA365759AD3FF /* UAPCase.swift */; };
 		9FAADC52C9C9E9BDA2BDBD23 /* Repositories.swift */ = {isa = PBXBuildFile; fileRef = 2BC4184830D06B2439AA71D0 /* Repositories.swift */; };
 		B0783838FD33D06CC26E1874 /* SubscriptionProviding.swift */ = {isa = PBXBuildFile; fileRef = 47B850A76B7EEC87241023A3 /* SubscriptionProviding.swift */; };
@@ -97,6 +100,7 @@
 		10F89EE1022E58536191BA96 /* FixtureBuilders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureBuilders.swift"; sourceTree = "<group>"; };
 		19CB24F6F2CD0B9564A2A86E /* FixtureRepositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FixtureRepositories.swift"; sourceTree = "<group>"; };
 		6208EC69C22BDD34798DDC60 /* LibraryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LibraryStore.swift"; sourceTree = "<group>"; };
+		B790B7282DDBB71DE5225C6F /* AssessmentRows.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssessmentRows.swift"; sourceTree = "<group>"; };
 		9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AtmosphereCanvas.swift"; sourceTree = "<group>"; };
 		6773B15442645C38C95F0771 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badges.swift"; sourceTree = "<group>"; };
 		83342F3181619CADEB5CA9B9 /* CaseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseCard.swift"; sourceTree = "<group>"; };
@@ -120,11 +124,13 @@
 		B38D0A7A9F65E7B3454D0941 /* SkyMetrics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyMetrics.swift"; sourceTree = "<group>"; };
 		945F1CF01FDF10EE3393B55F /* SkyMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyMotion.swift"; sourceTree = "<group>"; };
 		5FABB78C89EE9309368DDC70 /* ArticleBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArticleBlock.swift"; sourceTree = "<group>"; };
+		B7B9C73358B68E74E58DF80F /* AssessmentDimension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AssessmentDimension.swift"; sourceTree = "<group>"; };
 		52CBF32A3AF0C8D6724C0A93 /* CaseEnums.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseEnums.swift"; sourceTree = "<group>"; };
 		EF3D59873D02EAFAFDBC61B3 /* CaseScores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseScores.swift"; sourceTree = "<group>"; };
 		E311A9C20D969DA9437EDA1C /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entitlement.swift"; sourceTree = "<group>"; };
 		9557D1D22E32F83AB2015EF4 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed.swift"; sourceTree = "<group>"; };
 		5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupportingModels.swift"; sourceTree = "<group>"; };
+		ADFC785175071519EE5B3055 /* UAPCase+V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UAPCase+V2.swift"; sourceTree = "<group>"; };
 		6433740CC22FA365759AD3FF /* UAPCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UAPCase.swift"; sourceTree = "<group>"; };
 		2BC4184830D06B2439AA71D0 /* Repositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Repositories.swift"; sourceTree = "<group>"; };
 		47B850A76B7EEC87241023A3 /* SubscriptionProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionProviding.swift"; sourceTree = "<group>"; };
@@ -232,6 +238,7 @@
 			isa = PBXGroup;
 			children = (
 				FCD719C4C33318EF49B871BE,
+				B790B7282DDBB71DE5225C6F,
 				9061F9AB7FFDBAA24FBF9699,
 				6773B15442645C38C95F0771,
 				83342F3181619CADEB5CA9B9,
@@ -293,11 +300,13 @@
 			isa = PBXGroup;
 			children = (
 				5FABB78C89EE9309368DDC70,
+				B7B9C73358B68E74E58DF80F,
 				52CBF32A3AF0C8D6724C0A93,
 				EF3D59873D02EAFAFDBC61B3,
 				E311A9C20D969DA9437EDA1C,
 				9557D1D22E32F83AB2015EF4,
 				5F9E8EAF63A7C4DD889DACB7,
+				ADFC785175071519EE5B3055,
 				6433740CC22FA365759AD3FF,
 			);
 			path = "Models";
@@ -503,6 +512,7 @@
 				882626D249A6644BCC439455 /* FixtureBuilders.swift */,
 				2D3DD89E6A8DC1991CF5E98D /* FixtureRepositories.swift */,
 				702BBE8AFB5590330AE22EDD /* LibraryStore.swift */,
+				22A3234D11CDFD2A401C42F3 /* AssessmentRows.swift */,
 				3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */,
 				39D4328698BB1FBC922FDCBA /* Badges.swift */,
 				DFBCE17F55A976C1066BE02E /* CaseCard.swift */,
@@ -526,11 +536,13 @@
 				1161AC362A3C98941BFD3811 /* SkyMetrics.swift */,
 				C87BCDADC2C55A85C1766DC5 /* SkyMotion.swift */,
 				0E7D0251022F4107B201D5C0 /* ArticleBlock.swift */,
+				B9940A7CA2EA7C112E3E98F2 /* AssessmentDimension.swift */,
 				AD09BF87F16AF0DDC265789F /* CaseEnums.swift */,
 				1DBDB1F84DD82F8358F04A17 /* CaseScores.swift */,
 				9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */,
 				146298FC6CD67380CBF8A4A7 /* Feed.swift */,
 				0DFEEA459DE263793BC7A674 /* SupportingModels.swift */,
+				B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */,
 				9551F0C97DA0B2EFE924160A /* UAPCase.swift */,
 				9FAADC52C9C9E9BDA2BDBD23 /* Repositories.swift */,
 				B0783838FD33D06CC26E1874 /* SubscriptionProviding.swift */,

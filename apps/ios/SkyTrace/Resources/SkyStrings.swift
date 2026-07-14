@@ -34,10 +34,50 @@ enum SkyStrings {
     private struct Pair { let ja: String; let en: String }
 
     private static let table: [String: Pair] = merged(
-        general, tabs, status, statusV2, scores, evidence, sourceKinds, ai,
+        general, tabs, status, statusV2, assessV2, scores, evidence, sourceKinds, ai,
         explanation, today, briefing, map, research, caseDetail,
         paywall, settings, states, welcome, filters, location, article
     )
+
+    /// V2 assessment dimensions, change kinds, related-case relations.
+    private static let assessV2: [String: Pair] = [
+        "assess.sourceIndependence": .init(ja: "報告の独立性", en: "Source independence"),
+        "assess.timeConsistency": .init(ja: "時刻の整合", en: "Time consistency"),
+        "assess.locationPrecision": .init(ja: "位置精度", en: "Location precision"),
+        "assess.mediaProvenance": .init(ja: "映像資料の来歴", en: "Media provenance"),
+        "assess.officialCorroboration": .init(ja: "公的確認", en: "Official corroboration"),
+        "assess.knownPhenomenonFit": .init(ja: "既知現象との一致", en: "Known-phenomenon fit"),
+        "assess.unresolvedContradictions": .init(ja: "未解決の矛盾", en: "Unresolved contradictions"),
+        "assess.missingInformation": .init(ja: "不足情報", en: "Missing information"),
+        "assess.level.strong": .init(ja: "高", en: "Strong"),
+        "assess.level.moderate": .init(ja: "中", en: "Moderate"),
+        "assess.level.limited": .init(ja: "低", en: "Limited"),
+        "assess.level.insufficient": .init(ja: "判定材料不足", en: "Insufficient"),
+        "assess.sectionTitle": .init(ja: "現在の評価", en: "Current assessment"),
+        "assess.basis.independence": .init(ja: "独立報告 %@件・出典 %@件", en: "%@ independent · %@ sources"),
+        "assess.basis.timeOk": .init(ja: "出典間で時刻の大きな矛盾は確認されていません", en: "No major time conflicts across sources"),
+        "assess.basis.timeConflict": .init(ja: "出典間で時刻・内容に食い違いがあります", en: "Sources conflict on time or detail"),
+        "assess.basis.media": .init(ja: "映像・撮影メタデータの確かさに基づきます", en: "Based on footage and capture metadata"),
+        "assess.basis.official": .init(ja: "公的・一次資料の有無に基づきます", en: "Based on presence of official/primary records"),
+        "assess.basis.known": .init(ja: "既知現象で説明できる度合い（高いほど説明可能）", en: "Degree explainable by known phenomena"),
+        "assess.basis.contradiction": .init(ja: "未解決の矛盾 %@件", en: "%@ unresolved contradictions"),
+        "assess.basis.missing": .init(ja: "不足している重要情報 %@件", en: "%@ missing critical items"),
+        "change.sectionTitle": .init(ja: "前回からの変化", en: "What changed"),
+        "change.newEvidence": .init(ja: "資料が追加", en: "Evidence added"),
+        "change.assessmentChanged": .init(ja: "評価が変更", en: "Assessment changed"),
+        "change.correction": .init(ja: "訂正", en: "Correction"),
+        "change.locationRefined": .init(ja: "位置精度が改善", en: "Location refined"),
+        "change.officialUpdate": .init(ja: "公式資料の更新", en: "Official update"),
+        "change.contradiction": .init(ja: "矛盾が判明", en: "Contradiction found"),
+        "related.sectionTitle": .init(ja: "関連する事例", en: "Related cases"),
+        "related.sameTimeRegion": .init(ja: "同じ時間・地域", en: "Same time/region"),
+        "related.similarAppearance": .init(ja: "似た見え方", en: "Similar appearance"),
+        "related.sameExplanation": .init(ja: "同じ説明候補", en: "Same explanation"),
+        "related.sharedSource": .init(ja: "共通の出典", en: "Shared source"),
+        "related.historical": .init(ja: "歴史的比較", en: "Historical comparison"),
+        "case.whatHappened.v2": .init(ja: "何が起きたか", en: "What happened"),
+        "case.confirmedFacts": .init(ja: "確認済みの事実", en: "Confirmed facts"),
+    ]
 
     /// V2 (Aether) 8-status vocabulary labels.
     private static let statusV2: [String: Pair] = [

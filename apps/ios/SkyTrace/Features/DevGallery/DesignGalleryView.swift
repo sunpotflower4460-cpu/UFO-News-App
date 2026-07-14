@@ -9,6 +9,7 @@ struct DesignGalleryView: View {
             VStack(alignment: .leading, spacing: SkySpacing.x8) {
                 atmosphere
                 statuses
+                assessment
                 swatches
                 editorial
             }
@@ -41,6 +42,19 @@ struct DesignGalleryView: View {
                         Spacer()
                     }
                 }
+            }
+        }
+    }
+
+    private var assessment: some View {
+        let c = DemoCases.northSeaNotable
+        return EditorialSection(title: "Assessment / Changes / Facts", systemImage: "list.bullet.rectangle") {
+            VStack(alignment: .leading, spacing: SkySpacing.x4) {
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    ForEach(c.assessmentDimensions.prefix(4)) { AssessmentDimensionRow(dimension: $0) }
+                }
+                if let change = c.whatChanged.first { CaseChangeRow(change: change) }
+                if let fact = c.confirmedFacts.first { FactStatementRow(fact: fact) }
             }
         }
     }
