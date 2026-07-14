@@ -6,15 +6,16 @@ enum SkyFormat {
 
     /// Medium date + short time in a specific zone (e.g. the observation site).
     static func dateTime(_ date: Date, zone: TimeZone = .current) -> String {
-        date.formatted(
-            .dateTime.year().month().day().hour().minute()
-                .timeZone(zone)
-        )
+        var style = Date.FormatStyle.dateTime.year().month().day().hour().minute()
+        style.timeZone = zone
+        return date.formatted(style)
     }
 
     /// Short time only, in the given zone.
     static func time(_ date: Date, zone: TimeZone = .current) -> String {
-        date.formatted(.dateTime.hour().minute().timeZone(zone))
+        var style = Date.FormatStyle.dateTime.hour().minute()
+        style.timeZone = zone
+        return date.formatted(style)
     }
 
     /// Date only (no time).

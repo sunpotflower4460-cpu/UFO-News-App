@@ -52,9 +52,6 @@ struct TodayView: View {
                     DailyBriefingCard(briefing: feed.briefing, isPlus: env.subscription.isPlus,
                                       onReadFull: { showBriefing = true },
                                       onUnlock: { paywall = PaywallContext(trigger: .briefing) })
-                        .navigationDestination(isPresented: $showBriefing) {
-                            BriefingDetailView(date: feed.date)
-                        }
                     topCases(feed)
                     updates(feed)
                     savedUpdates(model)
@@ -65,6 +62,10 @@ struct TodayView: View {
             .padding(.vertical, SkySpacing.x4)
         }
         .refreshable { await model.refresh() }
+        // Hoisted out of the LazyVStack so navigation is reliable.
+        .navigationDestination(isPresented: $showBriefing) {
+            if let date = model.state.value?.date { BriefingDetailView(date: date) }
+        }
     }
 
     // MARK: Pieces
