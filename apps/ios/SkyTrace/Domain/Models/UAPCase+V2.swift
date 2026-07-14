@@ -53,7 +53,7 @@ extension UAPCase {
             .map { entry in
                 let kind: CaseChangeEntry.Kind = {
                     if entry.statusChange == .disputed { return .contradiction }
-                    if entry.statusChange == .corrected || entry.statusChange == .withdrawn { return .correction }
+                    if entry.statusChange == .withdrawn { return .correction }
                     if entry.statusChange != nil { return .assessmentChanged }
                     if !entry.addedSourceIDs.isEmpty { return .newEvidence }
                     return .officialUpdate
