@@ -25,6 +25,7 @@
 		3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */ = {isa = PBXBuildFile; fileRef = 9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */; };
 		39D4328698BB1FBC922FDCBA /* Badges.swift */ = {isa = PBXBuildFile; fileRef = 6773B15442645C38C95F0771 /* Badges.swift */; };
 		DFBCE17F55A976C1066BE02E /* CaseCard.swift */ = {isa = PBXBuildFile; fileRef = 83342F3181619CADEB5CA9B9 /* CaseCard.swift */; };
+		484E9307923B8DF50CC70A07 /* CaseExecutiveSummary.swift */ = {isa = PBXBuildFile; fileRef = 1AF51742704AFC767065F76E /* CaseExecutiveSummary.swift */; };
 		04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */ = {isa = PBXBuildFile; fileRef = 5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */; };
 		2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */ = {isa = PBXBuildFile; fileRef = 91B71D08AD149440583B2649 /* EditorialSurface.swift */; };
 		B30E7E698B69CF26392402AB /* EvidenceItemRow.swift */ = {isa = PBXBuildFile; fileRef = FDBD1BD08EAE977E33851A00 /* EvidenceItemRow.swift */; };
@@ -122,6 +123,7 @@
 		9061F9AB7FFDBAA24FBF9699 /* AtmosphereCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AtmosphereCanvas.swift"; sourceTree = "<group>"; };
 		6773B15442645C38C95F0771 /* Badges.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Badges.swift"; sourceTree = "<group>"; };
 		83342F3181619CADEB5CA9B9 /* CaseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseCard.swift"; sourceTree = "<group>"; };
+		1AF51742704AFC767065F76E /* CaseExecutiveSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseExecutiveSummary.swift"; sourceTree = "<group>"; };
 		5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyBriefingCard.swift"; sourceTree = "<group>"; };
 		91B71D08AD149440583B2649 /* EditorialSurface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EditorialSurface.swift"; sourceTree = "<group>"; };
 		FDBD1BD08EAE977E33851A00 /* EvidenceItemRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceItemRow.swift"; sourceTree = "<group>"; };
@@ -275,6 +277,7 @@
 				9061F9AB7FFDBAA24FBF9699,
 				6773B15442645C38C95F0771,
 				83342F3181619CADEB5CA9B9,
+				1AF51742704AFC767065F76E,
 				5F6BC68C43341D3669581D93,
 				91B71D08AD149440583B2649,
 				FDBD1BD08EAE977E33851A00,
@@ -580,6 +583,7 @@
 				3925201652F42F184D1FDE90 /* AtmosphereCanvas.swift */,
 				39D4328698BB1FBC922FDCBA /* Badges.swift */,
 				DFBCE17F55A976C1066BE02E /* CaseCard.swift */,
+				484E9307923B8DF50CC70A07 /* CaseExecutiveSummary.swift */,
 				04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */,
 				2AF43EEBA83C4DC9B355A8E2 /* EditorialSurface.swift */,
 				B30E7E698B69CF26392402AB /* EvidenceItemRow.swift */,

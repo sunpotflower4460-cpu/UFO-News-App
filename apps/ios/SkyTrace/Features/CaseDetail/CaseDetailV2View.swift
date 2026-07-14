@@ -43,6 +43,7 @@ struct CaseDetailV2View: View {
             VStack(alignment: .leading, spacing: SkySpacing.x8) {
                 if c.isDemo { InlineBanner(kind: .demo) }
                 header(model, c)                                   // 1
+                CaseExecutiveSummary(snapshot: c.executiveSnapshot) // 現時点 (V3 §5.1)
                 EditorialSurface {
                     VStack(alignment: .leading, spacing: SkySpacing.x8) {
                         whatChanged(c)                             // 2

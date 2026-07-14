@@ -10,6 +10,7 @@ struct WorldSkyPulse: View {
     let summary: GlobalSummary
     let signals: [AtmosphereSignal]
     let lastUpdated: Date
+    var updatedCount: Int = 0
     var onOpenMap: () -> Void = {}
 
     var body: some View {
@@ -28,14 +29,15 @@ struct WorldSkyPulse: View {
                         .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
                     Text(SkyStrings.t("today.heroTitle"))
                         .font(SkyTypography.sectionHeading).foregroundStyle(SkyColor.textPrimary)
-                    Text(SkyStrings.t("today.mergeSummary",
-                                      String(summary.newReportCount), String(summary.mergedCaseCount)))
-                        .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
-                        .fixedSize(horizontal: false, vertical: true)
-                    HStack(spacing: SkySpacing.x3) {
-                        legendDot(SkyColor.statusNew, SkyStrings.t("v2.status.newReport"))
-                        legendDot(SkyColor.signalWarm, SkyStrings.t("label.updated"))
+                    // Three labelled metrics — a number alone isn't context.
+                    HStack(alignment: .top, spacing: SkySpacing.x5) {
+                        metric(summary.newReportCount, SkyStrings.t("pulse.metric.new"), SkyColor.statusNew)
+                        metric(summary.mergedCaseCount, SkyStrings.t("pulse.metric.merged"), SkyColor.accentPrimary)
+                        metric(updatedCount, SkyStrings.t("pulse.metric.updated"), SkyColor.signalWarm)
                     }
+                    Text(SkyStrings.t(summary.coverageNoteKey))
+                        .font(SkyTypography.metadata).foregroundStyle(SkyColor.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
                     StaleBadge(date: lastUpdated)
                 }
                 .accessibilityElement(children: .ignore)
@@ -62,16 +64,18 @@ struct WorldSkyPulse: View {
         .shadow(color: SkyColor.aetherZenith.opacity(0.6), radius: 18, y: 10)
     }
 
-    private func legendDot(_ color: Color, _ text: String) -> some View {
-        HStack(spacing: 4) {
-            Circle().fill(color).frame(width: 7, height: 7)
-            Text(text).font(.caption2).foregroundStyle(SkyColor.textSecondary)
+    private func metric(_ value: Int, _ label: String, _ color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("\(value)").font(SkyTypography.scoreNumber).foregroundStyle(SkyColor.textPrimary)
+            Text(label).font(SkyTypography.metadata).foregroundStyle(color)
         }
     }
 
     private var a11ySummary: String {
         SkyStrings.t("today.heroTitle") + "。"
-            + SkyStrings.t("today.mergeSummary", String(summary.newReportCount), String(summary.mergedCaseCount))
+            + SkyStrings.t("pulse.metric.new") + " \(summary.newReportCount)。"
+            + SkyStrings.t("pulse.metric.merged") + " \(summary.mergedCaseCount)。"
+            + SkyStrings.t("pulse.metric.updated") + " \(updatedCount)。"
             + SkyStrings.t(summary.coverageNoteKey)
     }
 

@@ -50,6 +50,7 @@ struct TodayV2View: View {
                 WorldSkyPulse(date: feed.date, summary: feed.summary,
                               signals: WorldSkyPulse.signals(from: feed.topCases + feed.recentUpdates),
                               lastUpdated: feed.lastUpdatedAt,
+                              updatedCount: feed.recentUpdates.count,
                               onOpenMap: { router.openMap() })
                 briefingLead(feed)
                 priorityCase(feed)

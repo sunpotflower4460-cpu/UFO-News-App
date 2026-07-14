@@ -78,6 +78,18 @@ extension UAPCase {
         }
     }
 
+    /// The "現時点" snapshot shown at the top of Case Detail: where the case
+    /// stands now, the leading known explanation (if any), and the main open
+    /// point. Short — orients before the deep sections (V3 §5.1).
+    var executiveSnapshot: CaseExecutiveSnapshot {
+        let leading = explanationCandidates
+            .filter { $0.matchScore > 0 }
+            .max(by: { $0.matchScore < $1.matchScore })?.label
+        let open = missingInformation.first?.text ?? contradictions.first?.text
+        return CaseExecutiveSnapshot(currentState: currentAssessment,
+                                     leadingExplanation: leading, openPoint: open)
+    }
+
     /// Priority reason for Today's lead, derived from the latest meaningful change.
     var priorityReason: String? {
         guard let latest = whatChanged.first else { return nil }
