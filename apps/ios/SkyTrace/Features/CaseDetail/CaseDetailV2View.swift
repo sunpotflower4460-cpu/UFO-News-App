@@ -21,7 +21,7 @@ struct CaseDetailV2View: View {
             } else if let model, case .failed = model.state {
                 ErrorStateView { Task { await model.load() } }
             } else {
-                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                CaseDetailSkeleton()
             }
         }
         .background(SkyColor.canvas)
@@ -336,6 +336,41 @@ struct CaseDetailV2View: View {
         ToolbarItem(placement: .primaryAction) {
             ShareLink(item: c.title) { Image(systemName: "square.and.arrow.up") }
         }
+    }
+}
+
+/// Structural loading placeholder that mirrors the Case Detail layout — a
+/// header slab, title/metadata lines, and two stacked section blocks — so the
+/// wait reads as "this page is loading", not a lone spinner. VoiceOver hears a
+/// single "loading" label; shimmer honours Reduce Motion / UI-test flags.
+private struct CaseDetailSkeleton: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                    RoundedRectangle(cornerRadius: SkyRadius.hero)
+                        .fill(SkyColor.surfaceInteractive)
+                        .frame(height: 128)
+                    SkeletonBlock(height: 14, width: 120)
+                    SkeletonBlock(height: 26, width: 260)
+                    SkeletonBlock(height: 14, width: 180)
+                }
+                ForEach(0..<2, id: \.self) { _ in
+                    VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                        SkeletonBlock(height: 16, width: 140)
+                        SkeletonBlock(height: 14)
+                        SkeletonBlock(height: 14, width: 240)
+                    }
+                    .padding(SkySpacing.x4)
+                    .background(SkyColor.surfaceSecondary, in: RoundedRectangle(cornerRadius: SkyRadius.card))
+                }
+            }
+            .padding(.horizontal, SkySpacing.screenEdge)
+            .padding(.vertical, SkySpacing.x4)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(SkyStrings.t("state.loading"))
     }
 }
 

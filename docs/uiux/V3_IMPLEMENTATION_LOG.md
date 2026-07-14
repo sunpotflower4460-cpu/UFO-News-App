@@ -45,8 +45,15 @@
 ### V3-2 追加（実装済み・CI green: 38fce5b）
 - **CaseSectionNavigator**（sticky section chips：概要/評価/資料/経緯/出典）。`ScrollViewReader`＋アンカーで各グループへジャンプ。12節維持、Dynamic Type/VoiceOver対応。
 
+### V3-2 追加（レビュー指摘修正・実CI green: 4b3d14c）
+- **CaseSectionNavigator** に `sections` 引数を追加。CaseDetail は内容のある節のみ渡す（evidence/timeline/sources は存在時のみ）。press/social のみの事例で「資料」チップが死にリンクにならない。
+- **ResearchViewModel**：`runSearch()` が自分を起動した debounce タスクを cancel する問題を解消。`cancelDebounce()` を追加し onSubmit / selectTag / clearFilters から呼ぶ。
+
+### V3-2 追加（CaseDetail loading skeleton）
+- CaseDetail の読み込み中を素の `ProgressView` から構造スケルトン（ヘッダースラブ＋タイトル/メタ行＋2セクションブロック）へ。VoiceOver は「読み込み中」1要素、shimmer は Reduce Motion / UI テストフラグを尊重。
+
 ### V3-2 残
-- Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual、CaseDetailの状態UI（loading skeleton）。
+- Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
