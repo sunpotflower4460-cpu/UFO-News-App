@@ -38,6 +38,16 @@ struct CaseDetailV2View: View {
         .sheet(item: $paywall) { PaywallView(context: $0) }
     }
 
+    /// Only sections with content — overview/assessment are always derived;
+    /// evidence/timeline/sources depend on the case. Keeps every nav chip live.
+    private func availableSections(_ c: UAPCase) -> [CaseSection] {
+        var s: [CaseSection] = [.overview, .assessment]
+        if !c.evidenceItems.isEmpty { s.append(.evidence) }
+        if !c.timeline.isEmpty { s.append(.timeline) }
+        if !c.sources.isEmpty { s.append(.sources) }
+        return s
+    }
+
     private func content(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
         ScrollViewReader { proxy in
             ScrollView {
@@ -67,7 +77,7 @@ struct CaseDetailV2View: View {
                             }
                         }
                     } header: {
-                        CaseSectionNavigator { anchor in
+                        CaseSectionNavigator(sections: availableSections(c)) { anchor in
                             withAnimation { proxy.scrollTo(anchor, anchor: .top) }
                         }
                         .padding(.vertical, SkySpacing.x2)

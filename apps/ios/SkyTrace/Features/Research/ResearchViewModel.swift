@@ -69,20 +69,28 @@ final class ResearchViewModel {
         }
     }
 
-    /// Immediate search (submit, tag tap, filter change).
+    /// Cancels any pending debounced search. Call before an immediate search so
+    /// a queued debounce can't overwrite fresher results.
+    func cancelDebounce() { searchTask?.cancel() }
+
+    /// Immediate search (submit, tag tap, filter change). Does NOT cancel
+    /// `searchTask` — when called from the debounce it would cancel the very
+    /// task running it, which a cancellation-aware repo would turn into an
+    /// empty result set.
     func runSearch() async {
-        searchTask?.cancel()
         isRunning = true
         defer { isRunning = false }
         results = (try? await caseRepo.search(query: query, filters: filter)) ?? []
     }
 
     func selectTag(_ tag: String) {
+        cancelDebounce()
         query = tag
         Task { await runSearch() }
     }
 
     func clearFilters() {
+        cancelDebounce()
         filter = .none
         Task { await runSearch() }
     }

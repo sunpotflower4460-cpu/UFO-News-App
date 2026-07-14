@@ -13,12 +13,14 @@ enum CaseSection: String, CaseIterable, Identifiable {
 /// Not a heavy custom tab UI — just quick in-page navigation. Dynamic-Type
 /// safe; each chip is a real, VoiceOver-reachable button.
 struct CaseSectionNavigator: View {
+    /// Only the sections that actually have content — so no chip is a dead tap.
+    var sections: [CaseSection] = CaseSection.allCases
     var onSelect: (String) -> Void
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: SkySpacing.x2) {
-                ForEach(CaseSection.allCases) { section in
+                ForEach(sections) { section in
                     Button {
                         Haptics.light()
                         onSelect(section.anchor)
