@@ -1,12 +1,17 @@
 import SwiftUI
+import UIKit
 
 struct SettingsView: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
+    @Environment(\.openURL) private var openURL
     @State private var paywall: PaywallContext?
     @State private var linkToOpen: IdentifiedURL?
+    @State private var notifications = NotificationService()
+    @State private var recentsCount = 0
+    @State private var confirmClear = false
 
-    // Local (device-only) notification preferences for Phase 1.
+    // Per-topic preferences (only meaningful once OS authorization is granted).
     @AppStorage("notif.daily") private var notifDaily = false
     @AppStorage("notif.major") private var notifMajor = false
     @AppStorage("notif.saved") private var notifSaved = false
@@ -30,6 +35,7 @@ struct SettingsView: View {
             .background(SkyColor.canvas)
             .navigationTitle(SkyStrings.t("settings.title"))
         }
+        .task { await notifications.refresh(); recentsCount = await env.library.recentlyViewedCount() }
         .sheet(item: $paywall) { PaywallView(context: $0) }
         .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
     }
@@ -58,16 +64,36 @@ struct SettingsView: View {
         }
     }
 
-    private var notificationsSection: some View {
+    @ViewBuilder private var notificationsSection: some View {
         Section {
-            Toggle(SkyStrings.t("settings.notif.daily"), isOn: $notifDaily)
-            Toggle(SkyStrings.t("settings.notif.major"), isOn: $notifMajor)
-            Toggle(SkyStrings.t("settings.notif.saved"), isOn: $notifSaved)
-            Toggle(SkyStrings.t("settings.notif.region"), isOn: $notifRegion)
+            HStack {
+                Text(SkyStrings.t("settings.notif.status"))
+                Spacer()
+                Text(SkyStrings.t(notifications.state.labelKey)).foregroundStyle(SkyColor.textSecondary)
+            }
+            switch notifications.state {
+            case .notDetermined:
+                Button(SkyStrings.t("settings.notif.enable")) {
+                    Task { await notifications.requestIfNeeded() }
+                }
+                .foregroundStyle(SkyColor.accentPrimary)
+            case .denied:
+                Button(SkyStrings.t("settings.notif.openSettings")) {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { openURL(url) }
+                }
+                .foregroundStyle(SkyColor.accentPrimary)
+            case .authorized, .provisional:
+                Toggle(SkyStrings.t("settings.notif.daily"), isOn: $notifDaily)
+                Toggle(SkyStrings.t("settings.notif.major"), isOn: $notifMajor)
+                Toggle(SkyStrings.t("settings.notif.saved"), isOn: $notifSaved)
+                Toggle(SkyStrings.t("settings.notif.region"), isOn: $notifRegion)
+            }
         } header: {
             Text(SkyStrings.t("settings.section.notifications"))
         } footer: {
-            Text(SkyStrings.t("settings.notif.primer"))
+            Text(notifications.state == .denied
+                 ? SkyStrings.t("settings.notif.deniedNote")
+                 : SkyStrings.t("settings.notif.primer"))
         }
         .tint(SkyColor.signalCyan)
     }
@@ -82,11 +108,32 @@ struct SettingsView: View {
     }
 
     private var dataSection: some View {
-        Section(SkyStrings.t("settings.section.data")) {
-            Button(SkyStrings.t("settings.clearCache"), role: .destructive) {
-                // Phase 1 keeps only bookmarks/recent; clearing recents here.
-                Haptics.light()
+        Section {
+            HStack {
+                Text(SkyStrings.t("settings.cache.recents"))
+                Spacer()
+                Text(SkyStrings.t("settings.cache.count", String(recentsCount)))
+                    .foregroundStyle(SkyColor.textTertiary)
             }
+            Button(SkyStrings.t("settings.clearCache"), role: .destructive) { confirmClear = true }
+                .disabled(recentsCount == 0)
+        } header: {
+            Text(SkyStrings.t("settings.section.data"))
+        } footer: {
+            Text(SkyStrings.t("settings.cache.note"))
+        }
+        .confirmationDialog(SkyStrings.t("settings.cache.confirmTitle"),
+                            isPresented: $confirmClear, titleVisibility: .visible) {
+            Button(SkyStrings.t("settings.clearCache"), role: .destructive) {
+                Task {
+                    await env.library.clearRecentlyViewed()
+                    recentsCount = await env.library.recentlyViewedCount()
+                    Haptics.success()
+                }
+            }
+            Button(SkyStrings.t("action.cancel"), role: .cancel) {}
+        } message: {
+            Text(SkyStrings.t("settings.cache.confirmMessage"))
         }
     }
 

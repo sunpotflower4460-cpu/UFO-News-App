@@ -21,7 +21,10 @@ struct AtmosphereCanvas: View {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @State private var appeared = false
 
-    private var isMoving: Bool { animated && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled }
+    private var isMoving: Bool {
+        animated && !reduceMotion && !ProcessInfo.processInfo.isLowPowerModeEnabled
+            && !UITestFlags.disableAnimations
+    }
 
     var body: some View {
         GeometryReader { geo in

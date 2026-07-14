@@ -10,6 +10,7 @@ struct WorldSkyPulse: View {
     let summary: GlobalSummary
     let signals: [AtmosphereSignal]
     let lastUpdated: Date
+    var updatedCount: Int = 0
     var onOpenMap: () -> Void = {}
 
     var body: some View {
@@ -19,28 +20,39 @@ struct WorldSkyPulse: View {
                 AtmosphereCanvas(dayFraction: 0.2, signals: signals,
                                  parallax: CGSize(width: 0, height: geo.frame(in: .global).minY * 0.06))
             }
-            LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.66)],
-                           startPoint: .center, endPoint: .bottom)
+            // Legibility scrim: keeps the metrics/labels readable over bright
+            // atmosphere signals behind them.
+            LinearGradient(colors: [.clear, SkyColor.aetherZenith.opacity(0.45),
+                                    SkyColor.aetherZenith.opacity(0.85)],
+                           startPoint: .init(x: 0.5, y: 0.28), endPoint: .bottom)
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
-                Text(SkyFormat.dateOnly(date))
-                    .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
-                Text(SkyStrings.t("today.heroTitle"))
-                    .font(SkyTypography.sectionHeading).foregroundStyle(SkyColor.textPrimary)
-                Text(SkyStrings.t("today.mergeSummary",
-                                  String(summary.newReportCount), String(summary.mergedCaseCount)))
-                    .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
-                    .fixedSize(horizontal: false, vertical: true)
-                HStack(spacing: SkySpacing.x3) {
-                    legendDot(SkyColor.statusNew, SkyStrings.t("v2.status.newReport"))
-                    legendDot(SkyColor.signalWarm, SkyStrings.t("label.updated"))
-                    Spacer()
-                    Button(action: onOpenMap) {
-                        Label(SkyStrings.t("action.seeDetail"), systemImage: "map")
-                            .font(SkyTypography.metadata.weight(.semibold))
+                // The world summary is one VoiceOver element…
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    Text(SkyFormat.dateOnly(date))
+                        .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
+                    Text(SkyStrings.t("today.heroTitle"))
+                        .font(SkyTypography.sectionHeading).foregroundStyle(SkyColor.textPrimary)
+                    // Three labelled metrics — a number alone isn't context.
+                    HStack(alignment: .top, spacing: SkySpacing.x5) {
+                        metric(summary.newReportCount, SkyStrings.t("pulse.metric.new"), SkyColor.statusNew)
+                        metric(summary.mergedCaseCount, SkyStrings.t("pulse.metric.merged"), SkyColor.accentPrimary)
+                        metric(updatedCount, SkyStrings.t("pulse.metric.updated"), SkyColor.signalWarm)
                     }
-                    .buttonStyle(.plain).foregroundStyle(SkyColor.accentPrimary)
+                    Text(SkyStrings.t(summary.coverageNoteKey))
+                        .font(SkyTypography.metadata).foregroundStyle(SkyColor.textTertiary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    StaleBadge(date: lastUpdated)
                 }
-                StaleBadge(date: lastUpdated)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel(a11ySummary)
+
+                // …and "地図で見る" is a separate, reachable button.
+                Button(action: onOpenMap) {
+                    Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                        .font(SkyTypography.metadata.weight(.semibold))
+                }
+                .buttonStyle(.plain).foregroundStyle(SkyColor.accentPrimary)
+                .accessibilityLabel(SkyStrings.t("action.viewOnMap"))
             }
             .padding(SkySpacing.x4)
         }
@@ -53,21 +65,20 @@ struct WorldSkyPulse: View {
                                startPoint: .top, endPoint: .bottom),
                 lineWidth: 1))
         .shadow(color: SkyColor.aetherZenith.opacity(0.6), radius: 18, y: 10)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel(a11ySummary)
-        .accessibilityHint(SkyStrings.t("map.altList"))
     }
 
-    private func legendDot(_ color: Color, _ text: String) -> some View {
-        HStack(spacing: 4) {
-            Circle().fill(color).frame(width: 7, height: 7)
-            Text(text).font(.caption2).foregroundStyle(SkyColor.textSecondary)
+    private func metric(_ value: Int, _ label: String, _ color: Color) -> some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text("\(value)").font(SkyTypography.scoreNumber).foregroundStyle(SkyColor.textPrimary)
+            Text(label).font(SkyTypography.metadata).foregroundStyle(color)
         }
     }
 
     private var a11ySummary: String {
         SkyStrings.t("today.heroTitle") + "。"
-            + SkyStrings.t("today.mergeSummary", String(summary.newReportCount), String(summary.mergedCaseCount))
+            + SkyStrings.t("pulse.metric.new") + " \(summary.newReportCount)。"
+            + SkyStrings.t("pulse.metric.merged") + " \(summary.mergedCaseCount)。"
+            + SkyStrings.t("pulse.metric.updated") + " \(updatedCount)。"
             + SkyStrings.t(summary.coverageNoteKey)
     }
 

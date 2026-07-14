@@ -6,16 +6,23 @@ import SwiftUI
 /// the codebase (TodayView/MapView/ResearchView) and their previews, so the
 /// switch is reversible and non-destructive.
 struct RootTabView: View {
+    @Environment(AppRouter.self) private var router
+
     var body: some View {
-        TabView {
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
             NavigationStack { TodayV2View() }
                 .tabItem { Label(SkyStrings.t("tab.today"), systemImage: "sun.max") }
+                .tag(AppTab.today)
             NavigationStack { MapV2View() }
                 .tabItem { Label(SkyStrings.t("tab.map"), systemImage: "map") }
+                .tag(AppTab.map)
             NavigationStack { SearchV2View() }
                 .tabItem { Label(SkyStrings.t("tab.research"), systemImage: "magnifyingglass") }
+                .tag(AppTab.explore)
             SettingsView()
                 .tabItem { Label(SkyStrings.t("tab.settings"), systemImage: "gearshape") }
+                .tag(AppTab.settings)
         }
         .tint(SkyColor.accentPrimary)
         .background(SkyColor.canvas)
@@ -26,4 +33,5 @@ struct RootTabView: View {
     RootTabView()
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
+        .environment(AppRouter())
 }

@@ -56,7 +56,7 @@ struct CaseCard: View {
 
     private var compact: some View {
         HStack(spacing: SkySpacing.x3) {
-            VStack { StatusBadge(status: uapCase.status, compact: true); Spacer(minLength: 0) }
+            VStack { CaseStatusGlyph(status: uapCase.v2Status, size: 22); Spacer(minLength: 0) }
             VStack(alignment: .leading, spacing: SkySpacing.x1) {
                 Text(uapCase.title).font(SkyTypography.supporting.weight(.semibold))
                     .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
@@ -87,7 +87,7 @@ struct CaseCard: View {
 
     private var topRow: some View {
         HStack(spacing: SkySpacing.x2) {
-            StatusBadge(status: uapCase.status)
+            CaseStatusLabel(status: uapCase.v2Status)
             if uapCase.hasRecentUpdate { UpdateBadge() }
             Spacer()
             if uapCase.isDemo { DemoBadge() }
@@ -126,7 +126,7 @@ private struct A11yCard: ViewModifier {
             .accessibilityAddTraits(.isButton)
     }
     private var label: String {
-        var parts: [String] = [SkyStrings.t(uapCase.status.labelKey), uapCase.title]
+        var parts: [String] = [SkyStrings.t(uapCase.v2Status.labelKey), uapCase.title]
         parts.append(SkyStrings.t("label.independent", String(uapCase.independentReportCount)))
         parts.append(SkyStrings.t("label.sources", String(uapCase.sourceCount)))
         if let v = uapCase.lastVerifiedAt {

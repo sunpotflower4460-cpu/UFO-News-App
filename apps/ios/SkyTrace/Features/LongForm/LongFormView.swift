@@ -18,18 +18,23 @@ struct LongFormView: View {
                 VStack(alignment: .leading, spacing: SkySpacing.x5) {
                     header
                     Divider().overlay(SkyColor.separator)
-                    let free = article.blocks.filter { !$0.isPremiumGated }
-                    let gated = article.blocks.filter { $0.isPremiumGated }
-                    ForEach(free) { ArticleBlockView(block: $0) }
+                    // Walk blocks in authored order so premium gating never
+                    // reorders the article. Plus reads everything; Free reads up
+                    // to the first gated block, then a contextual lock.
                     if isPlus {
-                        ForEach(gated) { ArticleBlockView(block: $0) }
-                    } else if !gated.isEmpty {
-                        PremiumLockView(
-                            title: SkyStrings.t("briefing.readFull"),
-                            unlocks: [SkyStrings.t("paywall.feature.synthesis"),
-                                      SkyStrings.t("paywall.feature.evidence")],
-                            ctaTitle: SkyStrings.t("paywall.cta"),
-                            onUnlock: { paywall = PaywallContext(trigger: .synthesis) })
+                        ForEach(article.blocks) { ArticleBlockView(block: $0) }
+                    } else {
+                        let firstGated = article.blocks.firstIndex(where: { $0.isPremiumGated })
+                        let visible = firstGated.map { Array(article.blocks.prefix($0)) } ?? article.blocks
+                        ForEach(visible) { ArticleBlockView(block: $0) }
+                        if firstGated != nil {
+                            PremiumLockView(
+                                title: SkyStrings.t("briefing.readFull"),
+                                unlocks: [SkyStrings.t("paywall.feature.synthesis"),
+                                          SkyStrings.t("paywall.feature.evidence")],
+                                ctaTitle: SkyStrings.t("paywall.cta"),
+                                onUnlock: { paywall = PaywallContext(trigger: .synthesis) })
+                        }
                     }
                     // Corrections stay free — always shown when present, regardless of Plus.
                     if let note = article.correctionNote { correction(note) }

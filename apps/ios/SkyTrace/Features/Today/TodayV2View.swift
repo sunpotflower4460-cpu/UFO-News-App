@@ -7,14 +7,26 @@ import SwiftUI
 struct TodayV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
+    @Environment(AppRouter.self) private var router
     @State private var model: TodayViewModel?
 
     var body: some View {
         Group {
-            if let model, let feed = model.state.value {
-                content(model, feed)
+            if let model {
+                switch model.state {
+                case .idle, .loading:
+                    TodaySkeleton()
+                case .loaded(let feed):
+                    content(model, feed, stale: false)
+                case .partial(let feed):
+                    content(model, feed, stale: true)
+                case .failed(_, .some(let feed)):
+                    content(model, feed, stale: true)
+                case .failed(_, .none):
+                    ErrorStateView { Task { await model.load() } }
+                }
             } else {
-                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                TodaySkeleton()
             }
         }
         .background(SkyColor.canvas)
@@ -27,12 +39,19 @@ struct TodayV2View: View {
         }
     }
 
-    private func content(_ model: TodayViewModel, _ feed: TodayFeed) -> some View {
+    private func content(_ model: TodayViewModel, _ feed: TodayFeed, stale: Bool) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SkySpacing.x8) {
+                if stale {
+                    InlineBanner(kind: model.state.error == .offline ? .offline : .partial) {
+                        Task { await model.refresh() }
+                    }
+                }
                 WorldSkyPulse(date: feed.date, summary: feed.summary,
                               signals: WorldSkyPulse.signals(from: feed.topCases + feed.recentUpdates),
-                              lastUpdated: feed.lastUpdatedAt)
+                              lastUpdated: feed.lastUpdatedAt,
+                              updatedCount: feed.recentUpdates.count,
+                              onOpenMap: { router.openMap() })
                 briefingLead(feed)
                 priorityCase(feed)
                 sinceLastVisit(model)
@@ -127,8 +146,25 @@ struct TodayV2View: View {
     }
 }
 
+/// Loading skeleton for Today — a shaped placeholder instead of a lone spinner.
+private struct TodaySkeleton: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: SkySpacing.x6) {
+                SkeletonBlock(height: 250).clipShape(RoundedRectangle(cornerRadius: SkyRadius.hero))
+                SkeletonCard()
+                SkeletonCard()
+            }
+            .padding(.horizontal, SkySpacing.screenEdge)
+            .padding(.vertical, SkySpacing.x4)
+        }
+        .accessibilityLabel(SkyStrings.t("state.loading"))
+    }
+}
+
 #Preview("Today V2") {
     NavigationStack { TodayV2View() }
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
+        .environment(AppRouter())
 }

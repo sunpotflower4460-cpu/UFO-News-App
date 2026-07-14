@@ -39,31 +39,46 @@ struct CaseDetailV2View: View {
     }
 
     private func content(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                if c.isDemo { InlineBanner(kind: .demo) }
-                header(model, c)                                   // 1
-                EditorialSurface {
-                    VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                        whatChanged(c)                             // 2
-                        whatHappened(c)                            // 3
-                        assessment(c)                              // 4
-                        confirmedFacts(c)                          // 5
-                        agreements(c)                              // 6
-                        contradictions(c)                          // 7
-                        evidence(c)                                // 8
-                        explanations(c)                            // 9
-                        timeline(c)                                // 10
-                        sources(c)                                 // 11
-                        relatedCases()                             // 12
-                        aiDisclosure(model.article)
+        ScrollViewReader { proxy in
+            ScrollView {
+                LazyVStack(alignment: .leading, spacing: SkySpacing.x8, pinnedViews: [.sectionHeaders]) {
+                    if c.isDemo { InlineBanner(kind: .demo) }
+                    header(model, c)                                   // 1
+                    CaseExecutiveSummary(snapshot: c.executiveSnapshot) // 現時点 (V3 §5.1)
+                    Section {
+                        EditorialSurface {
+                            VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                                // 概要
+                                VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                                    whatChanged(c); whatHappened(c); confirmedFacts(c)
+                                }.id(CaseSection.overview.anchor)
+                                // 評価
+                                VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                                    assessment(c); agreements(c); contradictions(c); explanations(c)
+                                }.id(CaseSection.assessment.anchor)
+                                // 資料
+                                evidence(c).id(CaseSection.evidence.anchor)
+                                // 経緯
+                                timeline(c).id(CaseSection.timeline.anchor)
+                                // 出典
+                                VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                                    sources(c); relatedCases(); aiDisclosure(model.article)
+                                }.id(CaseSection.sources.anchor)
+                            }
+                        }
+                    } header: {
+                        CaseSectionNavigator { anchor in
+                            withAnimation { proxy.scrollTo(anchor, anchor: .top) }
+                        }
+                        .padding(.vertical, SkySpacing.x2)
+                        .background(SkyColor.canvas)
                     }
                 }
+                .padding(.horizontal, SkySpacing.screenEdge)
+                .padding(.vertical, SkySpacing.x4)
             }
-            .padding(.horizontal, SkySpacing.screenEdge)
-            .padding(.vertical, SkySpacing.x4)
+            .toolbar { toolbar(model, c) }
         }
-        .toolbar { toolbar(model, c) }
     }
 
     // MARK: 1. Header (atmosphere allowed here only)
@@ -173,20 +188,14 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 8. Evidence (grouped by source type)
+    // MARK: 8. Evidence (records the case rests on — not the citation list)
 
     @ViewBuilder private func evidence(_ c: UAPCase) -> some View {
-        if !c.sources.isEmpty {
+        let items = c.evidenceItems
+        if !items.isEmpty {
             EditorialSection(title: SkyStrings.t("case.evidence"), systemImage: "doc.on.doc") {
-                let groups = Dictionary(grouping: c.sources, by: { $0.sourceType })
                 VStack(alignment: .leading, spacing: SkySpacing.x3) {
-                    ForEach(groups.keys.sorted(by: { $0.rawValue < $1.rawValue }), id: \.self) { type in
-                        Text(SkyStrings.t(type.labelKey))
-                            .font(.caption.weight(.semibold)).foregroundStyle(SkyColor.textTertiary)
-                        ForEach(groups[type] ?? []) { s in
-                            SourceRow(source: s) { url in linkToOpen = IdentifiedURL(url: url) }
-                        }
-                    }
+                    ForEach(items) { EvidenceItemRow(item: $0) }
                 }
             }
         }
@@ -238,16 +247,26 @@ struct CaseDetailV2View: View {
                 VStack(alignment: .leading, spacing: SkySpacing.x3) {
                     ForEach(related) { ref in
                         if let rc = allCases.first(where: { $0.id == ref.id }) {
-                            HStack(spacing: SkySpacing.x3) {
-                                CaseStatusGlyph(status: rc.v2Status, size: 20)
-                                VStack(alignment: .leading, spacing: 1) {
-                                    Text(rc.title).font(SkyTypography.supporting.weight(.medium))
-                                        .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
-                                    Text(SkyStrings.t(ref.relation.labelKey))
-                                        .font(.caption2).foregroundStyle(SkyColor.accentSecondary)
+                            NavigationLink { CaseDetailV2View(caseID: rc.id) } label: {
+                                HStack(spacing: SkySpacing.x3) {
+                                    CaseStatusGlyph(status: rc.v2Status, size: 20)
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text(rc.title).font(SkyTypography.supporting.weight(.medium))
+                                            .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
+                                        Text(SkyStrings.t(ref.relation.labelKey))
+                                            .font(SkyTypography.metadata).foregroundStyle(SkyColor.accentSecondary)
+                                    }
+                                    Spacer(minLength: 0)
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption).foregroundStyle(SkyColor.textTertiary)
                                 }
-                                Spacer(minLength: 0)
+                                .contentShape(Rectangle())
                             }
+                            .buttonStyle(.plain)
+                            .accessibilityElement(children: .ignore)
+                            .accessibilityLabel(rc.title + "。" + SkyStrings.t(ref.relation.labelKey))
+                            .accessibilityHint(SkyStrings.t("action.openDetail"))
+                            .accessibilityAddTraits(.isButton)
                         }
                     }
                 }
