@@ -52,8 +52,13 @@
 ### V3-2 追加（CaseDetail loading skeleton）
 - CaseDetail の読み込み中を素の `ProgressView` から構造スケルトン（ヘッダースラブ＋タイトル/メタ行＋2セクションブロック）へ。VoiceOver は「読み込み中」1要素、shimmer は Reduce Motion / UI テストフラグを尊重。
 
+### V3-2 追加（Citation drawer）
+- 本文 fact ブロックの出典マーカーをタップ可能な `[n]` チップ化。記事内の初出順に 1…n 番号を付与（`sources` に解決できる id のみ）。タップで **CitationDrawer**（medium/large detent）を開き、媒体名・種別・タイトル・許諾抜粋・原典への in-app リンク（SafariView）を表示。読書位置を失わない。
+- `sources` が無い文脈（デバッグギャラリー等）ではプレーンな脚注へフォールバックし、出典表示が消えない。
+- 変更ファイル：`Domain/…`不要。`Features/CaseDetail/ArticleBlockView.swift`, `DesignSystem/Components/CitationDrawer.swift`(新), `Features/LongForm/LongFormView.swift`, `Features/CaseDetail/CaseDetailV2View.swift`（`LongFormView` に `sources` を受け渡し）, `Resources/SkyStrings.swift`（citation.*）。
+
 ### V3-2 残
-- Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual。
+- adaptive time metadata、Case Lead Visual。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。

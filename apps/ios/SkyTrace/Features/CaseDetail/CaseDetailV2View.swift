@@ -72,7 +72,7 @@ struct CaseDetailV2View: View {
                                 timeline(c).id(CaseSection.timeline.anchor)
                                 // 出典
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                    sources(c); relatedCases(); aiDisclosure(model.article)
+                                    sources(c); relatedCases(); aiDisclosure(model.article, caseSources: c.sources)
                                 }.id(CaseSection.sources.anchor)
                             }
                         }
@@ -284,11 +284,11 @@ struct CaseDetailV2View: View {
         }
     }
 
-    private func aiDisclosure(_ article: SynthesizedArticle?) -> some View {
+    private func aiDisclosure(_ article: SynthesizedArticle?, caseSources: [SourceReference]) -> some View {
         EditorialSection(title: SkyStrings.t("ai.sectionTitle"), systemImage: "sparkles") {
             VStack(alignment: .leading, spacing: SkySpacing.x3) {
                 if let article {
-                    NavigationLink { LongFormView(article: article) } label: {
+                    NavigationLink { LongFormView(article: article, sources: caseSources) } label: {
                         HStack {
                             Label(SkyStrings.t("case.article"), systemImage: "doc.richtext")
                                 .foregroundStyle(SkyColor.signalViolet)

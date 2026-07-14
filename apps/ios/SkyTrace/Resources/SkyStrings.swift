@@ -207,6 +207,10 @@ enum SkyStrings {
         "source.type.open_data": .init(ja: "オープンデータ", en: "Open data"),
         "sources.sectionTitle": .init(ja: "出典", en: "Sources"),
         "sources.openLink": .init(ja: "外部リンクを開く", en: "Open external link"),
+        "citation.marker": .init(ja: "出典%@", en: "Citation %@"),
+        "citation.hint": .init(ja: "出典の詳細を開く", en: "Open citation details"),
+        "citation.drawerTitle": .init(ja: "出典 %@", en: "Citation %@"),
+        "citation.excerpt": .init(ja: "許諾済み抜粋", en: "Licensed excerpt"),
     ]
 
     private static let ai: [String: Pair] = [
