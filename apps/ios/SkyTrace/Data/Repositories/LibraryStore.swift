@@ -40,4 +40,13 @@ actor LibraryStore: LibraryRepository {
         if ids.count > recentLimit { ids = Array(ids.prefix(recentLimit)) }
         defaults.set(ids, forKey: recentKey)
     }
+
+    func recentlyViewedCount() async -> Int {
+        await recentlyViewedIDs().count
+    }
+
+    /// Clears the recently-viewed cache. Bookmarks are kept (a separate action).
+    func clearRecentlyViewed() async {
+        defaults.removeObject(forKey: recentKey)
+    }
 }

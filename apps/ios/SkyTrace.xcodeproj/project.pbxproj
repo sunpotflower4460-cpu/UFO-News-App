@@ -82,6 +82,7 @@
 		87559C26C025336D150BD784 /* FeatureFlags.swift */ = {isa = PBXBuildFile; fileRef = 9C34FAF4051029C1FB1CFE6F /* FeatureFlags.swift */; };
 		A0CE9201B98C515649959709 /* Haptics.swift */ = {isa = PBXBuildFile; fileRef = D44F3FFEE31AA8D3D6D6A811 /* Haptics.swift */; };
 		A8A4DEA49973F3DA07DAAF05 /* Loadable.swift */ = {isa = PBXBuildFile; fileRef = 6FC0A9029916855DD37D8FAF /* Loadable.swift */; };
+		592993E27AAC3DF86A5DD768 /* NotificationService.swift */ = {isa = PBXBuildFile; fileRef = A105AC964BE85E584409955B /* NotificationService.swift */; };
 		763A7EB87D3E29AD91E8A71A /* ReleaseLinkAudit.swift */ = {isa = PBXBuildFile; fileRef = BC50C255A50C1F28E51D90D2 /* ReleaseLinkAudit.swift */; };
 		47488061D511F80E3A7D8468 /* StoreKitSubscriptionService.swift */ = {isa = PBXBuildFile; fileRef = 45EA04523E1F43A0F6B61BC1 /* StoreKitSubscriptionService.swift */; };
 		2A9DBA3D1C1437745ED87C4F /* SubscriptionStore.swift */ = {isa = PBXBuildFile; fileRef = C8FB90C9DD46B8C9D9A5184D /* SubscriptionStore.swift */; };
@@ -175,6 +176,7 @@
 		9C34FAF4051029C1FB1CFE6F /* FeatureFlags.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FeatureFlags.swift"; sourceTree = "<group>"; };
 		D44F3FFEE31AA8D3D6D6A811 /* Haptics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Haptics.swift"; sourceTree = "<group>"; };
 		6FC0A9029916855DD37D8FAF /* Loadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Loadable.swift"; sourceTree = "<group>"; };
+		A105AC964BE85E584409955B /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationService.swift"; sourceTree = "<group>"; };
 		BC50C255A50C1F28E51D90D2 /* ReleaseLinkAudit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReleaseLinkAudit.swift"; sourceTree = "<group>"; };
 		45EA04523E1F43A0F6B61BC1 /* StoreKitSubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreKitSubscriptionService.swift"; sourceTree = "<group>"; };
 		C8FB90C9DD46B8C9D9A5184D /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionStore.swift"; sourceTree = "<group>"; };
@@ -482,6 +484,7 @@
 				9C34FAF4051029C1FB1CFE6F,
 				D44F3FFEE31AA8D3D6D6A811,
 				6FC0A9029916855DD37D8FAF,
+				A105AC964BE85E584409955B,
 				BC50C255A50C1F28E51D90D2,
 				45EA04523E1F43A0F6B61BC1,
 				C8FB90C9DD46B8C9D9A5184D,
@@ -625,6 +628,7 @@
 				87559C26C025336D150BD784 /* FeatureFlags.swift */,
 				A0CE9201B98C515649959709 /* Haptics.swift */,
 				A8A4DEA49973F3DA07DAAF05 /* Loadable.swift */,
+				592993E27AAC3DF86A5DD768 /* NotificationService.swift */,
 				763A7EB87D3E29AD91E8A71A /* ReleaseLinkAudit.swift */,
 				47488061D511F80E3A7D8468 /* StoreKitSubscriptionService.swift */,
 				2A9DBA3D1C1437745ED87C4F /* SubscriptionStore.swift */,

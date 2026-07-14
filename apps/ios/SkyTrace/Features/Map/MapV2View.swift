@@ -14,6 +14,7 @@ struct MapV2View: View {
                            span: MKCoordinateSpan(latitudeDelta: 120, longitudeDelta: 200)))
     @State private var selected: UAPCase?
     @State private var showSheet = true
+    @State private var sheetDetent: PresentationDetent = .height(120)
 
     var body: some View {
         mapLayer
@@ -56,7 +57,9 @@ struct MapV2View: View {
             if cluster.isCluster {
                 withAnimation { camera = .region(region(around: cluster)) }
             } else {
+                // Select → raise the sheet and scroll the list to this case.
                 selected = cluster.cases.first
+                sheetDetent = .medium
             }
         } label: {
             if cluster.isCluster {
@@ -159,35 +162,42 @@ struct MapV2View: View {
         NavigationStack {
             Group {
                 if let model {
-                    List {
-                        if let selected {
-                            Section {
-                                CaseCard(uapCase: selected, variant: .mapSheet)
-                                    .listRowBackground(Color.clear).listRowSeparator(.hidden)
-                                NavigationLink { CaseDetailV2View(caseID: selected.id) } label: {
-                                    Text(SkyStrings.t("action.seeDetail")).foregroundStyle(SkyColor.accentPrimary)
+                    ScrollViewReader { proxy in
+                        List {
+                            if let selected {
+                                Section {
+                                    CaseCard(uapCase: selected, variant: .mapSheet)
+                                        .listRowBackground(Color.clear).listRowSeparator(.hidden)
+                                    NavigationLink { CaseDetailV2View(caseID: selected.id) } label: {
+                                        Text(SkyStrings.t("action.seeDetail")).foregroundStyle(SkyColor.accentPrimary)
+                                    }
+                                    .listRowBackground(SkyColor.surfaceSecondary)
                                 }
-                                .listRowBackground(SkyColor.surfaceSecondary)
+                                .id("selected")
+                            }
+                            Section {
+                                ForEach(model.plottableCases) { c in
+                                    NavigationLink { CaseDetailV2View(caseID: c.id) } label: {
+                                        CaseCard(uapCase: c, variant: .compact)
+                                    }
+                                    .listRowBackground(Color.clear).listRowSeparator(.hidden)
+                                }
+                            } header: {
+                                Text(SkyStrings.t("map.results", String(model.plottableCases.count)))
                             }
                         }
-                        Section {
-                            ForEach(model.plottableCases) { c in
-                                NavigationLink { CaseDetailV2View(caseID: c.id) } label: {
-                                    CaseCard(uapCase: c, variant: .compact)
-                                }
-                                .listRowBackground(Color.clear).listRowSeparator(.hidden)
-                            }
-                        } header: {
-                            Text(SkyStrings.t("map.results", String(model.plottableCases.count)))
+                        .listStyle(.plain).scrollContentBackground(.hidden).background(SkyColor.canvas)
+                        .navigationTitle(SkyStrings.t("map.altList"))
+                        .navigationBarTitleDisplayMode(.inline)
+                        .onChange(of: selected?.id) { _, id in
+                            guard id != nil else { return }
+                            withAnimation { proxy.scrollTo("selected", anchor: .top) }
                         }
                     }
-                    .listStyle(.plain).scrollContentBackground(.hidden).background(SkyColor.canvas)
-                    .navigationTitle(SkyStrings.t("map.altList"))
-                    .navigationBarTitleDisplayMode(.inline)
                 }
             }
         }
-        .presentationDetents([.height(120), .medium, .large])
+        .presentationDetents([.height(120), .medium, .large], selection: $sheetDetent)
         .presentationBackgroundInteraction(.enabled(upThrough: .medium))
         .interactiveDismissDisabled()
     }

@@ -34,6 +34,8 @@ protocol LibraryRepository: Sendable {
     func toggleBookmark(_ id: String) async
     func recentlyViewedIDs() async -> [String]
     func markViewed(_ id: String) async
+    func recentlyViewedCount() async -> Int
+    func clearRecentlyViewed() async
 }
 
 /// Structured search / filter criteria used by the Research hub and Map.
