@@ -9,6 +9,28 @@ final class ScreenshotUITests: XCTestCase {
 
     override func setUp() { continueAfterFailure = true }
 
+    /// First-run Welcome flow (Aether depth): the dimensional night sky +
+    /// AetherOrb. Forces Welcome via `-uitest-show-welcome` so it's captured
+    /// regardless of persisted state.
+    func testCaptureWelcome() {
+        let app = XCUIApplication()
+        app.launchArguments += ["-uitest-show-welcome"]
+        app.launch()
+        // Let the atmosphere + orb settle before capturing.
+        Thread.sleep(forTimeInterval: 2.4)
+        snapshot(name: "00-welcome-aether")
+
+        // Advance to the editorial policy page (does not complete Welcome).
+        let start = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] %@", "始"))
+            .firstMatch
+        let cta = start.exists ? start : app.buttons.element(boundBy: 0)
+        if cta.waitForExistence(timeout: 6) {
+            cta.tap()
+            Thread.sleep(forTimeInterval: 1.6)
+            snapshot(name: "00b-welcome-policy")
+        }
+    }
+
     func testCaptureV2Screens() {
         let app = XCUIApplication()
         app.launchArguments += ["-uitest-skip-welcome"]
