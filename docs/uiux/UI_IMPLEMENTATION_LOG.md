@@ -57,6 +57,16 @@
 ### Phase 3/4/5 — Today/Map/Search V2 + タブ切替
 - Status: complete（実CI green, 18dbd7b）— 4タブがV2画面に。WorldSkyPulse + Briefing lead + Priority Case + Since Your Last Visit + Case Stream。Design Galleryから到達。
 
+
+
+### Phase 7 — Long-form / Phase 8 — Widgets
+- Long-form: complete（実CI green, a20390a）— LongFormView（Editorial reading, Plusゲート, disclosure）。Case Detail V2 と Gallery から到達。
+- Widgets: content views + TimelineProvider + StaticConfiguration をアプリターゲットに実装（in progress）。**extensionターゲット化は M-050（Xcode必須）**。Gallery に content preview。
+
+### 残（人手/macOS）
+- VoiceOver実機・AX5・Reduce Motion/Transparency確認、スクリーンショット、Instruments（M-051）。
+- Widget extension ターゲット（M-050）。実データ接続（Phase 11）、App Store提出（Phase 12）。
+
 ## Decisions / Deviations
 - D-V2-001: deployment target は iOS 17 を維持（既存の意図的下限）。V2のiOS 26推奨に対する逸脱理由を記録。
 - D-V2-002: 文字列は当面 `SkyStrings`（コード内表）を継続使用（Phase 1のD-006を踏襲）。

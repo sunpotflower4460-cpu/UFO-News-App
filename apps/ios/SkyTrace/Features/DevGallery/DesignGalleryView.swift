@@ -40,6 +40,7 @@ struct DesignGalleryView: View {
                 atmosphere
                 statuses
                 assessment
+                widgets
                 swatches
                 editorial
             }
@@ -85,6 +86,20 @@ struct DesignGalleryView: View {
                 }
                 if let change = c.whatChanged.first { CaseChangeRow(change: change) }
                 if let fact = c.confirmedFacts.first { FactStatementRow(fact: fact) }
+            }
+        }
+    }
+
+    private var widgets: some View {
+        let entry = SkyWidgetProvider.sample
+        return EditorialSection(title: "Widgets (content preview)", systemImage: "square.grid.2x2") {
+            HStack(alignment: .top, spacing: SkySpacing.x4) {
+                SkyWidgetSmall(entry: entry)
+                    .padding(SkySpacing.x3).frame(width: 150, height: 150)
+                    .background(SkyColor.canvasElevated, in: RoundedRectangle(cornerRadius: 20))
+                SkyWidgetMedium(entry: entry)
+                    .padding(SkySpacing.x3).frame(height: 150)
+                    .background(SkyColor.canvasElevated, in: RoundedRectangle(cornerRadius: 20))
             }
         }
     }

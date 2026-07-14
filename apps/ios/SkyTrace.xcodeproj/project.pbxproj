@@ -83,6 +83,7 @@
 		763A7EB87D3E29AD91E8A71A /* ReleaseLinkAudit.swift */ = {isa = PBXBuildFile; fileRef = BC50C255A50C1F28E51D90D2 /* ReleaseLinkAudit.swift */; };
 		47488061D511F80E3A7D8468 /* StoreKitSubscriptionService.swift */ = {isa = PBXBuildFile; fileRef = 45EA04523E1F43A0F6B61BC1 /* StoreKitSubscriptionService.swift */; };
 		2A9DBA3D1C1437745ED87C4F /* SubscriptionStore.swift */ = {isa = PBXBuildFile; fileRef = C8FB90C9DD46B8C9D9A5184D /* SubscriptionStore.swift */; };
+		BE1AD85912A4630965E9AE6F /* SkyWidgets.swift */ = {isa = PBXBuildFile; fileRef = 04B8FDCDB87C587256DFC539 /* SkyWidgets.swift */; };
 		D21898F688DA1C73EF726B00 /* Assets.xcassets */ = {isa = PBXBuildFile; fileRef = 3D03DCF3837AD3B7B7B6FB99 /* Assets.xcassets */; };
 		6FF2A954737ABB916CB43988 /* Localizable.xcstrings */ = {isa = PBXBuildFile; fileRef = D76E0D051F3DB668D3D0B1BA /* Localizable.xcstrings */; };
 		776E9EA7831D4A85B312FCAC /* PrivacyInfo.xcprivacy */ = {isa = PBXBuildFile; fileRef = C25FA98399DA0303A937DCF4 /* PrivacyInfo.xcprivacy */; };
@@ -171,6 +172,7 @@
 		BC50C255A50C1F28E51D90D2 /* ReleaseLinkAudit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ReleaseLinkAudit.swift"; sourceTree = "<group>"; };
 		45EA04523E1F43A0F6B61BC1 /* StoreKitSubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "StoreKitSubscriptionService.swift"; sourceTree = "<group>"; };
 		C8FB90C9DD46B8C9D9A5184D /* SubscriptionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionStore.swift"; sourceTree = "<group>"; };
+		04B8FDCDB87C587256DFC539 /* SkyWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyWidgets.swift"; sourceTree = "<group>"; };
 		3D03DCF3837AD3B7B7B6FB99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Assets.xcassets"; sourceTree = "<group>"; };
 		D76E0D051F3DB668D3D0B1BA /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = "Localizable.xcstrings"; sourceTree = "<group>"; };
 		C25FA98399DA0303A937DCF4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "PrivacyInfo.xcprivacy"; sourceTree = "<group>"; };
@@ -477,6 +479,14 @@
 			path = "Services";
 			sourceTree = "<group>";
 		};
+		D32CAF0EDD2E90E178176F84 /* Widgets */ = {
+			isa = PBXGroup;
+			children = (
+				04B8FDCDB87C587256DFC539,
+			);
+			path = "Widgets";
+			sourceTree = "<group>";
+		};
 		8B5704A9B912D5C37E2FDF01 /* SkyTrace */ = {
 			isa = PBXGroup;
 			children = (
@@ -487,6 +497,7 @@
 				CBCC70678B0059A22689AD03,
 				89AD8CDBBB89B79DDC07D3F4,
 				22D88421AD064D30EC595CDB,
+				D32CAF0EDD2E90E178176F84,
 			);
 			path = "SkyTrace";
 			sourceTree = "<group>";
@@ -603,6 +614,7 @@
 				763A7EB87D3E29AD91E8A71A /* ReleaseLinkAudit.swift */,
 				47488061D511F80E3A7D8468 /* StoreKitSubscriptionService.swift */,
 				2A9DBA3D1C1437745ED87C4F /* SubscriptionStore.swift */,
+				BE1AD85912A4630965E9AE6F /* SkyWidgets.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
