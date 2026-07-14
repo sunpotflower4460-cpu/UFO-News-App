@@ -54,7 +54,7 @@ final class AppEnvironment {
             dataSource: .fixture,
             flags: FeatureFlags(),
             subscription: sub,
-            library: LibraryStore(defaults: UserDefaults(suiteName: "preview") ?? .standard)
+            library: LibraryStore(suiteName: "preview")
         )
         return env
     }

@@ -9,8 +9,10 @@ actor LibraryStore: LibraryRepository {
     private let recentKey = "skytrace.recentlyViewed"
     private let recentLimit = 12
 
-    init(defaults: UserDefaults = .standard) {
-        self.defaults = defaults
+    /// Takes a suite name (Sendable) rather than a `UserDefaults` instance so no
+    /// non-Sendable value crosses the actor boundary (Swift 6 concurrency).
+    init(suiteName: String? = nil) {
+        self.defaults = suiteName.flatMap { UserDefaults(suiteName: $0) } ?? .standard
     }
 
     func bookmarkedIDs() async -> [String] {

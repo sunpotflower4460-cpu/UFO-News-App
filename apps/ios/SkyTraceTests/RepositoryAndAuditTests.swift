@@ -27,7 +27,7 @@ final class RepositoryAndAuditTests: XCTestCase {
     }
 
     func testBookmarkToggle() async {
-        let store = LibraryStore(defaults: UserDefaults(suiteName: "test.\(UUID().uuidString)")!)
+        let store = LibraryStore(suiteName: "test.\(UUID().uuidString)")
         let id = DemoCases.starlink.id
         var isMarked = await store.isBookmarked(id)
         XCTAssertFalse(isMarked)
@@ -40,7 +40,7 @@ final class RepositoryAndAuditTests: XCTestCase {
     }
 
     func testRecentlyViewedIsCappedAndOrdered() async {
-        let store = LibraryStore(defaults: UserDefaults(suiteName: "test.\(UUID().uuidString)")!)
+        let store = LibraryStore(suiteName: "test.\(UUID().uuidString)")
         for c in DemoCases.all { await store.markViewed(c.id) }
         let recent = await store.recentlyViewedIDs()
         XCTAssertLessThanOrEqual(recent.count, 12)
