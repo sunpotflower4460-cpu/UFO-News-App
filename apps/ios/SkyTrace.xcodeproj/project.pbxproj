@@ -54,6 +54,7 @@
 		B0783838FD33D06CC26E1874 /* SubscriptionProviding.swift */ = {isa = PBXBuildFile; fileRef = 47B850A76B7EEC87241023A3 /* SubscriptionProviding.swift */; };
 		C006EE95D5ACCA6F27605047 /* BriefingDetailView.swift */ = {isa = PBXBuildFile; fileRef = 364429CF555A6168F86BBEE9 /* BriefingDetailView.swift */; };
 		11E34281377D35F2EF486211 /* ArticleBlockView.swift */ = {isa = PBXBuildFile; fileRef = 0F32DAC504DB0A04836A465F /* ArticleBlockView.swift */; };
+		D51304026E21D83B2F236147 /* CaseDetailV2View.swift */ = {isa = PBXBuildFile; fileRef = 3D5B196C833BCB1529A214D6 /* CaseDetailV2View.swift */; };
 		ED11B7798C9EA2B7D8DD6646 /* CaseDetailView.swift */ = {isa = PBXBuildFile; fileRef = 46EB7C3DEADAA027A178DA0D /* CaseDetailView.swift */; };
 		BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */ = {isa = PBXBuildFile; fileRef = B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */; };
 		2F778D595193C1659B895EDB /* CaseNavigation.swift */ = {isa = PBXBuildFile; fileRef = 05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */; };
@@ -136,6 +137,7 @@
 		47B850A76B7EEC87241023A3 /* SubscriptionProviding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionProviding.swift"; sourceTree = "<group>"; };
 		364429CF555A6168F86BBEE9 /* BriefingDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BriefingDetailView.swift"; sourceTree = "<group>"; };
 		0F32DAC504DB0A04836A465F /* ArticleBlockView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ArticleBlockView.swift"; sourceTree = "<group>"; };
+		3D5B196C833BCB1529A214D6 /* CaseDetailV2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailV2View.swift"; sourceTree = "<group>"; };
 		46EB7C3DEADAA027A178DA0D /* CaseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailView.swift"; sourceTree = "<group>"; };
 		B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailViewModel.swift"; sourceTree = "<group>"; };
 		05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseNavigation.swift"; sourceTree = "<group>"; };
@@ -342,6 +344,7 @@
 			isa = PBXGroup;
 			children = (
 				0F32DAC504DB0A04836A465F,
+				3D5B196C833BCB1529A214D6,
 				46EB7C3DEADAA027A178DA0D,
 				B73B113FB0F2BFBA0AF0506C,
 				05AC1A7E251EF597BA23C133,
@@ -548,6 +551,7 @@
 				B0783838FD33D06CC26E1874 /* SubscriptionProviding.swift */,
 				C006EE95D5ACCA6F27605047 /* BriefingDetailView.swift */,
 				11E34281377D35F2EF486211 /* ArticleBlockView.swift */,
+				D51304026E21D83B2F236147 /* CaseDetailV2View.swift */,
 				ED11B7798C9EA2B7D8DD6646 /* CaseDetailView.swift */,
 				BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */,
 				2F778D595193C1659B895EDB /* CaseNavigation.swift */,

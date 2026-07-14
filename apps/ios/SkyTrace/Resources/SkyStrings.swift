@@ -77,6 +77,7 @@ enum SkyStrings {
         "related.historical": .init(ja: "歴史的比較", en: "Historical comparison"),
         "case.whatHappened.v2": .init(ja: "何が起きたか", en: "What happened"),
         "case.confirmedFacts": .init(ja: "確認済みの事実", en: "Confirmed facts"),
+        "case.evidence": .init(ja: "資料", en: "Evidence"),
     ]
 
     /// V2 (Aether) 8-status vocabulary labels.

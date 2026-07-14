@@ -7,6 +7,12 @@ struct DesignGalleryView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                NavigationLink {
+                    CaseDetailV2View(caseID: DemoCases.northSeaNotable.id)
+                } label: {
+                    Label("Case Detail V2 (12 sections)", systemImage: "doc.richtext")
+                        .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
+                }
                 atmosphere
                 statuses
                 assessment
