@@ -2,6 +2,11 @@ import XCTest
 
 /// Critical-flow UI tests (UI_UX_PLAN 21.1). These require a running Simulator.
 /// They launch with `-uitest-skip-welcome` so the app starts on the tab shell.
+///
+/// `@MainActor` because XCUIApplication / XCUIElement are main-actor-isolated in
+/// the current SDK. CI compiles this target (build-for-testing) but runs only
+/// the deterministic unit tests; run these UI tests locally in Xcode.
+@MainActor
 final class CriticalFlowUITests: XCTestCase {
 
     private func launch() -> XCUIApplication {
