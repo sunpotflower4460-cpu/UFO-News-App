@@ -41,8 +41,17 @@ final class NotificationService {
     private(set) var state: NotificationAuthorizationState = .notDetermined
 
     func refresh() async {
-        let settings = await UNUserNotificationCenter.current().notificationSettings()
-        state = NotificationAuthorizationState(settings.authorizationStatus)
+        state = NotificationAuthorizationState(await Self.currentStatus())
+    }
+
+    /// Reads only the (Sendable) authorization status, so no non-Sendable
+    /// `UNNotificationSettings` crosses the actor boundary (Swift 6).
+    private static func currentStatus() async -> UNAuthorizationStatus {
+        await withCheckedContinuation { continuation in
+            UNUserNotificationCenter.current().getNotificationSettings { settings in
+                continuation.resume(returning: settings.authorizationStatus)
+            }
+        }
     }
 
     /// Requests authorization when undetermined, then reports the resulting state.
