@@ -36,8 +36,14 @@ final class AppSettings {
     init() {
         let raw = UserDefaults.standard.string(forKey: Self.key) ?? Appearance.dark.rawValue
         self.appearance = Appearance(rawValue: raw) ?? .dark
-        let uiTestSkip = ProcessInfo.processInfo.arguments.contains("-uitest-skip-welcome")
-        self.hasCompletedWelcome = uiTestSkip || UserDefaults.standard.bool(forKey: Self.welcomeKey)
+        let args = ProcessInfo.processInfo.arguments
+        let uiTestSkip = args.contains("-uitest-skip-welcome")
+        // Force the first-run Welcome flow for screenshot capture, clearing any
+        // persisted completion so the state is deterministic across test methods.
+        let uiTestShowWelcome = args.contains("-uitest-show-welcome")
+        if uiTestShowWelcome { UserDefaults.standard.removeObject(forKey: Self.welcomeKey) }
+        self.hasCompletedWelcome = !uiTestShowWelcome
+            && (uiTestSkip || UserDefaults.standard.bool(forKey: Self.welcomeKey))
     }
 }
 
