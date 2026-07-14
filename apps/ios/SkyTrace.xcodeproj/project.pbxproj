@@ -13,6 +13,7 @@
 		7E3C4AD8331C5C3C41382576 /* RootTabView.swift */ = {isa = PBXBuildFile; fileRef = 8BB9D265772FD51C29865ED0 /* RootTabView.swift */; };
 		DA0D8050BB225AC2083B44A4 /* SafariView.swift */ = {isa = PBXBuildFile; fileRef = 3D67979DA0EB347607B8857A /* SafariView.swift */; };
 		1B4CB2A95C4C3BB6A84097E3 /* SkyTraceApp.swift */ = {isa = PBXBuildFile; fileRef = 0A57BDF34F63FB82A641E465 /* SkyTraceApp.swift */; };
+		00C7841FCA2E8B7BF6748F71 /* UITestSupport.swift */ = {isa = PBXBuildFile; fileRef = 7158FEF2F62D3F19BB46F107 /* UITestSupport.swift */; };
 		EEFF546409D55DD50D374E66 /* DemoArticles.swift */ = {isa = PBXBuildFile; fileRef = 34179763F4F454371F0176E0 /* DemoArticles.swift */; };
 		4C3A168B610B0AC4A3919142 /* DemoCases.swift */ = {isa = PBXBuildFile; fileRef = 505F332323D5C0784FEBA7A9 /* DemoCases.swift */; };
 		541D4F9C725894A00E083F6A /* DemoFeed.swift */ = {isa = PBXBuildFile; fileRef = ED4D6E511D6CAED00426498C /* DemoFeed.swift */; };
@@ -109,6 +110,7 @@
 		8BB9D265772FD51C29865ED0 /* RootTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootTabView.swift"; sourceTree = "<group>"; };
 		3D67979DA0EB347607B8857A /* SafariView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SafariView.swift"; sourceTree = "<group>"; };
 		0A57BDF34F63FB82A641E465 /* SkyTraceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SkyTraceApp.swift"; sourceTree = "<group>"; };
+		7158FEF2F62D3F19BB46F107 /* UITestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITestSupport.swift"; sourceTree = "<group>"; };
 		34179763F4F454371F0176E0 /* DemoArticles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DemoArticles.swift"; sourceTree = "<group>"; };
 		505F332323D5C0784FEBA7A9 /* DemoCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DemoCases.swift"; sourceTree = "<group>"; };
 		ED4D6E511D6CAED00426498C /* DemoFeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DemoFeed.swift"; sourceTree = "<group>"; };
@@ -222,6 +224,7 @@
 				8BB9D265772FD51C29865ED0,
 				3D67979DA0EB347607B8857A,
 				0A57BDF34F63FB82A641E465,
+				7158FEF2F62D3F19BB46F107,
 			);
 			path = "App";
 			sourceTree = "<group>";
@@ -565,6 +568,7 @@
 				7E3C4AD8331C5C3C41382576 /* RootTabView.swift */,
 				DA0D8050BB225AC2083B44A4 /* SafariView.swift */,
 				1B4CB2A95C4C3BB6A84097E3 /* SkyTraceApp.swift */,
+				00C7841FCA2E8B7BF6748F71 /* UITestSupport.swift */,
 				EEFF546409D55DD50D374E66 /* DemoArticles.swift */,
 				4C3A168B610B0AC4A3919142 /* DemoCases.swift */,
 				541D4F9C725894A00E083F6A /* DemoFeed.swift */,

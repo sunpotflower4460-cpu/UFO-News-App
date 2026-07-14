@@ -18,7 +18,7 @@ struct AetherOrb: View {
     @Environment(\.accessibilityReduceTransparency) private var reduceTransparency
     @State private var phase: Double = 0
 
-    private var isMoving: Bool { animated && !reduceMotion }
+    private var isMoving: Bool { animated && !reduceMotion && !UITestFlags.disableAnimations }
 
     var body: some View {
         Canvas { ctx, size in draw(&ctx, size) }

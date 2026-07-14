@@ -14,7 +14,7 @@ final class ScreenshotUITests: XCTestCase {
     /// regardless of persisted state.
     func testCaptureWelcome() {
         let app = XCUIApplication()
-        app.launchArguments += ["-uitest-show-welcome"]
+        app.launchArguments += ["-uitest-show-welcome", "-uitest-no-animations"]
         app.launch()
         // Let the atmosphere + orb settle before capturing.
         Thread.sleep(forTimeInterval: 2.4)
@@ -33,7 +33,7 @@ final class ScreenshotUITests: XCTestCase {
 
     func testCaptureV2Screens() {
         let app = XCUIApplication()
-        app.launchArguments += ["-uitest-skip-welcome"]
+        app.launchArguments += ["-uitest-skip-welcome", "-uitest-no-animations"]
         app.launch()
         let tabs = app.tabBars.buttons
 

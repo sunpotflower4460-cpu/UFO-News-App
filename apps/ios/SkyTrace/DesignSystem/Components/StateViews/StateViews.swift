@@ -23,7 +23,7 @@ struct SkeletonBlock: View {
             )
             .clipShape(RoundedRectangle(cornerRadius: 6))
             .onAppear {
-                guard !reduceMotion else { return }
+                guard !reduceMotion, !UITestFlags.disableAnimations else { return }
                 withAnimation(.linear(duration: 1.3).repeatForever(autoreverses: false)) {
                     phase = 1.5
                 }
