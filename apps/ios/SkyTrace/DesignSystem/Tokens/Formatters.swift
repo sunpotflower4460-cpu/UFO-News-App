@@ -28,6 +28,15 @@ enum SkyFormat {
         date.formatted(.relative(presentation: .named))
     }
 
+    /// Adaptive freshness: a relative phrase within `window` days ("3日前"),
+    /// otherwise an absolute date. Use for freshness signals (last verified /
+    /// updated) — not for historical event facts, where an absolute date is
+    /// always clearer.
+    static func adaptive(_ date: Date, now: Date = .now, window: Int = 14) -> String {
+        let days = Calendar.current.dateComponents([.day], from: date, to: now).day ?? 0
+        return (days >= 0 && days <= window) ? relative(date, now: now) : dateOnly(date)
+    }
+
     /// Formats an observation instant with both local and user time when the
     /// zones differ, e.g. "現地 21:42 / 端末 04:42".
     static func dualTime(_ date: Date, siteZone: TimeZone, userZone: TimeZone = .current) -> String {

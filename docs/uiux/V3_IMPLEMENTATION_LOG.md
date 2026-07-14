@@ -61,8 +61,12 @@
 - CaseDetail ヘッダーの素の atmosphere ブロックを **CaseLeadVisual** に置換。ステータス色で染めた大気＋焦点となるステータスグリフ（立体的な影・ハロー）で、各事例に非扇情的で識別可能なヒーローを付与（未許諾写真に依存しない・CLAUDE.md §7）。ステータスは色だけでなく形で区別、装飾要素なので VoiceOver からは隠し、下のテキストが状態/タイトル/場所を説明。Reduce Transparency 尊重。
 - 変更ファイル：`DesignSystem/Components/CaseLeadVisual.swift`(新), `Features/CaseDetail/CaseDetailV2View.swift`。
 
-### V3-2 残
-- adaptive time metadata。
+### V3-2 追加（adaptive time metadata）
+- `SkyFormat.adaptive(_:window:)` を追加：`window` 日以内は相対表現（「3日前」）、それ以外は絶対日付。CaseDetail ヘッダーの「最終確認」チップ（鮮度シグナル）へ適用。発生日時・公開日（イベント事実）は絶対日付のまま。
+- 変更ファイル：`DesignSystem/Tokens/Formatters.swift`, `Features/CaseDetail/CaseDetailV2View.swift`。
+
+### V3-2 完了
+上記で V3-2（World Pulse metrics / executive summary / section navigator / citation drawer / lead visual / loading skeleton / adaptive time / 状態コンテナ）を一通り実装。次は Phase V3-3。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。

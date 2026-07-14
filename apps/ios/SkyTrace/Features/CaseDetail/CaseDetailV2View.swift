@@ -111,7 +111,7 @@ struct CaseDetailV2View: View {
                 timeChip(SkyStrings.t("label.published"), SkyFormat.dateOnly(c.publishedAt))
                 if let v = c.lastVerifiedAt {
                     timeChip(SkyStrings.t("label.lastVerified", "").trimmingCharacters(in: .whitespaces),
-                             SkyFormat.dateOnly(v))
+                             SkyFormat.adaptive(v))
                 }
             }
             ProvenanceRow(sourceCount: c.sourceCount, independentCount: c.independentReportCount)
