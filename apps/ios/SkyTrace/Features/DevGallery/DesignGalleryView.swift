@@ -14,6 +14,12 @@ struct DesignGalleryView: View {
                         .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
                 }
                 NavigationLink {
+                    MapV2View()
+                } label: {
+                    Label("Map V2 (markers, clusters, list parity)", systemImage: "map")
+                        .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
+                }
+                NavigationLink {
                     CaseDetailV2View(caseID: DemoCases.northSeaNotable.id)
                 } label: {
                     Label("Case Detail V2 (12 sections)", systemImage: "doc.richtext")
