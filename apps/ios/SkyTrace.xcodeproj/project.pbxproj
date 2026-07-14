@@ -93,6 +93,7 @@
 		C294105E5787FB56E9881B00 /* SearchAndFilterTests.swift */ = {isa = PBXBuildFile; fileRef = 8F838BB9A3B881E61ABFE410 /* SearchAndFilterTests.swift */; };
 		0A57371C4BD1121EF2A7CF94 /* SubscriptionTests.swift */ = {isa = PBXBuildFile; fileRef = B8F114DF9502FB99964C3354 /* SubscriptionTests.swift */; };
 		8888B71520881D56F0481FFF /* CriticalFlowUITests.swift */ = {isa = PBXBuildFile; fileRef = 96B818F5D52973EA3C136D03 /* CriticalFlowUITests.swift */; };
+		01BF9DBC27E4DBCB4C352E0A /* ScreenshotUITests.swift */ = {isa = PBXBuildFile; fileRef = 70D7B9D25229D4660228135C /* ScreenshotUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -182,6 +183,7 @@
 		8F838BB9A3B881E61ABFE410 /* SearchAndFilterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchAndFilterTests.swift"; sourceTree = "<group>"; };
 		B8F114DF9502FB99964C3354 /* SubscriptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SubscriptionTests.swift"; sourceTree = "<group>"; };
 		96B818F5D52973EA3C136D03 /* CriticalFlowUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CriticalFlowUITests.swift"; sourceTree = "<group>"; };
+		70D7B9D25229D4660228135C /* ScreenshotUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ScreenshotUITests.swift"; sourceTree = "<group>"; };
 		5A2EE694C04115370E58C717 /* SkyTrace.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SkyTrace.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01E150132E130BC0C2427E78 /* SkyTraceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkyTraceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		4CE266E1790387309CB8F94F /* SkyTraceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SkyTraceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -517,6 +519,7 @@
 			isa = PBXGroup;
 			children = (
 				96B818F5D52973EA3C136D03,
+				70D7B9D25229D4660228135C,
 			);
 			path = "SkyTraceUITests";
 			sourceTree = "<group>";
@@ -634,6 +637,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8888B71520881D56F0481FFF /* CriticalFlowUITests.swift */,
+				01BF9DBC27E4DBCB4C352E0A /* ScreenshotUITests.swift */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
