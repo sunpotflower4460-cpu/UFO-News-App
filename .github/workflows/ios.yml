@@ -1,0 +1,49 @@
+name: iOS CI
+
+on:
+  push:
+    branches: [ main, "claude/**" ]
+  pull_request:
+
+concurrency:
+  group: ios-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test:
+    name: Build & Test (Xcode)
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Environment
+        run: |
+          xcodebuild -version
+          echo "--- available iOS simulators ---"
+          xcrun simctl list devices available | grep -i iphone || true
+
+      - name: Regenerate project (XcodeGen)
+        run: |
+          set -euo pipefail
+          brew install xcodegen
+          make ios-project
+
+      - name: Build for testing
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation clean build-for-testing
+
+      - name: Run tests
+        run: |
+          set -o pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import sys,json; d=json.load(sys.stdin); devs=[x for v in d['devices'].values() for x in v if x.get('isAvailable') and 'iPhone' in x.get('name','')]; print(devs[0]['udid'] if devs else '')")
+          if [ -z "$UDID" ]; then echo 'No iPhone simulator available'; exit 1; fi
+          echo "Booting simulator $UDID"
+          # Boot and wait for the device to be ready to avoid intermittent
+          # "Simulator device failed to install the application" errors.
+          xcrun simctl bootstatus "$UDID" -b || true
+          echo "Testing on simulator $UDID"
+          # build-for-testing (above) compiles ALL targets incl. UI tests, so the
+          # UI test target is compile-verified. Run only the deterministic unit
+          # tests here to keep CI stable; run UI tests locally in Xcode.
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=$UDID" -skipPackagePluginValidation -only-testing:SkyTraceTests test-without-building
