@@ -54,8 +54,8 @@
 ### Phase 6 — Case Detail V2（12節）
 - Status: complete（実CI green, 24698aa）— Header/What Changed/What Happened/Assessment/Confirmed Facts/Agreement/Contradictions/Evidence/Explanations/Timeline/Sources/Related。Design Galleryから到達。
 
-### Phase 3 — Today V2（World Sky Pulse）
-- Status: in progress — WorldSkyPulse + Briefing lead + Priority Case + Since Your Last Visit + Case Stream。Design Galleryから到達。
+### Phase 3/4/5 — Today/Map/Search V2 + タブ切替
+- Status: complete（実CI green, 18dbd7b）— 4タブがV2画面に。WorldSkyPulse + Briefing lead + Priority Case + Since Your Last Visit + Case Stream。Design Galleryから到達。
 
 ## Decisions / Deviations
 - D-V2-001: deployment target は iOS 17 を維持（既存の意図的下限）。V2のiOS 26推奨に対する逸脱理由を記録。

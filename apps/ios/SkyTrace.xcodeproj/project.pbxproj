@@ -60,6 +60,7 @@
 		BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */ = {isa = PBXBuildFile; fileRef = B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */; };
 		2F778D595193C1659B895EDB /* CaseNavigation.swift */ = {isa = PBXBuildFile; fileRef = 05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */; };
 		3753C107A274107F4D4E8D77 /* DesignGalleryView.swift */ = {isa = PBXBuildFile; fileRef = 55A3843AB902AC6103DBC46E /* DesignGalleryView.swift */; };
+		BF0342EF9353F8FB8E72C01F /* LongFormView.swift */ = {isa = PBXBuildFile; fileRef = 275345B4E88D927A3717738C /* LongFormView.swift */; };
 		D71F3BE96CCEF79A6FCF3070 /* MapClustering.swift */ = {isa = PBXBuildFile; fileRef = 6C2A2013F25D35BC93508A04 /* MapClustering.swift */; };
 		0871015E757C7162AD3808D8 /* MapV2View.swift */ = {isa = PBXBuildFile; fileRef = 66CDF5D377432A04507699F9 /* MapV2View.swift */; };
 		62A56F036BF0C6F3B3D2824E /* MapView.swift */ = {isa = PBXBuildFile; fileRef = E2A40C314D1E8691A228DA28 /* MapView.swift */; };
@@ -147,6 +148,7 @@
 		B73B113FB0F2BFBA0AF0506C /* CaseDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseDetailViewModel.swift"; sourceTree = "<group>"; };
 		05AC1A7E251EF597BA23C133 /* CaseNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseNavigation.swift"; sourceTree = "<group>"; };
 		55A3843AB902AC6103DBC46E /* DesignGalleryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DesignGalleryView.swift"; sourceTree = "<group>"; };
+		275345B4E88D927A3717738C /* LongFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LongFormView.swift"; sourceTree = "<group>"; };
 		6C2A2013F25D35BC93508A04 /* MapClustering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapClustering.swift"; sourceTree = "<group>"; };
 		66CDF5D377432A04507699F9 /* MapV2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapV2View.swift"; sourceTree = "<group>"; };
 		E2A40C314D1E8691A228DA28 /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapView.swift"; sourceTree = "<group>"; };
@@ -369,6 +371,14 @@
 			path = "DevGallery";
 			sourceTree = "<group>";
 		};
+		9003BC8B746A03D6AB53C723 /* LongForm */ = {
+			isa = PBXGroup;
+			children = (
+				275345B4E88D927A3717738C,
+			);
+			path = "LongForm";
+			sourceTree = "<group>";
+		};
 		B7F95DB0D05DBEB9A7967EF3 /* Map */ = {
 			isa = PBXGroup;
 			children = (
@@ -431,6 +441,7 @@
 				7CB1D3B1CC01255B3C24D7AC,
 				3E5A8F18CE7B15471C48F354,
 				76CC0D1E8C909668D908D216,
+				9003BC8B746A03D6AB53C723,
 				B7F95DB0D05DBEB9A7967EF3,
 				8BCF6F07BFF34C125CA41B54,
 				7D1C411494653E132D7C6F75,
@@ -569,6 +580,7 @@
 				BEC05C78C061A1D243E3E089 /* CaseDetailViewModel.swift */,
 				2F778D595193C1659B895EDB /* CaseNavigation.swift */,
 				3753C107A274107F4D4E8D77 /* DesignGalleryView.swift */,
+				BF0342EF9353F8FB8E72C01F /* LongFormView.swift */,
 				D71F3BE96CCEF79A6FCF3070 /* MapClustering.swift */,
 				0871015E757C7162AD3808D8 /* MapV2View.swift */,
 				62A56F036BF0C6F3B3D2824E /* MapView.swift */,

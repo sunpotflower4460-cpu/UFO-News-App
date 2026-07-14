@@ -56,7 +56,7 @@ struct CaseDetailV2View: View {
                         timeline(c)                                // 10
                         sources(c)                                 // 11
                         relatedCases()                             // 12
-                        aiDisclosure()
+                        aiDisclosure(model.article)
                     }
                 }
             }
@@ -255,11 +255,29 @@ struct CaseDetailV2View: View {
         }
     }
 
-    private func aiDisclosure() -> some View {
+    private func aiDisclosure(_ article: SynthesizedArticle?) -> some View {
         EditorialSection(title: SkyStrings.t("ai.sectionTitle"), systemImage: "sparkles") {
-            Text(SkyStrings.t("ai.disclosureNote"))
-                .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
-                .fixedSize(horizontal: false, vertical: true)
+            VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                if let article {
+                    NavigationLink { LongFormView(article: article) } label: {
+                        HStack {
+                            Label(SkyStrings.t("case.article"), systemImage: "doc.richtext")
+                                .foregroundStyle(SkyColor.signalViolet)
+                            Spacer()
+                            AIDisclosureBadge(disclosure: article.disclosure)
+                            Image(systemName: "chevron.right").foregroundStyle(SkyColor.textTertiary)
+                        }
+                        .font(SkyTypography.supporting.weight(.semibold))
+                        .padding(SkySpacing.x3)
+                        .background(SkyColor.signalViolet.opacity(0.10),
+                                    in: RoundedRectangle(cornerRadius: SkyRadius.chip))
+                    }
+                    .buttonStyle(.plain)
+                }
+                Text(SkyStrings.t("ai.disclosureNote"))
+                    .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
     }
 
