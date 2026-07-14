@@ -20,6 +20,12 @@ struct DesignGalleryView: View {
                         .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
                 }
                 NavigationLink {
+                    SearchV2View()
+                } label: {
+                    Label("Search V2 (discovery, results, filters)", systemImage: "magnifyingglass")
+                        .font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.accentPrimary)
+                }
+                NavigationLink {
                     CaseDetailV2View(caseID: DemoCases.northSeaNotable.id)
                 } label: {
                     Label("Case Detail V2 (12 sections)", systemImage: "doc.richtext")

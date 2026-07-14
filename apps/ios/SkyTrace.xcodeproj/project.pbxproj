@@ -66,6 +66,7 @@
 		5E27C5CA5F42C4DF02AB10CD /* MapViewModel.swift */ = {isa = PBXBuildFile; fileRef = 4A9BA9736EAC25F760284B90 /* MapViewModel.swift */; };
 		9289015066FB72341052ADCC /* ResearchView.swift */ = {isa = PBXBuildFile; fileRef = 828AB253A28A8703AFE9236F /* ResearchView.swift */; };
 		A9CE4EC019F47B0723B0E3CC /* ResearchViewModel.swift */ = {isa = PBXBuildFile; fileRef = 5549AF54B11A369E450883CD /* ResearchViewModel.swift */; };
+		C482CE6D3BEA5CF8BF6BBA63 /* SearchV2View.swift */ = {isa = PBXBuildFile; fileRef = B772B6A55DBC7B1E02CFD69F /* SearchV2View.swift */; };
 		5A634BBEEBE6AEE547265408 /* LegalPages.swift */ = {isa = PBXBuildFile; fileRef = 4310F744AF2D3503C5DC1BDC /* LegalPages.swift */; };
 		5AF368370CA911576A731428 /* SettingsView.swift */ = {isa = PBXBuildFile; fileRef = 33A7889D5E04A3171FA34D33 /* SettingsView.swift */; };
 		2568589966A2117B57A68702 /* PaywallView.swift */ = {isa = PBXBuildFile; fileRef = 00DD5986FB7249035FBF68F2 /* PaywallView.swift */; };
@@ -152,6 +153,7 @@
 		4A9BA9736EAC25F760284B90 /* MapViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapViewModel.swift"; sourceTree = "<group>"; };
 		828AB253A28A8703AFE9236F /* ResearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResearchView.swift"; sourceTree = "<group>"; };
 		5549AF54B11A369E450883CD /* ResearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ResearchViewModel.swift"; sourceTree = "<group>"; };
+		B772B6A55DBC7B1E02CFD69F /* SearchV2View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SearchV2View.swift"; sourceTree = "<group>"; };
 		4310F744AF2D3503C5DC1BDC /* LegalPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LegalPages.swift"; sourceTree = "<group>"; };
 		33A7889D5E04A3171FA34D33 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SettingsView.swift"; sourceTree = "<group>"; };
 		00DD5986FB7249035FBF68F2 /* PaywallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PaywallView.swift"; sourceTree = "<group>"; };
@@ -383,6 +385,7 @@
 			children = (
 				828AB253A28A8703AFE9236F,
 				5549AF54B11A369E450883CD,
+				B772B6A55DBC7B1E02CFD69F,
 			);
 			path = "Research";
 			sourceTree = "<group>";
@@ -572,6 +575,7 @@
 				5E27C5CA5F42C4DF02AB10CD /* MapViewModel.swift */,
 				9289015066FB72341052ADCC /* ResearchView.swift */,
 				A9CE4EC019F47B0723B0E3CC /* ResearchViewModel.swift */,
+				C482CE6D3BEA5CF8BF6BBA63 /* SearchV2View.swift */,
 				5A634BBEEBE6AEE547265408 /* LegalPages.swift */,
 				5AF368370CA911576A731428 /* SettingsView.swift */,
 				2568589966A2117B57A68702 /* PaywallView.swift */,

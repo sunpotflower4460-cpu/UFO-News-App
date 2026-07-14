@@ -1,0 +1,154 @@
+import SwiftUI
+
+/// V2 Search (docs/uiux 03 §5): discovery sections before input, type-grouped
+/// suggestions, a results list with a match reason, filter chips, and a zero-
+/// results recovery path. Case-centric results. Reachable from the debug Design
+/// Gallery during bring-up; existing Explore tab untouched.
+struct SearchV2View: View {
+    @Environment(AppEnvironment.self) private var env
+    @State private var model: ResearchViewModel?
+    @State private var showFilters = false
+
+    var body: some View {
+        Group {
+            if let model {
+                if model.isSearching { results(model) } else { discover(model) }
+            } else { ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity) }
+        }
+        .background(SkyColor.canvas)
+        .navigationTitle(SkyStrings.t("research.title"))
+        .searchable(text: searchBinding, prompt: SkyStrings.t("research.searchPrompt"))
+        .onSubmit(of: .search) { Task { await model?.runSearch() } }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button { showFilters = true } label: {
+                    Image(systemName: model?.filter.isActive == true
+                          ? "line.3.horizontal.decrease.circle.fill" : "line.3.horizontal.decrease.circle")
+                }
+            }
+        }
+        .task {
+            if model == nil { model = ResearchViewModel(caseRepo: env.caseRepository, library: env.library) }
+            await model?.load()
+        }
+        .sheet(isPresented: $showFilters) { if let model { FiltersSheet(model: model) } }
+    }
+
+    private var searchBinding: Binding<String> {
+        Binding(get: { model?.query ?? "" }, set: { model?.query = $0; Task { await model?.runSearch() } })
+    }
+
+    // MARK: Discovery root
+
+    private func discover(_ model: ResearchViewModel) -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: SkySpacing.x8) {
+                if !model.recentlyViewed.isEmpty {
+                    section(SkyStrings.t("research.recent"), "clock.arrow.circlepath", model.recentlyViewed)
+                }
+                if !model.updatedThisWeek.isEmpty {
+                    section(SkyStrings.t("research.updatedThisWeek"), "arrow.triangle.2.circlepath", model.updatedThisWeek)
+                }
+                phenomena(model)
+                savedSection(model)
+            }
+            .padding(.horizontal, SkySpacing.screenEdge).padding(.vertical, SkySpacing.x4)
+        }
+    }
+
+    private func section(_ title: String, _ image: String, _ items: [UAPCase]) -> some View {
+        EditorialSection(title: title, systemImage: image) {
+            VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                ForEach(items) { row($0) }
+            }
+        }
+    }
+
+    // Phenomena/theme chips built from shape tags (type-grouped discovery).
+    private func phenomena(_ model: ResearchViewModel) -> some View {
+        let tags = Array(Set(DemoCases.all.flatMap(\.shapeTags))).sorted().prefix(10)
+        return EditorialSection(title: SkyStrings.t("research.collections"), systemImage: "tag") {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), spacing: SkySpacing.x2)], alignment: .leading,
+                      spacing: SkySpacing.x2) {
+                ForEach(Array(tags), id: \.self) { tag in
+                    Button {
+                        model.query = tag; Task { await model.runSearch() }
+                    } label: { SkyChip(text: tag, systemImage: "number") }
+                    .buttonStyle(.plain)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder private func savedSection(_ model: ResearchViewModel) -> some View {
+        EditorialSection(title: SkyStrings.t("research.saved"), systemImage: "bookmark") {
+            if model.saved.isEmpty {
+                EmptyStateView(messageKey: "empty.saved", systemImage: "bookmark")
+            } else {
+                VStack(alignment: .leading, spacing: SkySpacing.x3) { ForEach(model.saved) { row($0) } }
+            }
+        }
+    }
+
+    // MARK: Results
+
+    private func results(_ model: ResearchViewModel) -> some View {
+        ScrollView {
+            LazyVStack(alignment: .leading, spacing: SkySpacing.x3) {
+                HStack {
+                    Text(SkyStrings.t("research.resultCount", String(model.results.count)))
+                        .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
+                    Spacer()
+                    if model.filter.isActive {
+                        Button(SkyStrings.t("research.clearFilters")) { model.clearFilters() }
+                            .font(.caption).foregroundStyle(SkyColor.accentPrimary)
+                    }
+                }
+                if model.results.isEmpty {
+                    VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                        EmptyStateView(messageKey: "empty.search", systemImage: "magnifyingglass")
+                        Button(SkyStrings.t("research.clearFilters")) {
+                            model.query = ""; model.clearFilters()
+                        }
+                        .buttonStyle(.bordered).tint(SkyColor.accentPrimary)
+                        .frame(maxWidth: .infinity)
+                    }
+                } else {
+                    ForEach(model.results) { row($0, showReason: true) }
+                }
+            }
+            .padding(.horizontal, SkySpacing.screenEdge).padding(.vertical, SkySpacing.x4)
+        }
+    }
+
+    // MARK: Result row (status geometry + reason)
+
+    private func row(_ c: UAPCase, showReason: Bool = false) -> some View {
+        NavigationLink { CaseDetailV2View(caseID: c.id) } label: {
+            HStack(alignment: .top, spacing: SkySpacing.x3) {
+                CaseStatusGlyph(status: c.v2Status, size: 22, showsUpdateIndicator: c.hasRecentUpdate)
+                    .padding(.top, 2)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(c.title).font(SkyTypography.supporting.weight(.semibold))
+                        .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
+                    HStack(spacing: SkySpacing.x2) {
+                        Text(c.localityName ?? c.regionName)
+                        if let occurred = c.occurredAtStart { Text(SkyFormat.dateOnly(occurred)) }
+                    }
+                    .font(.caption2).foregroundStyle(SkyColor.textTertiary)
+                    if showReason, let reason = c.priorityReason {
+                        Text(reason).font(.caption2).foregroundStyle(SkyColor.signalWarm).lineLimit(1)
+                    }
+                }
+                Spacer(minLength: 0)
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+#Preview("Search V2") {
+    NavigationStack { SearchV2View() }
+        .environment(AppEnvironment.preview()).environment(AppSettings())
+}
