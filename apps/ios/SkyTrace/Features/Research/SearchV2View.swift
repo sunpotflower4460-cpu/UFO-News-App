@@ -28,7 +28,7 @@ struct SearchV2View: View {
         .background(SkyColor.canvas)
         .navigationTitle(SkyStrings.t("research.title"))
         .searchable(text: searchBinding, prompt: SkyStrings.t("research.searchPrompt"))
-        .onSubmit(of: .search) { Task { await model?.runSearch() } }
+        .onSubmit(of: .search) { model?.cancelDebounce(); Task { await model?.runSearch() } }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button { showFilters = true } label: {

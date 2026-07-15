@@ -45,8 +45,28 @@
 ### V3-2 追加（実装済み・CI green: 38fce5b）
 - **CaseSectionNavigator**（sticky section chips：概要/評価/資料/経緯/出典）。`ScrollViewReader`＋アンカーで各グループへジャンプ。12節維持、Dynamic Type/VoiceOver対応。
 
-### V3-2 残
-- Citation drawer（本文の[1]→出典ドロワー）、adaptive time metadata、Case Lead Visual、CaseDetailの状態UI（loading skeleton）。
+### V3-2 追加（レビュー指摘修正・実CI green: 4b3d14c）
+- **CaseSectionNavigator** に `sections` 引数を追加。CaseDetail は内容のある節のみ渡す（evidence/timeline/sources は存在時のみ）。press/social のみの事例で「資料」チップが死にリンクにならない。
+- **ResearchViewModel**：`runSearch()` が自分を起動した debounce タスクを cancel する問題を解消。`cancelDebounce()` を追加し onSubmit / selectTag / clearFilters から呼ぶ。
+
+### V3-2 追加（CaseDetail loading skeleton）
+- CaseDetail の読み込み中を素の `ProgressView` から構造スケルトン（ヘッダースラブ＋タイトル/メタ行＋2セクションブロック）へ。VoiceOver は「読み込み中」1要素、shimmer は Reduce Motion / UI テストフラグを尊重。
+
+### V3-2 追加（Citation drawer）
+- 本文 fact ブロックの出典マーカーをタップ可能な `[n]` チップ化。記事内の初出順に 1…n 番号を付与（`sources` に解決できる id のみ）。タップで **CitationDrawer**（medium/large detent）を開き、媒体名・種別・タイトル・許諾抜粋・原典への in-app リンク（SafariView）を表示。読書位置を失わない。
+- `sources` が無い文脈（デバッグギャラリー等）ではプレーンな脚注へフォールバックし、出典表示が消えない。
+- 変更ファイル：`Domain/…`不要。`Features/CaseDetail/ArticleBlockView.swift`, `DesignSystem/Components/CitationDrawer.swift`(新), `Features/LongForm/LongFormView.swift`, `Features/CaseDetail/CaseDetailV2View.swift`（`LongFormView` に `sources` を受け渡し）, `Resources/SkyStrings.swift`（citation.*）。
+
+### V3-2 追加（Case Lead Visual）
+- CaseDetail ヘッダーの素の atmosphere ブロックを **CaseLeadVisual** に置換。ステータス色で染めた大気＋焦点となるステータスグリフ（立体的な影・ハロー）で、各事例に非扇情的で識別可能なヒーローを付与（未許諾写真に依存しない・CLAUDE.md §7）。ステータスは色だけでなく形で区別、装飾要素なので VoiceOver からは隠し、下のテキストが状態/タイトル/場所を説明。Reduce Transparency 尊重。
+- 変更ファイル：`DesignSystem/Components/CaseLeadVisual.swift`(新), `Features/CaseDetail/CaseDetailV2View.swift`。
+
+### V3-2 追加（adaptive time metadata）
+- `SkyFormat.adaptive(_:window:)` を追加：`window` 日以内は相対表現（「3日前」）、それ以外は絶対日付。CaseDetail ヘッダーの「最終確認」チップ（鮮度シグナル）へ適用。発生日時・公開日（イベント事実）は絶対日付のまま。
+- 変更ファイル：`DesignSystem/Tokens/Formatters.swift`, `Features/CaseDetail/CaseDetailV2View.swift`。
+
+### V3-2 完了
+上記で V3-2（World Pulse metrics / executive summary / section navigator / citation drawer / lead visual / loading skeleton / adaptive time / 状態コンテナ）を一通り実装。次は Phase V3-3。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。

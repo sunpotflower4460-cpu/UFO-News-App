@@ -21,7 +21,7 @@ struct CaseDetailV2View: View {
             } else if let model, case .failed = model.state {
                 ErrorStateView { Task { await model.load() } }
             } else {
-                ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
+                CaseDetailSkeleton()
             }
         }
         .background(SkyColor.canvas)
@@ -36,6 +36,16 @@ struct CaseDetailV2View: View {
         }
         .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
         .sheet(item: $paywall) { PaywallView(context: $0) }
+    }
+
+    /// Only sections with content — overview/assessment are always derived;
+    /// evidence/timeline/sources depend on the case. Keeps every nav chip live.
+    private func availableSections(_ c: UAPCase) -> [CaseSection] {
+        var s: [CaseSection] = [.overview, .assessment]
+        if !c.evidenceItems.isEmpty { s.append(.evidence) }
+        if !c.timeline.isEmpty { s.append(.timeline) }
+        if !c.sources.isEmpty { s.append(.sources) }
+        return s
     }
 
     private func content(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
@@ -62,12 +72,12 @@ struct CaseDetailV2View: View {
                                 timeline(c).id(CaseSection.timeline.anchor)
                                 // 出典
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                    sources(c); relatedCases(); aiDisclosure(model.article)
+                                    sources(c); relatedCases(); aiDisclosure(model.article, caseSources: c.sources)
                                 }.id(CaseSection.sources.anchor)
                             }
                         }
                     } header: {
-                        CaseSectionNavigator { anchor in
+                        CaseSectionNavigator(sections: availableSections(c)) { anchor in
                             withAnimation { proxy.scrollTo(anchor, anchor: .top) }
                         }
                         .padding(.vertical, SkySpacing.x2)
@@ -85,11 +95,7 @@ struct CaseDetailV2View: View {
 
     private func header(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
         VStack(alignment: .leading, spacing: SkySpacing.x3) {
-            AtmosphereCanvas(dayFraction: 0.2, signals: [
-                .init(x: 0.5, y: 0.45, color: c.v2Status.color, emphasized: true)
-            ])
-            .frame(height: 128)
-            .clipShape(RoundedRectangle(cornerRadius: SkyRadius.hero))
+            CaseLeadVisual(status: c.v2Status)
             CaseStatusLabel(status: c.v2Status, showsUpdateIndicator: c.hasRecentUpdate)
             Text(c.title).font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
             HStack(spacing: SkySpacing.x2) {
@@ -105,7 +111,7 @@ struct CaseDetailV2View: View {
                 timeChip(SkyStrings.t("label.published"), SkyFormat.dateOnly(c.publishedAt))
                 if let v = c.lastVerifiedAt {
                     timeChip(SkyStrings.t("label.lastVerified", "").trimmingCharacters(in: .whitespaces),
-                             SkyFormat.dateOnly(v))
+                             SkyFormat.adaptive(v))
                 }
             }
             ProvenanceRow(sourceCount: c.sourceCount, independentCount: c.independentReportCount)
@@ -274,11 +280,11 @@ struct CaseDetailV2View: View {
         }
     }
 
-    private func aiDisclosure(_ article: SynthesizedArticle?) -> some View {
+    private func aiDisclosure(_ article: SynthesizedArticle?, caseSources: [SourceReference]) -> some View {
         EditorialSection(title: SkyStrings.t("ai.sectionTitle"), systemImage: "sparkles") {
             VStack(alignment: .leading, spacing: SkySpacing.x3) {
                 if let article {
-                    NavigationLink { LongFormView(article: article) } label: {
+                    NavigationLink { LongFormView(article: article, sources: caseSources) } label: {
                         HStack {
                             Label(SkyStrings.t("case.article"), systemImage: "doc.richtext")
                                 .foregroundStyle(SkyColor.signalViolet)
@@ -326,6 +332,41 @@ struct CaseDetailV2View: View {
         ToolbarItem(placement: .primaryAction) {
             ShareLink(item: c.title) { Image(systemName: "square.and.arrow.up") }
         }
+    }
+}
+
+/// Structural loading placeholder that mirrors the Case Detail layout — a
+/// header slab, title/metadata lines, and two stacked section blocks — so the
+/// wait reads as "this page is loading", not a lone spinner. VoiceOver hears a
+/// single "loading" label; shimmer honours Reduce Motion / UI-test flags.
+private struct CaseDetailSkeleton: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                    RoundedRectangle(cornerRadius: SkyRadius.hero)
+                        .fill(SkyColor.surfaceInteractive)
+                        .frame(height: 128)
+                    SkeletonBlock(height: 14, width: 120)
+                    SkeletonBlock(height: 26, width: 260)
+                    SkeletonBlock(height: 14, width: 180)
+                }
+                ForEach(0..<2, id: \.self) { _ in
+                    VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                        SkeletonBlock(height: 16, width: 140)
+                        SkeletonBlock(height: 14)
+                        SkeletonBlock(height: 14, width: 240)
+                    }
+                    .padding(SkySpacing.x4)
+                    .background(SkyColor.surfaceSecondary, in: RoundedRectangle(cornerRadius: SkyRadius.card))
+                }
+            }
+            .padding(.horizontal, SkySpacing.screenEdge)
+            .padding(.vertical, SkySpacing.x4)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(SkyStrings.t("state.loading"))
     }
 }
 

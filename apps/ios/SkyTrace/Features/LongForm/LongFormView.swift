@@ -7,10 +7,50 @@ import SwiftUI
 /// Detail V2 and the debug Design Gallery.
 struct LongFormView: View {
     let article: SynthesizedArticle
+    /// The case's sources, used to resolve in-text citation markers. Empty when
+    /// presented without a case context (e.g. the debug gallery) — markers then
+    /// fall back to plain footnotes.
+    var sources: [SourceReference] = []
     @Environment(AppEnvironment.self) private var env
     @State private var paywall: PaywallContext?
+    @State private var activeCitation: Citation?
 
     private var isPlus: Bool { env.subscription.isPlus }
+
+    /// A resolved citation: a real source plus its 1-based footnote number.
+    private struct Citation: Identifiable {
+        let number: Int
+        let source: SourceReference
+        var id: String { source.id }
+    }
+
+    /// Sources in first-appearance order across the article's blocks, numbered
+    /// 1…n. Only ids that resolve to a real source are included, so every
+    /// rendered marker is tappable and opens a real drawer.
+    private var orderedCitations: [Citation] {
+        var seen = Set<String>()
+        var out: [Citation] = []
+        for block in article.blocks {
+            for sid in block.sourceIDs where !seen.contains(sid) {
+                seen.insert(sid)
+                if let source = sources.first(where: { $0.id == sid }) {
+                    out.append(Citation(number: out.count + 1, source: source))
+                }
+            }
+        }
+        return out
+    }
+
+    private var citationByID: [String: Citation] {
+        Dictionary(uniqueKeysWithValues: orderedCitations.map { ($0.source.id, $0) })
+    }
+
+    private func block(_ b: ArticleBlock) -> some View {
+        ArticleBlockView(
+            block: b,
+            citationNumber: { citationByID[$0]?.number },
+            onCite: { if let c = citationByID[$0] { activeCitation = c } })
+    }
 
     var body: some View {
         ScrollView {
@@ -22,11 +62,11 @@ struct LongFormView: View {
                     // reorders the article. Plus reads everything; Free reads up
                     // to the first gated block, then a contextual lock.
                     if isPlus {
-                        ForEach(article.blocks) { ArticleBlockView(block: $0) }
+                        ForEach(article.blocks) { block($0) }
                     } else {
                         let firstGated = article.blocks.firstIndex(where: { $0.isPremiumGated })
                         let visible = firstGated.map { Array(article.blocks.prefix($0)) } ?? article.blocks
-                        ForEach(visible) { ArticleBlockView(block: $0) }
+                        ForEach(visible) { block($0) }
                         if firstGated != nil {
                             PremiumLockView(
                                 title: SkyStrings.t("briefing.readFull"),
@@ -48,6 +88,7 @@ struct LongFormView: View {
         .navigationTitle(SkyStrings.t("case.article"))
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $paywall) { PaywallView(context: $0) }
+        .sheet(item: $activeCitation) { CitationDrawer(number: $0.number, source: $0.source) }
     }
 
     private var header: some View {
