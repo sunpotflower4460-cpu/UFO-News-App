@@ -44,6 +44,16 @@
 	<array>
 		<string>ja</string>
 		<string>en</string>
+		<string>es</string>
+		<string>fr</string>
+		<string>de</string>
+		<string>pt-PT</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+		<string>ko</string>
+		<string>ar</string>
+		<string>hi</string>
+		<string>ru</string>
 	</array>
 </dict>
 </plist>
