@@ -3,6 +3,27 @@
 Claude Codeが実行できない、または資格情報・契約・実機が必要な項目のみを記載する。
 開発全体はこれらで停止しない（fixture/mock/feature flagで前進済み）。
 
+## 🚀 App Store 提出までに人間がやる操作（自動化済みを除いた残り一覧）
+
+コード側の準備（アイコン・法務ページHTML・URL配線・メタデータ下書き・バージョン1.0.0・
+Privacy Manifest・審査メモ）は完了済み。**以下は資格情報／契約／実機／設定トグルが必要で
+Claude Codeでは実行できない**もののみ：
+
+1. **GitHub Pages を ON**（Settings → Pages → Source: **GitHub Actions**）。以後 `docs/site/` が
+   自動公開され、アプリ内Privacy/Terms/Support URLが実在化する（M-020）。
+2. **サポート連絡先メールを実アドレスへ**差し替え（`scripts/generate_legal_site.py` の
+   `SUPPORT_CONTACT` → 再生成 → コミット）（M-023）。
+3. **Apple Developer 登録・正式 Bundle ID**（M-010）と **App Store Connect の商品ID**（M-011）を
+   実値化。`project.yml`／`.storekit`／`SubscriptionIDs` の該当箇所を一括差し替え。
+4. **契約・税・銀行情報**（Paid Apps Agreement）（M-012）。
+5. **macOS + Xcode で Archive → Upload**、Sandbox購入/復元の実機確認（M-001／M-013）。
+6. **App Store Connect でメタデータ入力**（`docs/APP_STORE_METADATA.md` からコピペ）、
+   スクリーンショット添付（6.9"/6.5"、`screenshots.yml`はPro Max優先で撮影）、App Privacy回答、
+   年齢レーティング、審査提出。
+
+> それ以外（アイコン、法務サイト、URL配線、メタデータ下書き、バージョン、Privacy Manifest、
+> 自動更新、多言語、メディア権利ゲート）はコミット済み・CI green。
+
 ## 最優先（Phase 1 完了確認）
 
 - **M-001 Xcodeでのビルド・テスト確認（必須）**
@@ -30,9 +51,18 @@ Claude Codeが実行できない、または資格情報・契約・実機が必
 
 ## Legal / インフラ（Phase 7）
 
-- **M-020** プライバシー/利用規約/サポートの本番HTTPS URLを用意しデプロイ。`LegalPage.externalURL`のホスト`skytrace.example.com`を実ドメインへ置換。`ReleaseLinkAudit`がプレースホルダーを検出する。
-- **M-021** App Privacy（Nutrition Label）回答を`PrivacyInfo.xcprivacy`と一致させる。
-- **M-022** App Icon（1024pt）とアクセント/起動色の最終アセット。現在はプレースホルダーのカラーセットのみ。
+- **M-020**（コード側完了 / 残：Pages を ON）プライバシー/利用規約/サポートは `docs/site/` に
+  実HTMLを生成し、`LegalPage.externalURL` を `https://sunpotflower4460-cpu.github.io/UFO-News-App/…`
+  へ配線済み（`ReleaseLinkAudit` は clean）。**人間の操作は Settings → Pages → Source を
+  「GitHub Actions」にするのみ**。`pages.yml` が自動デプロイ。将来 独自ドメインにするなら
+  `LegalPages.swift` の host を差し替え。
+- **M-021** App Privacy（Nutrition Label）回答を`PrivacyInfo.xcprivacy`と一致させる。回答下書きは
+  `docs/APP_STORE_METADATA.md` §7（現状は **Data Not Collected**）。
+- **M-022**（完了）App Icon（1024pt, RGB, アルファなし）を
+  `Assets.xcassets/AppIcon.appiconset/AppIcon-1024.png` に生成・配線済み
+  （`scripts/generate_app_icon.py` で再生成可）。差し替えたい場合はPNGを置換。
+- **M-023** サポート連絡先メールの実アドレス化。`scripts/generate_legal_site.py` の
+  `SUPPORT_CONTACT`（暫定 `support@skytrace.app`）を実運用アドレスへ変更し再生成・コミット。
 
 ## データソース権利（Phase 3）
 

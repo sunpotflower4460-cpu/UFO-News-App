@@ -23,9 +23,11 @@ enum LegalPage: String, CaseIterable, Identifiable {
         }
     }
 
-    /// Production URL. Placeholder host — replaced before submission.
+    /// Production URL. Served as static pages via GitHub Pages (docs/site,
+    /// deployed by .github/workflows/pages.yml). Swap the host here if a custom
+    /// domain is adopted later. `ReleaseLinkAudit` enforces a valid HTTPS host.
     var externalURL: URL? {
-        URL(string: "https://skytrace.example.com/\(rawValue)")
+        URL(string: "https://sunpotflower4460-cpu.github.io/UFO-News-App/\(rawValue)/")
     }
 
     /// Native long-form body (Japanese primary).

@@ -75,3 +75,18 @@ Date: 2026-07-13
 - **ビルド未検証**：Linux環境のためコンパイル・テスト・Simulator確認を実行できていない。目視レビューで明白な誤りは修正済みだが、Swift 6 strict concurrencyの微細な指摘やAPI差異が残る可能性がある。
 - **文字列**：Phase 1は`SkyStrings`（コード内テーブル）を実行時の正本とし、`Localizable.xcstrings`は構造サンプルのみ。理由と移行方針はD-006。
 - 生成`.xcodeproj`は本環境でXcodeを開いて検証できていない。確実な経路としてXcodeGen（`project.yml`）を併置。
+
+## App Store 提出準備（2026-07-15）
+
+実装済み（コミット・CI検証）:
+- **App Icon 1024pt** 生成・配線（`scripts/generate_app_icon.py`／`AppIcon-1024.png`、RGB・アルファなし）。
+- **法務/サポートの実在URL**：`docs/site/`（ja+en 静的HTML）＋`pages.yml`（GitHub Pages自動デプロイ）。
+  `LegalPage.externalURL` を github.io へ配線、`ReleaseLinkAudit` を clean 化（テスト更新）。
+- **バージョン 1.0.0**（`project.yml`／`generate_xcodeproj.py` 同期）。
+- **提出メタデータ**：`docs/APP_STORE_METADATA.md`（名称/副題/説明/キーワード/リリースノート/
+  審査メモ/App Privacy回答/年齢レーティング、ja+en）。
+- **スクリーンショットCI**：Pro Max（6.9"）優先で撮影するよう `screenshots.yml` を調整。
+
+残る手動（`MANUAL_ACTIONS.md` 冒頭の一覧）:
+- GitHub Pages を ON、サポートメール実アドレス化、Apple登録・Bundle ID/商品ID実値化、
+  契約/税/銀行、Xcode Archive→Upload＋Sandbox実機確認、ASCメタデータ入力・提出。

@@ -4,9 +4,11 @@
 凡例：✅ 実装済 / 🟡 部分・要検証 / ⬜ 未着手（後続Phase）
 
 ## ビルド／プラットフォーム
-- 🟡 Xcode 26+ / iOS 26 SDK / deployment target iOS 17（設定済、macOSでのビルド確認は M-001）
+- 🟡 Xcode 26+ / iOS 26 SDK / deployment target iOS 17（設定済、CIビルドは green／実機Archiveは M-001）
 - 🟡 no-warnings目標（strict concurrency有効、実ビルド未確認）
-- ⬜ Release archive / dSYM アップロード（Phase 9）
+- ✅ バージョン **1.0.0（build 1）**（`project.yml` / `generate_xcodeproj.py` 同期）
+- ✅ App Icon 1024pt（`AppIcon.appiconset/AppIcon-1024.png`、RGB・アルファなし・角丸なし。`scripts/generate_app_icon.py`で再生成可）
+- ⬜ Release archive / dSYM アップロード（Phase 9・M-001）
 
 ## サブスクリプション
 - ✅ StoreKit 2、In-App Purchaseのみ（外部決済誘導なし）
@@ -32,8 +34,9 @@
 - ⬜ source rights承認済みの本番データ（Phase 3）
 
 ## リンク／サポート
-- 🟡 Privacy/Terms/Support URL（現在プレースホルダー`skytrace.example.com`。`ReleaseLinkAudit`が検出。M-020）
+- ✅ Privacy/Terms/Support URL を実在HTTPSへ（GitHub Pages: `docs/site/`、`pages.yml`でデプロイ）。`ReleaseLinkAudit`は clean（テスト更新済）。**残る手動は Pages を ON にするのみ（M-020）**
 - ✅ アプリ内に編集/AI/スコア/出典/訂正の各方針ページ
+- 🟡 サポート連絡先メール（`docs/site` 内は暫定 `support@skytrace.app`。実アドレスへ差し替え M-023）
 
 ## アクセシビリティ
 - ✅ Dynamic Type（最大付近でCTA到達可能な設計）
@@ -42,7 +45,11 @@
 - ✅ Reduce Motion対応
 - ✅ Light/Dark両対応
 
-## Review Notes（下書き）
+## メタデータ（提出用）
+- ✅ 名称/副題/説明/キーワード/リリースノート/審査メモ/App Privacy回答/年齢レーティングを
+  `docs/APP_STORE_METADATA.md` に ja+en で用意（ASCへコピペ可）。
+
+## Review Notes（下書き。完全版は `APP_STORE_METADATA.md` §6）
 - UAPは未確認現象を指し、地球外起源を断定しない。
 - 4軸スコアの意味（特に既知現象一致度は「高い＝説明可能」）。
 - AI生成箇所と出典表示の位置。

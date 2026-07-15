@@ -39,3 +39,10 @@
 - **D-I18N-001 Apple String Catalog へ移行（B1）**: 実CI（Xcode）が使えるため D-006 を実行。`SkyStrings` のコード内 `Pair` 表を撤去し `Localizable.xcstrings` を正本化。`SkyStrings.t` は `NSLocalizedString`＋`String(format:locale:)` で解決（公開APIは不変、約330呼び出し箇所は無変更）。以後の文字列追加はカタログを直接編集（`scripts/build_xcstrings.py` は旧表からの一括移行用の一度きりツール）。対応言語は ja/en に加え es/fr/de/pt-PT/zh-Hans/zh-Hant/ko/ar/hi/ru を宣言。未翻訳は当面 ja へフォールバック。
 - **D-I18N-002 複数形・直書き修正（B2）**: 件数系（`label.sources`/`research.resultCount`）を String Catalog の複数形バリエーション（`.stringsdict`、`%lld`）へ変更し、呼び出し側は Int を渡す。直書きだった共有文言（`share.caseText`）とウィジェット文言（`widget.counts`）をカタログ経由に統一。数値は `locale:` 付きで整形。
 - **残（B3）**: es/fr/de/pt · zh-Hans/zh-Hant/ko · ar/hi/ru の UI 翻訳草案（ネイティブレビュー推奨）と、アラビア語の RTL 検証。長文（LegalPages）とデモ内容の翻訳は対象外（データ／要専門レビュー）。
+
+## App Store 提出準備（Release Readiness）
+- **D-STORE-001 App Icon をコード生成**: 画像ツール無しの環境のため、`scripts/generate_app_icon.py`（標準ライブラリのみ）で 1024×1024 RGB・アルファなし・角丸なしのPNGを生成し `AppIcon.appiconset` に配線。モチーフはブランドの「観測アパーチャ（走査リング＋一点の光）」で `SkyColor` 暗色系に準拠。差し替え可能。
+- **D-STORE-002 法務/サポートURLを GitHub Pages で実在化**: プレースホルダー `skytrace.example.com` を廃し、`docs/site/`（ja+en 静的HTML、`scripts/generate_legal_site.py` 生成）を `pages.yml` で公開。`LegalPage.externalURL` を `https://sunpotflower4460-cpu.github.io/UFO-News-App/<page>/` へ配線し、`ReleaseLinkAudit` を clean 化（テストは production=clean / placeholder=flagged を両検証）。残る手動は Pages を ON にするのみ。独自ドメイン採用時は host 差し替えで移行可。ユーザー選択に基づく（GitHub Pages 推奨）。
+- **D-STORE-003 バージョンを 1.0.0 に**: 初回リリース想定で `MARKETING_VERSION` を 0.1.0→1.0.0（`project.yml` と `generate_xcodeproj.py` を同期）。build は 1。
+- **D-STORE-004 Bundle ID / 商品ID はプレースホルダー据え置き**: Apple アカウントに紐づくため実値は生成不可（ユーザー選択）。`com.example.skytrace*` のまま `MANUAL_ACTIONS`（M-010/011）で差し替え箇所を一元管理。
+- **D-STORE-005 提出メタデータを文書化**: `docs/APP_STORE_METADATA.md` に 名称/副題/説明/キーワード/リリースノート/審査メモ/App Privacy回答/年齢レーティングを ja+en で用意（ASCへ手動コピペ）。他ストア地域メタデータは当面 en 流用。

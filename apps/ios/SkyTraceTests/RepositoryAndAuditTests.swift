@@ -47,10 +47,25 @@ final class RepositoryAndAuditTests: XCTestCase {
         XCTAssertEqual(recent.first, DemoCases.all.last?.id, "Most recent should be first")
     }
 
-    func testReleaseLinkAuditFlagsPlaceholderHost() {
+    func testReleaseLinkAuditPassesForProductionHosts() {
+        // Legal/support URLs now resolve to the GitHub Pages site (docs/site),
+        // so the audit must be clean — a prerequisite for a Release build.
         let problems = ReleaseLinkAudit.audit()
-        XCTAssertTrue(problems.contains { $0.reason == "placeholder host" },
-                      "Placeholder legal URLs must be flagged before submission")
+        XCTAssertTrue(problems.isEmpty,
+                      "Legal/support URLs must be valid HTTPS with no placeholder host before submission; got \(problems)")
+    }
+
+    func testReleaseLinkAuditFlagsPlaceholderHost() {
+        // The audit still catches a regression back to a placeholder host.
+        let bad = ReleaseLinkAudit.problems(page: "probe", url: URL(string: "https://skytrace.example.com/x"))
+        XCTAssertTrue(bad.contains { $0.reason == "placeholder host" },
+                      "A placeholder host must still be flagged")
+    }
+
+    func testReleaseLinkAuditFlagsNonHTTPS() {
+        let bad = ReleaseLinkAudit.problems(page: "probe", url: URL(string: "http://sunpotflower4460-cpu.github.io/x"))
+        XCTAssertTrue(bad.contains { $0.reason == "non-HTTPS scheme" },
+                      "A non-HTTPS URL must be flagged")
     }
 
     func testLoadableKeepsCacheOnFailure() {
