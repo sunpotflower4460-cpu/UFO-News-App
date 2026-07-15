@@ -28,3 +28,9 @@
 - **D-AR-001 クライアント側自動更新エンジンを先行実装**: `DataRefreshController`（`generation`カウンタ＋`lastRefreshed`）を導入し、各画面は`.task(id: generation)`で購読。フォアグラウンド復帰（`scenePhase == .active`）で即時更新＋一定間隔ポーリング（既定5分、`AppSettings.refreshInterval`）、全タブに`.refreshable`（Todayは既存）。ポーリングはLow Power Mode／UIテスト時は停止、Settingsでオン/オフ・間隔を変更可。
   - **依存**: 実際に「新しいニュースが来る」には実データ源が必要。現状は全てfixtureで、`AppEnvironment.rebuildRepositories()`の`.localAPI`分岐は未実装（fixtureへfallback）。エンジンはこのRepository seamに配線済みで、Phase 2でURLSessionベースのFeed/Case APIが入れば自動で実データに反映される。プッシュ通知配信（APNs）はさらに後段（別途）。
   - **設計理由**: 「完全自動更新」の体験をクライアント側で完成させ、バックエンド未実装でも決定的にfixtureで検証可能にするため。Repository抽象（D-008）に依存し、輸送手段に非依存。
+
+## ソース画像・映像（Case Media）
+- **D-MEDIA-001 権利ゲート＋リンクアウト方式**: 各Caseに `MediaAsset`（`kind`/`rights`/`sourceID`/`sourceURL`/`mediaURL?`/attribution/license）を導入。**権利が確認できた素材（public domain / official / Creative Commons / licensed）のみをインライン表示**し、`rights_unknown` は**情報源へのリンクのみ**（ホスティング・再配布しない）。CLAUDE.md §7・D-007 に準拠、著作権とApp Store 5.2への配慮。
+  - ユーザー要望「毎回可能な限りソースのUFO画像・映像を掲載」に対し、**許諾できる範囲で毎回最大限表示**しつつ、権利未確認は必ずリンクアウトにするという解で実現。無断スクレイピング・無断ホスティングは行わない。
+  - **依存**: 実際のメディアURLはPhase 2バックエンド＋実ソース接続が前提。現状はfixtureで `mediaURL=nil`（許諾済み素材は抽象 `ObservationGlyph` プレースホルダ、リンクは常時）。バックエンド接続時に実URLを流し込めば自動でインライン表示。
+  - **UI**: Case Detail に「映像・画像」セクション（`CaseSection.media`、内容がある時のみ表示）。`CaseMediaSection`/`MediaAssetView`。権利バッジ・クレジット表記・情報源リンクを常に併記。

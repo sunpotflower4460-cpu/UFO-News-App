@@ -28,6 +28,7 @@
 		DFBCE17F55A976C1066BE02E /* CaseCard.swift */ = {isa = PBXBuildFile; fileRef = 83342F3181619CADEB5CA9B9 /* CaseCard.swift */; };
 		484E9307923B8DF50CC70A07 /* CaseExecutiveSummary.swift */ = {isa = PBXBuildFile; fileRef = 1AF51742704AFC767065F76E /* CaseExecutiveSummary.swift */; };
 		6D9D3F8D1BDBCF10461EEB82 /* CaseLeadVisual.swift */ = {isa = PBXBuildFile; fileRef = C8158C9D38780F75C3D68BB1 /* CaseLeadVisual.swift */; };
+		E676700C5B1A9EE44CCF3513 /* CaseMediaSection.swift */ = {isa = PBXBuildFile; fileRef = 3547C209FF7A27AF03F35E83 /* CaseMediaSection.swift */; };
 		DC75215B0CF4E1D57BFCAE04 /* CaseSectionNavigator.swift */ = {isa = PBXBuildFile; fileRef = 10D7E73841A7C28CF3FFEF39 /* CaseSectionNavigator.swift */; };
 		17C7A33C9F84342253244B90 /* CitationDrawer.swift */ = {isa = PBXBuildFile; fileRef = 7DBFC477A721BDAD6F9301EE /* CitationDrawer.swift */; };
 		04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */ = {isa = PBXBuildFile; fileRef = 5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */; };
@@ -58,6 +59,7 @@
 		9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */ = {isa = PBXBuildFile; fileRef = E311A9C20D969DA9437EDA1C /* Entitlement.swift */; };
 		10EE74A5A4626B002A3A27F0 /* EvidenceItem.swift */ = {isa = PBXBuildFile; fileRef = 13F0034AB3F38584080E9EA0 /* EvidenceItem.swift */; };
 		146298FC6CD67380CBF8A4A7 /* Feed.swift */ = {isa = PBXBuildFile; fileRef = 9557D1D22E32F83AB2015EF4 /* Feed.swift */; };
+		CA208A3EB719E85399B5E3EF /* MediaAsset.swift */ = {isa = PBXBuildFile; fileRef = FECC1AED7636A308D11866AF /* MediaAsset.swift */; };
 		0DFEEA459DE263793BC7A674 /* SupportingModels.swift */ = {isa = PBXBuildFile; fileRef = 5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */; };
 		B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */ = {isa = PBXBuildFile; fileRef = ADFC785175071519EE5B3055 /* UAPCase+V2.swift */; };
 		9551F0C97DA0B2EFE924160A /* UAPCase.swift */ = {isa = PBXBuildFile; fileRef = 6433740CC22FA365759AD3FF /* UAPCase.swift */; };
@@ -132,6 +134,7 @@
 		83342F3181619CADEB5CA9B9 /* CaseCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseCard.swift"; sourceTree = "<group>"; };
 		1AF51742704AFC767065F76E /* CaseExecutiveSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseExecutiveSummary.swift"; sourceTree = "<group>"; };
 		C8158C9D38780F75C3D68BB1 /* CaseLeadVisual.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseLeadVisual.swift"; sourceTree = "<group>"; };
+		3547C209FF7A27AF03F35E83 /* CaseMediaSection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseMediaSection.swift"; sourceTree = "<group>"; };
 		10D7E73841A7C28CF3FFEF39 /* CaseSectionNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CaseSectionNavigator.swift"; sourceTree = "<group>"; };
 		7DBFC477A721BDAD6F9301EE /* CitationDrawer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CitationDrawer.swift"; sourceTree = "<group>"; };
 		5F6BC68C43341D3669581D93 /* DailyBriefingCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DailyBriefingCard.swift"; sourceTree = "<group>"; };
@@ -162,6 +165,7 @@
 		E311A9C20D969DA9437EDA1C /* Entitlement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Entitlement.swift"; sourceTree = "<group>"; };
 		13F0034AB3F38584080E9EA0 /* EvidenceItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EvidenceItem.swift"; sourceTree = "<group>"; };
 		9557D1D22E32F83AB2015EF4 /* Feed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Feed.swift"; sourceTree = "<group>"; };
+		FECC1AED7636A308D11866AF /* MediaAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MediaAsset.swift"; sourceTree = "<group>"; };
 		5F9E8EAF63A7C4DD889DACB7 /* SupportingModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SupportingModels.swift"; sourceTree = "<group>"; };
 		ADFC785175071519EE5B3055 /* UAPCase+V2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UAPCase+V2.swift"; sourceTree = "<group>"; };
 		6433740CC22FA365759AD3FF /* UAPCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UAPCase.swift"; sourceTree = "<group>"; };
@@ -292,6 +296,7 @@
 				83342F3181619CADEB5CA9B9,
 				1AF51742704AFC767065F76E,
 				C8158C9D38780F75C3D68BB1,
+				3547C209FF7A27AF03F35E83,
 				10D7E73841A7C28CF3FFEF39,
 				7DBFC477A721BDAD6F9301EE,
 				5F6BC68C43341D3669581D93,
@@ -360,6 +365,7 @@
 				E311A9C20D969DA9437EDA1C,
 				13F0034AB3F38584080E9EA0,
 				9557D1D22E32F83AB2015EF4,
+				FECC1AED7636A308D11866AF,
 				5F9E8EAF63A7C4DD889DACB7,
 				ADFC785175071519EE5B3055,
 				6433740CC22FA365759AD3FF,
@@ -604,6 +610,7 @@
 				DFBCE17F55A976C1066BE02E /* CaseCard.swift */,
 				484E9307923B8DF50CC70A07 /* CaseExecutiveSummary.swift */,
 				6D9D3F8D1BDBCF10461EEB82 /* CaseLeadVisual.swift */,
+				E676700C5B1A9EE44CCF3513 /* CaseMediaSection.swift */,
 				DC75215B0CF4E1D57BFCAE04 /* CaseSectionNavigator.swift */,
 				17C7A33C9F84342253244B90 /* CitationDrawer.swift */,
 				04BC882B4DCF81E0186A8459 /* DailyBriefingCard.swift */,
@@ -634,6 +641,7 @@
 				9F7A6B03BCC31570F5FD4199 /* Entitlement.swift */,
 				10EE74A5A4626B002A3A27F0 /* EvidenceItem.swift */,
 				146298FC6CD67380CBF8A4A7 /* Feed.swift */,
+				CA208A3EB719E85399B5E3EF /* MediaAsset.swift */,
 				0DFEEA459DE263793BC7A674 /* SupportingModels.swift */,
 				B94F276386D34C85C70FAB9A /* UAPCase+V2.swift */,
 				9551F0C97DA0B2EFE924160A /* UAPCase.swift */,

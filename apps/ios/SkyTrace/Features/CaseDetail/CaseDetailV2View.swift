@@ -50,6 +50,7 @@ struct CaseDetailV2View: View {
     private func availableSections(_ c: UAPCase) -> [CaseSection] {
         var s: [CaseSection] = [.overview, .assessment]
         if !c.evidenceItems.isEmpty { s.append(.evidence) }
+        if !c.media.isEmpty { s.append(.media) }
         if !c.timeline.isEmpty { s.append(.timeline) }
         if !c.sources.isEmpty { s.append(.sources) }
         return s
@@ -75,6 +76,8 @@ struct CaseDetailV2View: View {
                                 }.id(CaseSection.assessment.anchor)
                                 // 資料
                                 evidence(c).id(CaseSection.evidence.anchor)
+                                // 映像・画像
+                                media(c).id(CaseSection.media.anchor)
                                 // 経緯
                                 timeline(c).id(CaseSection.timeline.anchor)
                                 // 出典
@@ -219,6 +222,14 @@ struct CaseDetailV2View: View {
                     ForEach(items) { EvidenceItemRow(item: $0) }
                 }
             }
+        }
+    }
+
+    // MARK: 8b. Media (rights-gated: cleared inline, unknown links out)
+
+    @ViewBuilder private func media(_ c: UAPCase) -> some View {
+        if !c.media.isEmpty {
+            CaseMediaSection(media: c.media) { url in linkToOpen = IdentifiedURL(url: url) }
         }
     }
 
