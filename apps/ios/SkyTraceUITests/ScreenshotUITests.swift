@@ -13,10 +13,14 @@ final class ScreenshotUITests: XCTestCase {
 
     override func setUp() { continueAfterFailure = true }
 
-    private func launchApp(showWelcome: Bool = false) -> XCUIApplication {
+    private func launchApp(showWelcome: Bool = false, language: String? = nil) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchArguments += [showWelcome ? "-uitest-show-welcome" : "-uitest-skip-welcome",
                                 "-uitest-no-animations"]
+        if let language {
+            // Force the app UI language (and matching locale for RTL/formatting).
+            app.launchArguments += ["-AppleLanguages", "(\(language))", "-AppleLocale", language]
+        }
         app.launch()
         return app
     }
@@ -41,6 +45,21 @@ final class ScreenshotUITests: XCTestCase {
         let app = launchApp()
         waitUntilLoaded(app)
         snapshot(name: "01-today-v2")
+    }
+
+    /// Arabic launch — verifies translated core vocabulary + right-to-left
+    /// layout mirroring (body strings fall back to readable English for now).
+    func testCaptureTodayArabic() {
+        let app = launchApp(language: "ar")
+        waitUntilLoaded(app)
+        snapshot(name: "01-today-ar-rtl")
+    }
+
+    /// Spanish launch — verifies a Latin-script target language renders.
+    func testCaptureTodaySpanish() {
+        let app = launchApp(language: "es")
+        waitUntilLoaded(app)
+        snapshot(name: "01-today-es")
     }
 
     func testCaptureMap() {
