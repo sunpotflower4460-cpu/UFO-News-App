@@ -1,0 +1,40 @@
+name: Deploy legal/support site (GitHub Pages)
+
+# Publishes the static privacy/terms/support pages in docs/site so the app's
+# in-app legal links resolve to real HTTPS URLs (required by App Review).
+#
+# One-time manual step: repository Settings → Pages → Source: "GitHub Actions".
+# After that this deploys automatically on every push to main that touches the
+# site. Published at https://sunpotflower4460-cpu.github.io/UFO-News-App/
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - "docs/site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/site
+      - id: deployment
+        uses: actions/deploy-pages@v4

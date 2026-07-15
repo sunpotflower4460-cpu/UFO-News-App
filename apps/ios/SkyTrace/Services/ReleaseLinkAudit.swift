@@ -7,18 +7,20 @@ enum ReleaseLinkAudit {
     struct Problem: Equatable { let page: String; let reason: String }
 
     static func audit(_ pages: [LegalPage] = LegalPage.allCases) -> [Problem] {
+        pages.flatMap { problems(page: $0.rawValue, url: $0.externalURL) }
+    }
+
+    /// Validates a single legal/support URL. Exposed so tests can probe both a
+    /// production URL (must be clean) and a placeholder (must be flagged).
+    static func problems(page: String, url: URL?) -> [Problem] {
+        guard let url else { return [.init(page: page, reason: "missing URL")] }
         var problems: [Problem] = []
-        for page in pages {
-            guard let url = page.externalURL else {
-                problems.append(.init(page: page.rawValue, reason: "missing URL")); continue
-            }
-            if url.scheme?.lowercased() != "https" {
-                problems.append(.init(page: page.rawValue, reason: "non-HTTPS scheme"))
-            }
-            if url.host?.contains("example.com") == true {
-                // Placeholder host — must be replaced before submission.
-                problems.append(.init(page: page.rawValue, reason: "placeholder host"))
-            }
+        if url.scheme?.lowercased() != "https" {
+            problems.append(.init(page: page, reason: "non-HTTPS scheme"))
+        }
+        if url.host?.contains("example.com") == true || url.host?.contains("example.org") == true {
+            // Placeholder host — must be replaced before submission.
+            problems.append(.init(page: page, reason: "placeholder host"))
         }
         return problems
     }

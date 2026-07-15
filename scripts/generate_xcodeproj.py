@@ -378,7 +378,7 @@ def app_settings(config):
         "ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME": "AccentColor",
         "CODE_SIGN_STYLE": "Automatic",
         "CURRENT_PROJECT_VERSION": "1",
-        "MARKETING_VERSION": "0.1.0",
+        "MARKETING_VERSION": "1.0.0",
         "GENERATE_INFOPLIST_FILE": "NO",
         "INFOPLIST_FILE": "SkyTrace/Resources/Info.plist",
         "IPHONEOS_DEPLOYMENT_TARGET": "17.0",
@@ -397,7 +397,7 @@ def test_settings(kind, config):
     s = {
         "CODE_SIGN_STYLE": "Automatic",
         "CURRENT_PROJECT_VERSION": "1",
-        "MARKETING_VERSION": "0.1.0",
+        "MARKETING_VERSION": "1.0.0",
         "GENERATE_INFOPLIST_FILE": "YES",
         "IPHONEOS_DEPLOYMENT_TARGET": "17.0",
         "PRODUCT_NAME": "\"$(TARGET_NAME)\"",
