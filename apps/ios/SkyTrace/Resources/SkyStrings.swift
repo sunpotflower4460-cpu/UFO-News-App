@@ -36,8 +36,29 @@ enum SkyStrings {
     private static let table: [String: Pair] = merged(
         general, tabs, status, statusV2, assessV2, scores, evidence, sourceKinds, ai,
         explanation, today, briefing, map, research, caseDetail,
-        paywall, settings, states, welcome, filters, location, article
+        paywall, settings, states, welcome, filters, location, article, trust
     )
+
+    private static let trust: [String: Pair] = [
+        "trust.title": .init(ja: "信頼のしくみ", en: "Trust Center"),
+        "trust.entry": .init(ja: "信頼のしくみ", en: "How SkyTrace works"),
+        "trust.hero": .init(
+            ja: "SkyTraceは、空で報告された事象を出典・証拠・不確実性とともに記録します。信じさせることも、否定することも目的にしません。",
+            en: "SkyTrace records what's reported in the sky with its sources, evidence, and uncertainty. It exists neither to convince nor to debunk."),
+        "trust.stance.title": .init(ja: "私たちの立場", en: "Our stance"),
+        "trust.stance.1": .init(ja: "「未解明」を「地球外起源」とは断定しません。",
+            en: "\"Unexplained\" is never equated with \"extraterrestrial.\""),
+        "trust.stance.2": .init(ja: "既知現象との照合を先に行い、残った部分だけを未解明として示します。",
+            en: "Known causes are checked first; only what remains is marked unexplained."),
+        "trust.stance.3": .init(ja: "単一の信ぴょう性スコアは使いません。証拠を複数の軸で示します。",
+            en: "No single credibility score — evidence is shown across several axes."),
+        "trust.stance.4": .init(ja: "AIは証拠を整理する編集助手であり、真実を宣言する権威ではありません。",
+            en: "AI is an editorial assistant that organizes evidence, not an authority that declares truth."),
+        "trust.status.title": .init(ja: "ステータスの意味", en: "What the statuses mean"),
+        "trust.status.note": .init(ja: "ステータスは「理解の状態」を表し、物体の正体を表しません。",
+            en: "A status describes the state of understanding — never what the object is."),
+        "trust.learnMore": .init(ja: "詳しい方針", en: "Detailed policies"),
+    ]
 
     /// V2 assessment dimensions, change kinds, related-case relations.
     private static let assessV2: [String: Pair] = [
@@ -90,6 +111,22 @@ enum SkyStrings {
         "v2.status.disputed": .init(ja: "争点あり", en: "Disputed"),
         "v2.status.corrected": .init(ja: "訂正済み", en: "Corrected"),
         "v2.status.archived": .init(ja: "アーカイブ", en: "Archived"),
+        "v2.status.newReport.meaning": .init(ja: "報告を受け付けた段階。まだ照合前。",
+            en: "Just reported — not yet checked against known causes."),
+        "v2.status.underReview.meaning": .init(ja: "証拠と出典を照合中。評価は変わりうる。",
+            en: "Evidence and sources are being checked; the assessment may change."),
+        "v2.status.informationInsufficient.meaning": .init(ja: "判断に足る情報がまだ足りない。",
+            en: "Not enough information yet to reach an assessment."),
+        "v2.status.knownExplanationLikely.meaning": .init(ja: "既知現象で説明できる可能性が高い。",
+            en: "Likely explained by a known cause."),
+        "v2.status.explained.meaning": .init(ja: "既知現象と一致し、説明がついた。",
+            en: "Matched to a known cause and explained."),
+        "v2.status.disputed.meaning": .init(ja: "出典間で見解が分かれている。",
+            en: "Sources disagree on what happened."),
+        "v2.status.corrected.meaning": .init(ja: "新情報で評価を訂正。履歴は残す。",
+            en: "Assessment corrected with new information; history is kept."),
+        "v2.status.archived.meaning": .init(ja: "更新が止まった、または統合された事例。",
+            en: "No longer active, or merged into another case."),
     ]
 
     private static func merged(_ dicts: [String: Pair]...) -> [String: Pair] {
@@ -325,6 +362,14 @@ enum SkyStrings {
         "paywall.feature.evidence": .init(ja: "一致・矛盾・照合根拠の詳細", en: "Detailed agreement, contradiction & matching"),
         "paywall.feature.filters": .init(ja: "高度フィルターと検索", en: "Advanced filters & search"),
         "paywall.feature.tracking": .init(ja: "更新履歴の詳細追跡", en: "Detailed update tracking"),
+        "paywall.context.synthesis": .init(ja: "この事例のAI統合調査記事の続きを読むには。",
+            en: "To keep reading this case's AI synthesis."),
+        "paywall.context.briefing": .init(ja: "Daily Sky Briefing の全文を読むには。",
+            en: "To read the full Daily Sky Briefing."),
+        "paywall.context.filters": .init(ja: "高度なフィルターと検索を使うには。",
+            en: "To use advanced filters and search."),
+        "paywall.context.tracking": .init(ja: "この事例の更新を追跡するには。",
+            en: "To track updates on this case."),
         "paywall.perMonth": .init(ja: "実質 %@／月", en: "≈ %@/mo"),
         "paywall.pending": .init(ja: "購入は承認待ちです。", en: "Purchase is pending approval."),
         "paywall.restored": .init(ja: "購入を復元しました。", en: "Purchases restored."),

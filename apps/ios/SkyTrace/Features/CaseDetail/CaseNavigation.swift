@@ -17,19 +17,27 @@ extension View {
     }
 }
 
-/// Context passed to the paywall so its headline/CTA fit where it was triggered.
+/// Context passed to the paywall so its headline/features fit where it was
+/// triggered — the gate leads with the feature the reader just reached for,
+/// then lists the rest, rather than a generic wall.
 struct PaywallContext: Identifiable {
-    enum Trigger { case briefing, synthesis, filters, tracking }
+    enum Trigger: String { case briefing, synthesis, filters, tracking }
     let id = UUID()
     let trigger: Trigger
 
+    /// A one-line lead that names why the gate appeared here.
+    var headlineKey: String { "paywall.context.\(trigger.rawValue)" }
+
+    /// All Plus features, with the triggering feature first. `evidence` is a
+    /// general benefit and always follows the lead.
     var unlocks: [String] {
-        [
-            SkyStrings.t("paywall.feature.briefing"),
-            SkyStrings.t("paywall.feature.synthesis"),
-            SkyStrings.t("paywall.feature.evidence"),
-            SkyStrings.t("paywall.feature.filters"),
-            SkyStrings.t("paywall.feature.tracking"),
-        ]
+        let ordered: [Trigger] = ([trigger] + Trigger.ordered.filter { $0 != trigger })
+        var keys = ordered.map { "paywall.feature.\($0.rawValue)" }
+        keys.insert("paywall.feature.evidence", at: 1)
+        return keys.map { SkyStrings.t($0) }
     }
+}
+
+private extension PaywallContext.Trigger {
+    static let ordered: [PaywallContext.Trigger] = [.synthesis, .briefing, .filters, .tracking]
 }

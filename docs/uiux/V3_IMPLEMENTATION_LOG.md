@@ -90,7 +90,24 @@
 - 注：`FiltersSheet`（詳細シート）は当面 legacy `CaseStatus` 語彙のまま（より粒度が細かい）。主要なクイックフィルターは facetBar が V2 語彙で提供。
 
 ### V3-3 完了
-Map/Explore 同期（cross-tab focus）・recent searches・facets を実装。次は Phase V3-4（Long-form reading・contextual gate・Paywall preview・Trust Center・notification permission 連携UI）。
+Map/Explore 同期（cross-tab focus）・recent searches・facets を実装。PR #7 で main へ squash-merge（`b78f900`、CI green）。
+
+## Phase V3-4 — Reading / Gate / Trust（進行中）
+作業ブランチ `uiux/v3-4`（merged main `b78f900` から作成）。
+
+### V3-4 追加（Trust Center）
+- **TrustCenterView**（新）：プロダクトの立場（CLAUDE.md §2/§6/§7）を最上部で明示し、ステータス語彙を平易な意味付きで一覧、詳細方針（editorial/ai/scores/sources/correction の LegalPage）へリンクする信頼ハブ。読むだけ・アカウント不要。
+- `SkyCaseStatus.meaningKey` を追加し、各ステータスの1行意味を SkyStrings に定義。
+- Settings の editorial セクションを散在リンクから単一の「信頼のしくみ」導線へ集約（詳細は Trust Center 内で辿れる）。
+- 変更ファイル：`Features/Settings/TrustCenterView.swift`(新), `Features/Settings/SettingsView.swift`, `DesignSystem/Status/SkyCaseStatus.swift`, `Resources/SkyStrings.swift`（trust.* / v2.status.*.meaning）。
+
+### V3-4 追加（文脈導線＋文脈対応ペイウォール）
+- Case Detail の AI 開示セクションから **Trust Center** への文脈導線（「信頼のしくみ」リンク）。
+- `PaywallContext` を trigger 対応に：`headlineKey` で発生箇所を1行で説明、`unlocks` はトリガー機能を先頭に並べ替え（generic な壁ではなく、読者が今触れた機能を先頭に提示）。`PaywallView` ヘッダーに文脈リードを表示。
+- 変更ファイル：`Features/CaseDetail/CaseDetailV2View.swift`, `Features/CaseDetail/CaseNavigation.swift`, `Features/Subscription/PaywallView.swift`, `Resources/SkyStrings.swift`（paywall.context.*）。
+
+### V3-4 残
+- Long-form reading（読書体験の細部向上）、notification permission の文脈的プライマー（任意）。V3-4 主要項目（Trust Center・文脈導線・文脈対応ゲート）は実装済み。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
