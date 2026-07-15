@@ -8,6 +8,7 @@ import MapKit
 /// debug Design Gallery during bring-up; existing Map tab is untouched.
 struct MapV2View: View {
     @Environment(AppEnvironment.self) private var env
+    @Environment(AppRouter.self) private var router
     @State private var model: MapViewModel?
     @State private var camera: MapCameraPosition = .region(
         MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25, longitude: 15),
@@ -33,8 +34,26 @@ struct MapV2View: View {
             .task {
                 if model == nil { model = MapViewModel(caseRepo: env.caseRepository) }
                 await model?.load()
+                focusRequestedCase()
             }
+            .onChange(of: router.mapFocusCaseID) { _, _ in focusRequestedCase() }
             .sheet(isPresented: $showSheet) { bottomSheet }
+    }
+
+    /// Consume a cross-tab focus request (e.g. "View on map" from Case Detail):
+    /// select the case, centre the camera on it, raise the sheet, then clear the
+    /// request so it fires once. No-op until the cases have loaded.
+    private func focusRequestedCase() {
+        guard let id = router.mapFocusCaseID,
+              let model, let c = model.allCases.first(where: { $0.id == id }) else { return }
+        selected = c
+        withAnimation {
+            camera = .region(MKCoordinateRegion(
+                center: CLLocationCoordinate2D(latitude: c.latitude, longitude: c.longitude),
+                span: MKCoordinateSpan(latitudeDelta: 8, longitudeDelta: 8)))
+        }
+        sheetDetent = .medium
+        router.mapFocusCaseID = nil
     }
 
     @ViewBuilder private var mapLayer: some View {
@@ -233,5 +252,5 @@ struct MapV2View: View {
 
 #Preview("Map V2") {
     NavigationStack { MapV2View() }
-        .environment(AppEnvironment.preview()).environment(AppSettings())
+        .environment(AppEnvironment.preview()).environment(AppSettings()).environment(AppRouter())
 }

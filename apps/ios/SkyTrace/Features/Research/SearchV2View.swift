@@ -28,7 +28,7 @@ struct SearchV2View: View {
         .background(SkyColor.canvas)
         .navigationTitle(SkyStrings.t("research.title"))
         .searchable(text: searchBinding, prompt: SkyStrings.t("research.searchPrompt"))
-        .onSubmit(of: .search) { model?.cancelDebounce(); Task { await model?.runSearch() } }
+        .onSubmit(of: .search) { Task { await model?.submitSearch() } }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button { showFilters = true } label: {
@@ -63,6 +63,8 @@ struct SearchV2View: View {
     private func discover(_ model: ResearchViewModel) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SkySpacing.x8) {
+                recentSearches(model)
+                facetBar(model)
                 if !model.recentlyViewed.isEmpty {
                     section(SkyStrings.t("research.recent"), "clock.arrow.circlepath", model.recentlyViewed)
                 }
@@ -80,6 +82,59 @@ struct SearchV2View: View {
         EditorialSection(title: title, systemImage: image) {
             VStack(alignment: .leading, spacing: SkySpacing.x3) {
                 ForEach(items) { row($0) }
+            }
+        }
+    }
+
+    // Recent committed searches — tap to re-run, or clear the list.
+    @ViewBuilder private func recentSearches(_ model: ResearchViewModel) -> some View {
+        if !model.recentSearches.isEmpty {
+            EditorialSection(title: SkyStrings.t("research.recentSearches"), systemImage: "clock") {
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), spacing: SkySpacing.x2)], alignment: .leading,
+                              spacing: SkySpacing.x2) {
+                        ForEach(model.recentSearches, id: \.self) { term in
+                            Button { model.selectTag(term) } label: {
+                                SkyChip(text: term, systemImage: "magnifyingglass")
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    Button(SkyStrings.t("research.clearRecent")) { model.clearRecentSearches() }
+                        .font(.caption).foregroundStyle(SkyColor.accentPrimary)
+                }
+            }
+        }
+    }
+
+    // Status facet chips (V2 vocabulary) with per-status result counts. Shared
+    // by discovery and results so the filter vocabulary is one system across
+    // Search and Map. Tapping a chip narrows to that status.
+    @ViewBuilder private func facetBar(_ model: ResearchViewModel) -> some View {
+        let facets = model.statusFacets
+        if facets.count > 1 {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: SkySpacing.x2) {
+                    ForEach(facets, id: \.status) { facet in
+                        Button { model.toggleStatusFacet(facet.status) } label: {
+                            HStack(spacing: 4) {
+                                CaseStatusGlyph(status: facet.status, size: 13)
+                                Text(SkyStrings.t(facet.status.labelKey)).font(SkyTypography.metadata)
+                                    .foregroundStyle(SkyColor.textPrimary)
+                                Text("\(facet.count)").font(SkyTypography.metadata.monospacedDigit())
+                                    .foregroundStyle(SkyColor.textTertiary)
+                            }
+                            .padding(.horizontal, SkySpacing.x3).padding(.vertical, SkySpacing.x2)
+                            .background(model.isStatusSelected(facet.status)
+                                        ? facet.status.color.opacity(0.22) : SkyColor.surfaceInteractive,
+                                        in: Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("\(SkyStrings.t(facet.status.labelKey))、\(facet.count)")
+                        .accessibilityAddTraits(model.isStatusSelected(facet.status)
+                                                ? [.isButton, .isSelected] : .isButton)
+                    }
+                }
             }
         }
     }
@@ -124,6 +179,7 @@ struct SearchV2View: View {
                             .font(.caption).foregroundStyle(SkyColor.accentPrimary)
                     }
                 }
+                facetBar(model)
                 if model.results.isEmpty {
                     VStack(alignment: .leading, spacing: SkySpacing.x3) {
                         EmptyStateView(messageKey: "empty.search", systemImage: "magnifyingglass")
