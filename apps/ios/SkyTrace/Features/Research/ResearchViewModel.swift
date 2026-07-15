@@ -35,6 +35,35 @@ final class ResearchViewModel {
         Array(Set(allCases.flatMap(\.shapeTags))).sorted().prefix(12).map { $0 }
     }
 
+    /// Status facets (V2 vocabulary) with per-status result counts. Counts are
+    /// computed for the current query + non-status filters, so an active status
+    /// filter doesn't collapse the other options to zero — the bar always shows
+    /// how many cases each status would yield, and tapping narrows to it.
+    var statusFacets: [(status: SkyCaseStatus, count: Int)] {
+        var base = filter
+        base.statuses = []
+        let matched = CaseSearch.run(query: query, filters: base, in: allCases)
+        let grouped = Dictionary(grouping: matched) { SkyCaseStatus($0.status) }
+        return SkyCaseStatus.allCases.compactMap { s in
+            guard let n = grouped[s]?.count, n > 0 else { return nil }
+            return (s, n)
+        }
+    }
+
+    func isStatusSelected(_ s: SkyCaseStatus) -> Bool {
+        CaseStatus.allCases.contains { SkyCaseStatus($0) == s && filter.statuses.contains($0) }
+    }
+
+    /// Toggle a V2 status facet by mapping it to the legacy statuses that render
+    /// as it (so filtering works against the current fixture model), then search.
+    func toggleStatusFacet(_ s: SkyCaseStatus) {
+        let legacy = CaseStatus.allCases.filter { SkyCaseStatus($0) == s }
+        let anyOn = legacy.contains { filter.statuses.contains($0) }
+        for l in legacy { if anyOn { filter.statuses.remove(l) } else { filter.statuses.insert(l) } }
+        cancelDebounce()
+        Task { await runSearch() }
+    }
+
     func load() async {
         do {
             allCases = try await caseRepo.allCases()

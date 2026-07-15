@@ -83,8 +83,14 @@
 - Producer：`CaseDetailV2View` の場所行に「地図で見る」ボタン（`router.openMap(focus: c.id)`）。これで詳細→地図の cross-tab 遷移が実動。
 - 変更ファイル：`Features/Map/MapV2View.swift`, `Features/CaseDetail/CaseDetailV2View.swift`, `Resources/SkyStrings.swift`。Preview に `AppRouter` を注入。
 
-### V3-3 残
-- facets（Map の期間/状態フィルターと Search の facets の統一・件数表示）。
+### V3-3 追加（facets：統一語彙＋件数表示）
+- `ResearchViewModel.statusFacets`：現在のクエリ＋（状態以外の）フィルターに対する各ステータスの件数を算出（状態フィルターを外した基準で数えるので、絞り込み中も他ステータスへ切替可能）。`isStatusSelected` / `toggleStatusFacet`（V2→legacy ステータス写像、Map と同じロジック）。
+- `SearchV2View.facetBar`：V2 語彙のステータスチップ（グリフ＋ラベル＋件数）。ディスカバリと結果の両方で共有し、Search と Map のフィルター語彙を1つのシステムに統一。タップでそのステータスへ絞り込み。`facets.count > 1` の時のみ表示。
+- 変更ファイル：`Features/Research/ResearchViewModel.swift`, `Features/Research/SearchV2View.swift`。
+- 注：`FiltersSheet`（詳細シート）は当面 legacy `CaseStatus` 語彙のまま（より粒度が細かい）。主要なクイックフィルターは facetBar が V2 語彙で提供。
+
+### V3-3 完了
+Map/Explore 同期（cross-tab focus）・recent searches・facets を実装。次は Phase V3-4（Long-form reading・contextual gate・Paywall preview・Trust Center・notification permission 連携UI）。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。
