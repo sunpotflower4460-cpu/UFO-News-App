@@ -6,6 +6,7 @@ import SwiftUI
 /// Gallery during bring-up; existing Explore tab untouched.
 struct SearchV2View: View {
     @Environment(AppEnvironment.self) private var env
+    @Environment(DataRefreshController.self) private var refresh
     @State private var model: ResearchViewModel?
     @State private var showFilters = false
 
@@ -37,7 +38,8 @@ struct SearchV2View: View {
                 }
             }
         }
-        .task {
+        .refreshable { await model?.load() }
+        .task(id: refresh.generation) {
             if model == nil { model = ResearchViewModel(caseRepo: env.caseRepository, library: env.library) }
             await model?.load()
         }
@@ -228,4 +230,5 @@ struct SearchV2View: View {
 #Preview("Search V2") {
     NavigationStack { SearchV2View() }
         .environment(AppEnvironment.preview()).environment(AppSettings())
+        .environment(DataRefreshController())
 }

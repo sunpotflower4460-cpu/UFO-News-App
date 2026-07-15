@@ -23,6 +23,7 @@ struct SettingsView: View {
             Form {
                 subscriptionSection
                 notificationsSection
+                refreshSection($settings)
                 appearanceSection($settings)
                 dataSection
                 editorialSection
@@ -96,6 +97,22 @@ struct SettingsView: View {
                  : SkyStrings.t("settings.notif.primer"))
         }
         .tint(SkyColor.signalCyan)
+    }
+
+    private func refreshSection(_ settings: Bindable<AppSettings>) -> some View {
+        Section {
+            Toggle(SkyStrings.t("settings.refresh.auto"), isOn: settings.autoRefreshEnabled)
+                .tint(SkyColor.signalCyan)
+            if settings.wrappedValue.autoRefreshEnabled {
+                Picker(SkyStrings.t("settings.refresh.interval"), selection: settings.refreshInterval) {
+                    ForEach(AppSettings.RefreshInterval.allCases) { Text(SkyStrings.t($0.labelKey)).tag($0) }
+                }
+            }
+        } header: {
+            Text(SkyStrings.t("settings.section.refresh"))
+        } footer: {
+            Text(SkyStrings.t("settings.refresh.note"))
+        }
     }
 
     private func appearanceSection(_ settings: Bindable<AppSettings>) -> some View {

@@ -34,4 +34,5 @@ struct RootTabView: View {
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
         .environment(AppRouter())
+        .environment(DataRefreshController())
 }
