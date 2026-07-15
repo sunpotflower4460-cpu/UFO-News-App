@@ -28,7 +28,7 @@ struct SearchV2View: View {
         .background(SkyColor.canvas)
         .navigationTitle(SkyStrings.t("research.title"))
         .searchable(text: searchBinding, prompt: SkyStrings.t("research.searchPrompt"))
-        .onSubmit(of: .search) { model?.cancelDebounce(); Task { await model?.runSearch() } }
+        .onSubmit(of: .search) { Task { await model?.submitSearch() } }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button { showFilters = true } label: {
@@ -63,6 +63,7 @@ struct SearchV2View: View {
     private func discover(_ model: ResearchViewModel) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SkySpacing.x8) {
+                recentSearches(model)
                 if !model.recentlyViewed.isEmpty {
                     section(SkyStrings.t("research.recent"), "clock.arrow.circlepath", model.recentlyViewed)
                 }
@@ -80,6 +81,27 @@ struct SearchV2View: View {
         EditorialSection(title: title, systemImage: image) {
             VStack(alignment: .leading, spacing: SkySpacing.x3) {
                 ForEach(items) { row($0) }
+            }
+        }
+    }
+
+    // Recent committed searches — tap to re-run, or clear the list.
+    @ViewBuilder private func recentSearches(_ model: ResearchViewModel) -> some View {
+        if !model.recentSearches.isEmpty {
+            EditorialSection(title: SkyStrings.t("research.recentSearches"), systemImage: "clock") {
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 90), spacing: SkySpacing.x2)], alignment: .leading,
+                              spacing: SkySpacing.x2) {
+                        ForEach(model.recentSearches, id: \.self) { term in
+                            Button { model.selectTag(term) } label: {
+                                SkyChip(text: term, systemImage: "magnifyingglass")
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                    Button(SkyStrings.t("research.clearRecent")) { model.clearRecentSearches() }
+                        .font(.caption).foregroundStyle(SkyColor.accentPrimary)
+                }
             }
         }
     }

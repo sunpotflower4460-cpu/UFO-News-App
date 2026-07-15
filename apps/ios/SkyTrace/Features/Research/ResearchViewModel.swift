@@ -10,6 +10,8 @@ final class ResearchViewModel {
     var recentlyViewed: [UAPCase] = []
     var saved: [UAPCase] = []
     var updatedThisWeek: [UAPCase] = []
+    /// Past committed queries (most-recent first), surfaced in discovery.
+    var recentSearches: [String] = []
     /// True while a debounced search is in flight (keeps prior results visible).
     var isRunning = false
     /// Discovery load state for the initial screen (skeleton → ready / failed).
@@ -48,6 +50,7 @@ final class ResearchViewModel {
         saved = allCases.filter { savedIDs.contains($0.id) }
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: FixtureClock.today)!
         updatedThisWeek = allCases.filter { $0.hasRecentUpdate && $0.updatedAt >= weekAgo }
+        recentSearches = await library.recentSearches()
         didLoad = true
         // Do not run an empty search on load — discovery is shown instead.
     }
@@ -83,10 +86,36 @@ final class ResearchViewModel {
         results = (try? await caseRepo.search(query: query, filters: filter)) ?? []
     }
 
+    /// Commits the current query (from the search-bar submit): records it in
+    /// recent searches, then runs immediately. Empty queries are not recorded.
+    func submitSearch() async {
+        cancelDebounce()
+        await recordSearch(query)
+        await runSearch()
+    }
+
     func selectTag(_ tag: String) {
         cancelDebounce()
         query = tag
-        Task { await runSearch() }
+        Task {
+            await recordSearch(tag)
+            await runSearch()
+        }
+    }
+
+    /// Persists a committed query and refreshes the local list for the UI.
+    private func recordSearch(_ q: String) async {
+        let trimmed = q.trimmingCharacters(in: .whitespaces)
+        guard !trimmed.isEmpty else { return }
+        await library.addRecentSearch(trimmed)
+        recentSearches = await library.recentSearches()
+    }
+
+    func clearRecentSearches() {
+        Task {
+            await library.clearRecentSearches()
+            recentSearches = []
+        }
     }
 
     func clearFilters() {

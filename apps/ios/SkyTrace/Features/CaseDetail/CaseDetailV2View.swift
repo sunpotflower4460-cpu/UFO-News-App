@@ -8,6 +8,7 @@ import SwiftUI
 struct CaseDetailV2View: View {
     let caseID: String
     @Environment(AppEnvironment.self) private var env
+    @Environment(AppRouter.self) private var router
     @State private var model: CaseDetailViewModel?
     @State private var related: [RelatedCaseRef] = []
     @State private var allCases: [UAPCase] = []
@@ -102,6 +103,14 @@ struct CaseDetailV2View: View {
                 Image(systemName: "mappin.and.ellipse").imageScale(.small)
                 Text(c.localityName ?? c.regionName)
                 Text("·"); Text(SkyStrings.t(c.locationPrecision.labelKey))
+                Spacer(minLength: SkySpacing.x2)
+                Button { router.openMap(focus: c.id) } label: {
+                    Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                        .font(SkyTypography.metadata.weight(.semibold))
+                        .foregroundStyle(SkyColor.accentPrimary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint(SkyStrings.t("map.focusHint"))
             }
             .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
             HStack(spacing: SkySpacing.x4) {
@@ -374,4 +383,5 @@ private struct CaseDetailSkeleton: View {
     NavigationStack { CaseDetailV2View(caseID: DemoCases.northSeaNotable.id) }
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
+        .environment(AppRouter())
 }

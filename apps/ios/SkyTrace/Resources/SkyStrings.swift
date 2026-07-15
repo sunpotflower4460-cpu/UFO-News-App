@@ -280,12 +280,15 @@ enum SkyStrings {
         "map.results": .init(ja: "%@件を表示", en: "Showing %@"),
         "map.altList": .init(ja: "一覧で見る", en: "View as list"),
         "map.approximateNote": .init(ja: "おおよその位置", en: "Approximate location"),
+        "map.focusHint": .init(ja: "地図タブでこの事例を表示", en: "Show this case on the Map tab"),
     ]
 
     private static let research: [String: Pair] = [
         "research.title": .init(ja: "探す", en: "Explore"),
         "research.searchPrompt": .init(ja: "地域・状態・形状で検索", en: "Search by region, status, shape"),
         "research.recent": .init(ja: "最近見た事例", en: "Recently viewed"),
+        "research.recentSearches": .init(ja: "最近の検索", en: "Recent searches"),
+        "research.clearRecent": .init(ja: "消去", en: "Clear"),
         "research.collections": .init(ja: "注目コレクション", en: "Featured collections"),
         "research.updatedThisWeek": .init(ja: "今週更新された事例", en: "Updated this week"),
         "research.saved": .init(ja: "保存済み", en: "Saved"),

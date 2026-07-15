@@ -7,7 +7,9 @@ actor LibraryStore: LibraryRepository {
     private let defaults: UserDefaults
     private let bookmarkKey = "skytrace.bookmarks"
     private let recentKey = "skytrace.recentlyViewed"
+    private let recentSearchKey = "skytrace.recentSearches"
     private let recentLimit = 12
+    private let recentSearchLimit = 8
 
     /// Takes a suite name (Sendable) rather than a `UserDefaults` instance so no
     /// non-Sendable value crosses the actor boundary (Swift 6 concurrency).
@@ -48,5 +50,26 @@ actor LibraryStore: LibraryRepository {
     /// Clears the recently-viewed cache. Bookmarks are kept (a separate action).
     func clearRecentlyViewed() async {
         defaults.removeObject(forKey: recentKey)
+    }
+
+    func recentSearches() async -> [String] {
+        defaults.stringArray(forKey: recentSearchKey) ?? []
+    }
+
+    /// Records a committed query (submit / tag), most-recent first. Trims,
+    /// ignores empties, and de-duplicates case-insensitively so re-running a
+    /// past search just moves it to the top rather than adding a near-duplicate.
+    func addRecentSearch(_ query: String) async {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        var items = await recentSearches()
+        items.removeAll { $0.caseInsensitiveCompare(trimmed) == .orderedSame }
+        items.insert(trimmed, at: 0)
+        if items.count > recentSearchLimit { items = Array(items.prefix(recentSearchLimit)) }
+        defaults.set(items, forKey: recentSearchKey)
+    }
+
+    func clearRecentSearches() async {
+        defaults.removeObject(forKey: recentSearchKey)
     }
 }
