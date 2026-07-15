@@ -2,7 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ main, "claude/**", "uiux/**" ]
+    branches: [ main, "claude/**", "uiux/**", "auto-refresh/**", "i18n/**" ]
   pull_request:
 
 concurrency:

@@ -23,3 +23,8 @@
 ## V3 UI/UX
 - **D-V3-001 Evidence と Sources の役割分離（P0-05）**: 専用の証拠データがfixtureに無いため、`EvidenceItem` を「記録性のある出典（official/scientific/database/openData）」から導出し、Evidence節は"記録"（種別＋記録日）として表示、Sources節は引用一覧のまま。press/socialは引用のみ。両節が同じ `SourceRow` を二重表示する重複を解消。実データ接続時はEvidenceを直接投入する。
 - **D-V3-002 通知トグルの権限連動（P0-09）**: ローカル`@AppStorage`のみだったトグルを`UNUserNotificationCenter`の実権限（未設定/拒否/許可）に連動。未設定は要求ボタン、拒否はシステム設定導線、許可時のみ個別トグル。
+
+## 自動更新（Auto-refresh）
+- **D-AR-001 クライアント側自動更新エンジンを先行実装**: `DataRefreshController`（`generation`カウンタ＋`lastRefreshed`）を導入し、各画面は`.task(id: generation)`で購読。フォアグラウンド復帰（`scenePhase == .active`）で即時更新＋一定間隔ポーリング（既定5分、`AppSettings.refreshInterval`）、全タブに`.refreshable`（Todayは既存）。ポーリングはLow Power Mode／UIテスト時は停止、Settingsでオン/オフ・間隔を変更可。
+  - **依存**: 実際に「新しいニュースが来る」には実データ源が必要。現状は全てfixtureで、`AppEnvironment.rebuildRepositories()`の`.localAPI`分岐は未実装（fixtureへfallback）。エンジンはこのRepository seamに配線済みで、Phase 2でURLSessionベースのFeed/Case APIが入れば自動で実データに反映される。プッシュ通知配信（APNs）はさらに後段（別途）。
+  - **設計理由**: 「完全自動更新」の体験をクライアント側で完成させ、バックエンド未実装でも決定的にfixtureで検証可能にするため。Repository抽象（D-008）に依存し、輸送手段に非依存。

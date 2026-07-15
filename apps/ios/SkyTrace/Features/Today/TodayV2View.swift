@@ -8,6 +8,7 @@ struct TodayV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
     @Environment(AppRouter.self) private var router
+    @Environment(DataRefreshController.self) private var refresh
     @State private var model: TodayViewModel?
 
     var body: some View {
@@ -31,7 +32,9 @@ struct TodayV2View: View {
         }
         .background(SkyColor.canvas)
         .navigationTitle(SkyStrings.t("today.title"))
-        .task {
+        // Re-runs whenever the refresh controller bumps its generation
+        // (foreground return / interval poll), in addition to first appearance.
+        .task(id: refresh.generation) {
             if model == nil {
                 model = TodayViewModel(feedRepo: env.feedRepository, caseRepo: env.caseRepository, library: env.library)
             }
@@ -52,6 +55,12 @@ struct TodayV2View: View {
                               lastUpdated: feed.lastUpdatedAt,
                               updatedCount: feed.recentUpdates.count,
                               onOpenMap: { router.openMap() })
+                if let fetched = refresh.lastRefreshed {
+                    HStack(spacing: SkySpacing.x1) {
+                        Spacer(minLength: 0)
+                        StaleBadge(date: fetched)
+                    }
+                }
                 briefingLead(feed)
                 priorityCase(feed)
                 sinceLastVisit(model)
@@ -167,4 +176,5 @@ private struct TodaySkeleton: View {
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
         .environment(AppRouter())
+        .environment(DataRefreshController())
 }

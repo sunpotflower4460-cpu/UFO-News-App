@@ -9,6 +9,7 @@ import MapKit
 struct MapV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppRouter.self) private var router
+    @Environment(DataRefreshController.self) private var refresh
     @State private var model: MapViewModel?
     @State private var camera: MapCameraPosition = .region(
         MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25, longitude: 15),
@@ -31,7 +32,7 @@ struct MapV2View: View {
             .background(SkyColor.canvas)
             .navigationTitle(SkyStrings.t("map.title"))
             .navigationBarTitleDisplayMode(.inline)
-            .task {
+            .task(id: refresh.generation) {
                 if model == nil { model = MapViewModel(caseRepo: env.caseRepository) }
                 await model?.load()
                 focusRequestedCase()
@@ -214,6 +215,7 @@ struct MapV2View: View {
                             }
                         }
                         .listStyle(.plain).scrollContentBackground(.hidden).background(SkyColor.canvas)
+                        .refreshable { await model.load() }
                         .navigationTitle(SkyStrings.t("map.altList"))
                         .navigationBarTitleDisplayMode(.inline)
                         .onChange(of: selected?.id) { _, id in
@@ -253,4 +255,5 @@ struct MapV2View: View {
 #Preview("Map V2") {
     NavigationStack { MapV2View() }
         .environment(AppEnvironment.preview()).environment(AppSettings()).environment(AppRouter())
+        .environment(DataRefreshController())
 }

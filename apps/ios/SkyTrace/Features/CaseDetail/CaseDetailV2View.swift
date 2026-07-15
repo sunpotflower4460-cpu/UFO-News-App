@@ -9,6 +9,7 @@ struct CaseDetailV2View: View {
     let caseID: String
     @Environment(AppEnvironment.self) private var env
     @Environment(AppRouter.self) private var router
+    @Environment(DataRefreshController.self) private var refresh
     @State private var model: CaseDetailViewModel?
     @State private var related: [RelatedCaseRef] = []
     @State private var allCases: [UAPCase] = []
@@ -27,16 +28,21 @@ struct CaseDetailV2View: View {
         }
         .background(SkyColor.canvas)
         .navigationBarTitleDisplayMode(.inline)
-        .task {
-            if model == nil {
-                model = CaseDetailViewModel(caseID: caseID, caseRepo: env.caseRepository, library: env.library)
-            }
-            await model?.load()
-            allCases = (try? await env.caseRepository.allCases()) ?? []
-            if let c = model?.state.value { related = c.relatedRefs(in: allCases) }
-        }
+        .refreshable { await reload() }
+        .task(id: refresh.generation) { await reload() }
         .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
         .sheet(item: $paywall) { PaywallView(context: $0) }
+    }
+
+    /// Loads (or reloads) the case, its article, and related refs. Runs on first
+    /// appearance, on pull-to-refresh, and when the refresh controller ticks.
+    private func reload() async {
+        if model == nil {
+            model = CaseDetailViewModel(caseID: caseID, caseRepo: env.caseRepository, library: env.library)
+        }
+        await model?.load()
+        allCases = (try? await env.caseRepository.allCases()) ?? []
+        if let c = model?.state.value { related = c.relatedRefs(in: allCases) }
     }
 
     /// Only sections with content — overview/assessment are always derived;
@@ -395,4 +401,5 @@ private struct CaseDetailSkeleton: View {
         .environment(AppEnvironment.preview())
         .environment(AppSettings())
         .environment(AppRouter())
+        .environment(DataRefreshController())
 }
