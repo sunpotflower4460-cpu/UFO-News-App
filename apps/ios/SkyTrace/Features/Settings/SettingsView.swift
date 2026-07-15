@@ -139,7 +139,11 @@ struct SettingsView: View {
 
     private var editorialSection: some View {
         Section(SkyStrings.t("settings.section.editorial")) {
-            legalLink(.editorial); legalLink(.ai); legalLink(.scores); legalLink(.sources); legalLink(.correction)
+            NavigationLink {
+                TrustCenterView()
+            } label: {
+                Label(SkyStrings.t("trust.entry"), systemImage: "checkmark.shield")
+            }
         }
     }
 

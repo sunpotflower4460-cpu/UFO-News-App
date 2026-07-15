@@ -19,6 +19,10 @@ enum SkyCaseStatus: String, Codable, Sendable, CaseIterable, Identifiable {
     /// Localization key for the user-facing label (natural Japanese).
     var labelKey: String { "v2.status.\(rawValue)" }
 
+    /// One-line plain-language meaning of the status, used by the Trust Center
+    /// (and anywhere the status vocabulary is explained rather than just tagged).
+    var meaningKey: String { "v2.status.\(rawValue).meaning" }
+
     /// Geometry used by `CaseStatusGlyph`. Same geometry everywhere: map, rows,
     /// header, timeline, widgets, VoiceOver description.
     var geometry: StatusGeometry {
