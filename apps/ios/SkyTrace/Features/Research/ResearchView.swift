@@ -128,7 +128,7 @@ struct ResearchView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: SkySpacing.x3) {
                 HStack {
-                    Text(SkyStrings.t("research.resultCount", String(model.results.count)))
+                    Text(SkyStrings.t("research.resultCount", model.results.count))
                         .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
                     Spacer()
                     if model.filter.isActive {

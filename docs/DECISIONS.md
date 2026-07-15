@@ -34,3 +34,8 @@
   - ユーザー要望「毎回可能な限りソースのUFO画像・映像を掲載」に対し、**許諾できる範囲で毎回最大限表示**しつつ、権利未確認は必ずリンクアウトにするという解で実現。無断スクレイピング・無断ホスティングは行わない。
   - **依存**: 実際のメディアURLはPhase 2バックエンド＋実ソース接続が前提。現状はfixtureで `mediaURL=nil`（許諾済み素材は抽象 `ObservationGlyph` プレースホルダ、リンクは常時）。バックエンド接続時に実URLを流し込めば自動でインライン表示。
   - **UI**: Case Detail に「映像・画像」セクション（`CaseSection.media`、内容がある時のみ表示）。`CaseMediaSection`/`MediaAssetView`。権利バッジ・クレジット表記・情報源リンクを常に併記。
+
+## 多言語対応（i18n）
+- **D-I18N-001 Apple String Catalog へ移行（B1）**: 実CI（Xcode）が使えるため D-006 を実行。`SkyStrings` のコード内 `Pair` 表を撤去し `Localizable.xcstrings` を正本化。`SkyStrings.t` は `NSLocalizedString`＋`String(format:locale:)` で解決（公開APIは不変、約330呼び出し箇所は無変更）。以後の文字列追加はカタログを直接編集（`scripts/build_xcstrings.py` は旧表からの一括移行用の一度きりツール）。対応言語は ja/en に加え es/fr/de/pt-PT/zh-Hans/zh-Hant/ko/ar/hi/ru を宣言。未翻訳は当面 ja へフォールバック。
+- **D-I18N-002 複数形・直書き修正（B2）**: 件数系（`label.sources`/`research.resultCount`）を String Catalog の複数形バリエーション（`.stringsdict`、`%lld`）へ変更し、呼び出し側は Int を渡す。直書きだった共有文言（`share.caseText`）とウィジェット文言（`widget.counts`）をカタログ経由に統一。数値は `locale:` 付きで整形。
+- **残（B3）**: es/fr/de/pt · zh-Hans/zh-Hant/ko · ar/hi/ru の UI 翻訳草案（ネイティブレビュー推奨）と、アラビア語の RTL 検証。長文（LegalPages）とデモ内容の翻訳は対象外（データ／要専門レビュー）。

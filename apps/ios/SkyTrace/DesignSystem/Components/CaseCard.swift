@@ -128,7 +128,7 @@ private struct A11yCard: ViewModifier {
     private var label: String {
         var parts: [String] = [SkyStrings.t(uapCase.v2Status.labelKey), uapCase.title]
         parts.append(SkyStrings.t("label.independent", String(uapCase.independentReportCount)))
-        parts.append(SkyStrings.t("label.sources", String(uapCase.sourceCount)))
+        parts.append(SkyStrings.t("label.sources", uapCase.sourceCount))
         if let v = uapCase.lastVerifiedAt {
             parts.append(SkyStrings.t("label.lastVerified", SkyFormat.dateTime(v)))
         }

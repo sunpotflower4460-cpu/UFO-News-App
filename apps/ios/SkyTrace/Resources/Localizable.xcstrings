@@ -2351,15 +2351,33 @@
       "extractionState": "manual",
       "localizations": {
         "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "出典 %@"
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "出典 %lld"
+                }
+              }
+            }
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ sources"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld source"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld sources"
+                }
+              }
+            }
           }
         }
       }
@@ -3660,15 +3678,33 @@
       "extractionState": "manual",
       "localizations": {
         "ja": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@件"
+          "variations": {
+            "plural": {
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld件"
+                }
+              }
+            }
           }
         },
         "en": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "%@ results"
+          "variations": {
+            "plural": {
+              "one": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld result"
+                }
+              },
+              "other": {
+                "stringUnit": {
+                  "state": "translated",
+                  "value": "%lld results"
+                }
+              }
+            }
           }
         }
       }
@@ -4740,6 +4776,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Settings"
+          }
+        }
+      }
+    },
+    "share.caseText": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@で報告された事象 — SkyTraceで出典と現在の評価を見る（%@）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A reported event over %@ — see the sources and current assessment on SkyTrace (%@)"
           }
         }
       }
@@ -5845,6 +5898,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tracking what's reported in the world's skies — with its sources"
+          }
+        }
+      }
+    },
+    "widget.counts": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "新%lld・更%lld"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld new · %lld upd"
           }
         }
       }

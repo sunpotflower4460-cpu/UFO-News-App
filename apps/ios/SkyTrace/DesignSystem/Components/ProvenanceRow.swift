@@ -7,7 +7,7 @@ struct ProvenanceRow: View {
     let independentCount: Int
     var body: some View {
         HStack(spacing: SkySpacing.x3) {
-            Label(SkyStrings.t("label.sources", String(sourceCount)), systemImage: "doc.text")
+            Label(SkyStrings.t("label.sources", sourceCount), systemImage: "doc.text")
             Label(SkyStrings.t("label.independent", String(independentCount)), systemImage: "person.2")
         }
         .font(SkyTypography.metadata)
