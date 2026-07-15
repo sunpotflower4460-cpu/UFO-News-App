@@ -38,6 +38,18 @@ enum Fx {
     }
     static func gap(_ id: String, _ text: String) -> EvidenceGap { EvidenceGap(id: id, text: text) }
 
+    /// Demo media. `mediaURL` is intentionally nil so no real (rights-uncertain)
+    /// binary is fetched — cleared items render the abstract observation
+    /// placeholder; the source link is always present.
+    static func media(_ id: String, _ kind: MediaKind, _ rights: MediaRights, source: String,
+                      attribution: String, caption: String, license: String? = nil,
+                      url: String = "https://example.org/skytrace-demo-source") -> MediaAsset {
+        MediaAsset(
+            id: id, kind: kind, rights: rights, sourceID: source, attribution: attribution,
+            sourceURL: URL(string: url)!, mediaURL: nil, thumbnailURL: nil,
+            caption: caption, licenseNote: license)
+    }
+
     static func candidate(_ id: String, _ cat: ExplanationCategory, _ label: String, _ score: Int,
                           match: [String], nonMatch: [String] = [], limits: String? = nil,
                           excluded: Bool = false, daysAgo: Int = 1) -> ExplanationCandidate {

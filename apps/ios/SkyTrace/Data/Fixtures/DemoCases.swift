@@ -230,6 +230,12 @@ enum DemoCases {
             Fx.source("s2", "地域公共放送", .press, "複数地点で謎の光点", daysAgo: 3, group: "g_ns2"),
             Fx.source("s3", "アマチュア天文家", .scientific, "連続フレーム解析メモ", daysAgo: 1, group: "g_ns3"),
         ],
+        media: [
+            Fx.media("m_ns1", .image, .creativeCommons, source: "s3",
+                     attribution: "アマチュア天文家", caption: "連続フレーム解析（等間隔の光点）", license: "CC BY 4.0"),
+            Fx.media("m_ns2", .video, .rightsUnknown, source: "s2",
+                     attribution: "地域公共放送", caption: "現地の放送映像"),
+        ],
         currentAssessment: "複数の独立地点と映像という比較的良質な証拠がある一方、既知現象では現時点で十分に説明できない。未解明部分が残るが、これは地球外起源を意味しない。",
         shapeTags: ["光点", "高速", "水平移動"], isDemo: true
     )
@@ -270,6 +276,12 @@ enum DemoCases {
             Fx.source("s1", "全国紙", .press, "夜空を横切った緑の光", daysAgo: 5),
             Fx.source("s2", "ドライブレコーダー投稿", .social, "車載カメラの記録（手掛かり）", role: .contextualizes, daysAgo: 5, group: "g_dash"),
             Fx.source("s3", "公的火球データベース", .official, "火球イベント記録", daysAgo: 2),
+        ],
+        media: [
+            Fx.media("m_qf1", .image, .official, source: "s3",
+                     attribution: "公的火球データベース", caption: "火球イベントの軌跡記録", license: "公的記録（パブリックドメイン相当）"),
+            Fx.media("m_qf2", .video, .rightsUnknown, source: "s2",
+                     attribution: "ドライブレコーダー投稿", caption: "車載カメラの投稿映像"),
         ],
         currentAssessment: "後日判明した典型的な火球の例。当初の『未解明』が新情報で更新される過程そのものが記録として価値を持つ。",
         shapeTags: ["閃光", "緑色", "高速"], isDemo: true

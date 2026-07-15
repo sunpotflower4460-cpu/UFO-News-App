@@ -41,6 +41,10 @@ struct UAPCase: Codable, Sendable, Hashable, Identifiable {
     var neededEvidence: [EvidenceGap]
     var timeline: [CaseTimelineEntry]
     var sources: [SourceReference]
+    /// Source images/video, each with a rights status. Cleared items render
+    /// inline; rights-unknown items link out to the source (CLAUDE.md §7).
+    /// Defaulted so existing initializers/fixtures compile unchanged.
+    var media: [MediaAsset] = []
 
     var currentAssessment: String
     var shapeTags: [String]

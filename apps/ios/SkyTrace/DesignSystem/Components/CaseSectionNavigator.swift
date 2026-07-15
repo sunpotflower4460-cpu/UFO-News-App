@@ -3,7 +3,7 @@ import SwiftUI
 /// The five reading groups of Case Detail (V3 §5.2). Used by the sticky
 /// section navigator to jump within the page.
 enum CaseSection: String, CaseIterable, Identifiable {
-    case overview, assessment, evidence, timeline, sources
+    case overview, assessment, evidence, media, timeline, sources
     var id: String { rawValue }
     var anchor: String { "case.section.\(rawValue)" }
     var labelKey: String { "case.nav.\(rawValue)" }
