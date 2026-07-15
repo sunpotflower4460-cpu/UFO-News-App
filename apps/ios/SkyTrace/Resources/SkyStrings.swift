@@ -13,9 +13,12 @@ import Foundation
 /// (e.g. `"tab.today"`); the catalog stores the localized value per language.
 enum SkyStrings {
 
-    /// Resolve a key for the current locale via the String Catalog.
+    /// Resolve a key for the current locale via the String Catalog. Uses
+    /// `NSLocalizedString` so that plural entries (compiled to `.stringsdict`)
+    /// return their `%#@…@` format for the `String(format:locale:)` calls below
+    /// to expand with the count argument.
     static func t(_ key: String) -> String {
-        String(localized: String.LocalizationValue(key), table: "Localizable", bundle: .main)
+        NSLocalizedString(key, tableName: "Localizable", bundle: .main, comment: "")
     }
 
     /// Resolve with a single positional substitution. The format string is

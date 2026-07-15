@@ -94,7 +94,7 @@ struct SkyWidgetLockInline: View {
     let entry: SkyWidgetEntry
     var body: some View {
         // Monochrome-safe; text carries the meaning.
-        Text("新\(entry.newCount)・更\(entry.updatedCount)")
+        Text(SkyStrings.t("widget.counts", entry.newCount, entry.updatedCount))
     }
 }
 
@@ -123,7 +123,7 @@ struct SkyWidgetEntryView: View {
             case .accessoryRectangular:
                 VStack(alignment: .leading) {
                     Text(entry.headline).font(.caption2).lineLimit(2)
-                    Text("新\(entry.newCount)・更\(entry.updatedCount)").font(.caption2)
+                    Text(SkyStrings.t("widget.counts", entry.newCount, entry.updatedCount)).font(.caption2)
                 }
             default: SkyWidgetLockInline(entry: entry)
             }

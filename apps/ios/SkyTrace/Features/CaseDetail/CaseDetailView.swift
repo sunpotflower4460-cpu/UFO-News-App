@@ -243,7 +243,7 @@ struct CaseDetailView: View {
     }
 
     private func shareText(_ c: UAPCase) -> String {
-        "\(c.regionName)で報告された事象 — SkyTraceで出典と現在の評価を見る（\(c.title)）"
+        SkyStrings.t("share.caseText", c.regionName, c.title)
     }
 }
 
