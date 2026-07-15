@@ -311,6 +311,17 @@ struct CaseDetailV2View: View {
                 Text(SkyStrings.t("ai.disclosureNote"))
                     .font(SkyTypography.supporting).foregroundStyle(SkyColor.textSecondary)
                     .fixedSize(horizontal: false, vertical: true)
+                NavigationLink { TrustCenterView() } label: {
+                    HStack(spacing: SkySpacing.x1) {
+                        Image(systemName: "checkmark.shield").imageScale(.small)
+                        Text(SkyStrings.t("trust.entry"))
+                        Image(systemName: "chevron.right").font(.caption2)
+                    }
+                    .font(SkyTypography.metadata.weight(.semibold))
+                    .foregroundStyle(SkyColor.accentPrimary)
+                }
+                .buttonStyle(.plain)
+                .accessibilityHint(SkyStrings.t("trust.hero"))
             }
         }
     }

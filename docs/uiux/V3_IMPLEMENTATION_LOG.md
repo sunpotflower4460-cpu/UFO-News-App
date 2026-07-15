@@ -101,8 +101,13 @@ Map/Explore 同期（cross-tab focus）・recent searches・facets を実装。P
 - Settings の editorial セクションを散在リンクから単一の「信頼のしくみ」導線へ集約（詳細は Trust Center 内で辿れる）。
 - 変更ファイル：`Features/Settings/TrustCenterView.swift`(新), `Features/Settings/SettingsView.swift`, `DesignSystem/Status/SkyCaseStatus.swift`, `Resources/SkyStrings.swift`（trust.* / v2.status.*.meaning）。
 
+### V3-4 追加（文脈導線＋文脈対応ペイウォール）
+- Case Detail の AI 開示セクションから **Trust Center** への文脈導線（「信頼のしくみ」リンク）。
+- `PaywallContext` を trigger 対応に：`headlineKey` で発生箇所を1行で説明、`unlocks` はトリガー機能を先頭に並べ替え（generic な壁ではなく、読者が今触れた機能を先頭に提示）。`PaywallView` ヘッダーに文脈リードを表示。
+- 変更ファイル：`Features/CaseDetail/CaseDetailV2View.swift`, `Features/CaseDetail/CaseNavigation.swift`, `Features/Subscription/PaywallView.swift`, `Resources/SkyStrings.swift`（paywall.context.*）。
+
 ### V3-4 残
-- Long-form reading（読書体験の向上）、contextual gate の文言最適化、Paywall preview（課金前に何が増えるかのプレビュー）、Case Detail の AI 開示からの Trust Center 文脈導線、notification permission の文脈的プライマー。
+- Long-form reading（読書体験の細部向上）、notification permission の文脈的プライマー（任意）。V3-4 主要項目（Trust Center・文脈導線・文脈対応ゲート）は実装済み。
 
 ## 残（次フェーズ）
 - **P0-10 の全画面展開**：Map/Search/CaseDetail の状態UI（skeleton/cached/offline/partial/error/empty）は V3-2 で完成（CaseDetailは既に`.failed`対応）。`MapViewModel`/`ResearchViewModel`へ`Loadable`導入も V3-2。

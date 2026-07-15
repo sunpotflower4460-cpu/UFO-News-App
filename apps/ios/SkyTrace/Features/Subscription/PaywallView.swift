@@ -50,6 +50,10 @@ struct PaywallView: View {
             PremiumBadge()
             Text(SkyStrings.t("paywall.heroTitle"))
                 .font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
+            // Context lead: names why the gate appeared where the reader hit it.
+            Text(SkyStrings.t(context.headlineKey))
+                .font(SkyTypography.body.weight(.semibold)).foregroundStyle(SkyColor.signalViolet)
+                .fixedSize(horizontal: false, vertical: true)
             Text(SkyStrings.t("paywall.heroBody"))
                 .font(SkyTypography.body).foregroundStyle(SkyColor.textSecondary)
         }
