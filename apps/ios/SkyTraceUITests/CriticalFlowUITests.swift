@@ -20,12 +20,12 @@ final class CriticalFlowUITests: XCTestCase {
     override func setUp() { continueAfterFailure = false }
 
     /// iPhone exposes tabs as tab-bar buttons; iPad can expose its top tab bar
-    /// using a different accessibility element type. Query by app-owned id first
-    /// without assuming the UIKit element class, then fall back to the label.
+    /// using a different type and duplicate parent/child accessibility nodes.
+    /// Select the first concrete match without assuming the UIKit element class.
     private func tab(_ app: XCUIApplication, identifier: String, label: String) -> XCUIElement {
-        let identified = app.descendants(matching: .any)[identifier]
+        let identified = app.descendants(matching: .any).matching(identifier: identifier).firstMatch
         if identified.waitForExistence(timeout: 5) { return identified }
-        return app.descendants(matching: .any)[label]
+        return app.descendants(matching: .any).matching(identifier: label).firstMatch
     }
 
     func testTabBarHasFourReachableTabs() {
