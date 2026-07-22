@@ -63,10 +63,12 @@ final class SubscriptionTests: XCTestCase {
         let store = await SubscriptionStore(provider: provider)
 
         await store.refresh()
-        XCTAssertTrue(await store.isPlus)
+        let firstRead = await store.isPlus
+        XCTAssertTrue(firstRead)
 
         await store.refresh()
-        XCTAssertTrue(await store.isPlus,
+        let secondRead = await store.isPlus
+        XCTAssertTrue(secondRead,
                       "A transient unknown StoreKit read must preserve known access")
     }
 }
@@ -79,7 +81,7 @@ private actor SequencedSubscriptionProvider: SubscriptionProviding {
     nonisolated var manageSubscriptionsURL: URL? { nil }
     func loadProducts() async -> [SubscriptionProduct] { [] }
     func purchase(productID: String) async -> PurchaseOutcome { .userCancelled }
-    func restore() async -> EntitlementState { await currentEntitlement() }
+    func restore() async -> EntitlementState { currentEntitlement() }
     func currentEntitlement() async -> EntitlementState {
         guard !states.isEmpty else { return .unknown }
         return states.removeFirst()
