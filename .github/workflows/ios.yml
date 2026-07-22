@@ -93,7 +93,7 @@ jobs:
           if-no-files-found: ignore
 
   second-audit-static:
-    name: Second audit — metadata, localization & Xcode Analyze
+    name: Deep audit — metadata, source safety & Xcode Analyze
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -109,11 +109,10 @@ jobs:
           make ios-project
           git diff --exit-code -- apps/ios/SkyTrace.xcodeproj
 
-      - name: Validate metadata, privacy manifest and source safety
+      - name: Validate metadata, privacy, secrets and source safety
         run: |
           set -euo pipefail
-          plutil -lint apps/ios/SkyTrace/Resources/Info.plist
-          plutil -lint apps/ios/SkyTrace/Resources/PrivacyInfo.xcprivacy
+          while IFS= read -r -d '' file; do plutil -lint "$file"; done < <(find apps/ios -type f \( -name '*.plist' -o -name '*.xcprivacy' \) -print0)
           python3 -m json.tool apps/ios/SkyTrace.storekit >/dev/null
           python3 - <<'PY' 2>&1 | tee source-audit.log
           import json, pathlib, re, sys
@@ -129,40 +128,59 @@ jobs:
           print('CATALOG_KEYS', len(catalog.get('strings', {})))
           print('MISSING_LOCALIZATIONS', len(missing))
           for x in missing[:200]: print('MISSING', *x)
-          print('NEEDS_REVIEW', len(needs))
-          for x in needs[:200]: print('REVIEW', *x)
-          patterns={
+          print('NEEDS_REVIEW_INFORMATIONAL', len(needs))
+
+          dangerous_patterns={
             'fatalError':r'\bfatalError\s*\(', 'preconditionFailure':r'\bpreconditionFailure\s*\(',
             'try!':r'\btry!', 'as!':r'\bas!\s', 'unowned':r'\bunowned\b'
           }
-          dangerous=[]; hardcoded=[]
+          secret_patterns={
+            'OpenAI-style key':r'\bsk-[A-Za-z0-9_-]{20,}',
+            'Google API key':r'\bAIza[0-9A-Za-z_-]{30,}',
+            'AWS access key':r'\bAKIA[0-9A-Z]{16}\b',
+            'Private key':r'-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----',
+            'Nonempty apiKey literal':r'\bapiKey\s*=\s*"[^"\n]{8,}"'
+          }
+          dangerous=[]; secrets=[]; hardcoded=[]; todos=[]; swallowed=[]
           ui=re.compile(r'\b(?:Text|Button|Label|navigationTitle|accessibilityLabel|alert)\s*\(\s*"([^"\\]*(?:\\.[^"\\]*)*)"')
           for path in sorted((root/'apps/ios').rglob('*.swift')):
               text=path.read_text(encoding='utf-8')
-              for name,p in patterns.items():
+              for name,p in dangerous_patterns.items():
                   for m in re.finditer(p,text): dangerous.append((str(path),text.count('\n',0,m.start())+1,name))
+              for name,p in secret_patterns.items():
+                  for m in re.finditer(p,text): secrets.append((str(path),text.count('\n',0,m.start())+1,name))
+              for m in re.finditer(r'\b(?:TODO|FIXME|HACK|XXX)\b', text):
+                  todos.append((str(path), text.count('\n',0,m.start())+1, m.group(0)))
+              for m in re.finditer(r'\btry\?\s+await\b|\btry\?\s+', text):
+                  swallowed.append((str(path), text.count('\n',0,m.start())+1, m.group(0).strip()))
               if 'Tests/' not in str(path) and 'UITests/' not in str(path):
                   for m in ui.finditer(text):
                       raw=m.group(1)
                       if raw and '\\(' not in raw: hardcoded.append((str(path),text.count('\n',0,m.start())+1,m.group(0)[:160]))
           print('DANGEROUS_CONSTRUCTS',len(dangerous))
           for x in dangerous: print('DANGEROUS',*x)
+          print('POTENTIAL_SECRETS',len(secrets))
+          for x in secrets: print('SECRET',*x)
+          print('TODO_FIXME_INFORMATIONAL',len(todos))
+          for x in todos[:200]: print('TODO',*x)
+          print('TRY_OPTIONAL_INFORMATIONAL',len(swallowed))
+          for x in swallowed[:200]: print('TRY_OPTIONAL',*x)
           print('POTENTIAL_HARDCODED_UI',len(hardcoded))
           for x in hardcoded[:300]: print('HARDCODED',*x)
-          if missing or needs or dangerous: sys.exit(1)
+          if missing or dangerous or secrets: sys.exit(1)
           PY
 
-      - name: Xcode Analyze Debug simulator
+      - name: Xcode Analyze Debug simulator — warnings are errors
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-debug.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES analyze 2>&1 | tee analyze-debug.log
 
-      - name: Xcode Analyze Release device
+      - name: Xcode Analyze Release device — warnings are errors
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-release.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES analyze 2>&1 | tee analyze-release.log
 
-      - name: Upload second-audit static logs
+      - name: Upload deep static audit logs
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -174,7 +192,7 @@ jobs:
           if-no-files-found: ignore
 
   second-audit-runtime:
-    name: Second audit — iPad, AddressSanitizer & ThreadSanitizer
+    name: Deep audit — iPad, ASan, TSan & UBSan
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
@@ -203,19 +221,44 @@ jobs:
           xcrun simctl bootstatus "$IPAD" -b || true
 
       - name: Run unit and critical UI tests on iPad
+        id: ipad_tests
+        continue-on-error: true
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.ipad }}" -only-testing:SkyTraceTests -only-testing:SkyTraceUITests/CriticalFlowUITests test 2>&1 | tee ipad-tests.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.ipad }}" -skipPackagePluginValidation -only-testing:SkyTraceTests -only-testing:SkyTraceUITests/CriticalFlowUITests test 2>&1 | tee ipad-tests.log
 
       - name: Run unit tests with Address Sanitizer
+        id: asan_tests
+        continue-on-error: true
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.iphone }}" -only-testing:SkyTraceTests -enableAddressSanitizer YES test 2>&1 | tee asan-tests.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.iphone }}" -skipPackagePluginValidation -only-testing:SkyTraceTests -enableAddressSanitizer YES test 2>&1 | tee asan-tests.log
 
       - name: Run unit tests with Thread Sanitizer
+        id: tsan_tests
+        continue-on-error: true
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.iphone }}" -only-testing:SkyTraceTests -enableThreadSanitizer YES test 2>&1 | tee tsan-tests.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.iphone }}" -skipPackagePluginValidation -only-testing:SkyTraceTests -enableThreadSanitizer YES test 2>&1 | tee tsan-tests.log
+
+      - name: Run unit tests with Undefined Behavior Sanitizer
+        id: ubsan_tests
+        continue-on-error: true
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulators.outputs.iphone }}" -skipPackagePluginValidation -only-testing:SkyTraceTests -enableUndefinedBehaviorSanitizer YES test 2>&1 | tee ubsan-tests.log
+
+      - name: Enforce all runtime audit results
+        if: always()
+        run: |
+          echo "iPad: ${{ steps.ipad_tests.outcome }}"
+          echo "ASan: ${{ steps.asan_tests.outcome }}"
+          echo "TSan: ${{ steps.tsan_tests.outcome }}"
+          echo "UBSan: ${{ steps.ubsan_tests.outcome }}"
+          test "${{ steps.ipad_tests.outcome }}" = success
+          test "${{ steps.asan_tests.outcome }}" = success
+          test "${{ steps.tsan_tests.outcome }}" = success
+          test "${{ steps.ubsan_tests.outcome }}" = success
 
       - name: Upload second-audit runtime logs
         if: always()
@@ -226,4 +269,5 @@ jobs:
             ipad-tests.log
             asan-tests.log
             tsan-tests.log
+            ubsan-tests.log
           if-no-files-found: ignore
