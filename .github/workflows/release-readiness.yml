@@ -14,7 +14,7 @@ on:
         type: boolean
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   audit:
@@ -38,11 +38,8 @@ jobs:
   second-audit-xcode-analyze:
     name: Second audit — Xcode Analyze Debug & Release
     runs-on: macos-15
-    if: github.head_ref == 'agent/second-deep-audit' || github.ref_name == 'agent/second-deep-audit'
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: agent/second-deep-audit
 
       - name: Select Xcode 26 and regenerate project
         run: |
@@ -53,40 +50,17 @@ jobs:
           sudo xcode-select -s "$XCODE_APP/Contents/Developer"
           brew install xcodegen
           make ios-project
-          git diff -- apps/ios/SkyTrace.xcodeproj > xcodegen-project.diff || true
-          cp apps/ios/SkyTrace.xcodeproj/project.pbxproj generated-project.pbxproj
-
-      - name: Commit canonical generated project when needed
-        run: |
-          if git diff --quiet -- apps/ios/SkyTrace.xcodeproj; then
-            echo "Canonical project is already synchronized"
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add apps/ios/SkyTrace.xcodeproj
-          git commit -m "Regenerate canonical Xcode project"
-          git push origin HEAD:agent/second-deep-audit
-
-      - name: Upload canonical generated project
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: canonical-xcodegen-project
-          path: |
-            generated-project.pbxproj
-            xcodegen-project.diff
-          if-no-files-found: ignore
+          git diff --exit-code -- apps/ios/SkyTrace.xcodeproj
 
       - name: Analyze Debug simulator
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-debug.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES analyze 2>&1 | tee analyze-debug.log
 
       - name: Analyze Release device
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-release.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO SWIFT_TREAT_WARNINGS_AS_ERRORS=YES GCC_TREAT_WARNINGS_AS_ERRORS=YES analyze 2>&1 | tee analyze-release.log
 
       - name: Upload analyzer logs
         if: always()
