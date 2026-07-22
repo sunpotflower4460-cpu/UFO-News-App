@@ -15,13 +15,15 @@ final class SubscriptionTests: XCTestCase {
         XCTAssertTrue(after)
     }
 
-    func testFailedPurchaseKeepsFree() async {
+    func testFailedPurchaseKeepsFreeAndShowsError() async {
         let provider = FakeSubscriptionProvider(initial: .free, shouldFailPurchase: true)
         let store = await SubscriptionStore(provider: provider)
         let outcome = await store.purchase(SubscriptionIDs.monthly)
         if case .failed = outcome {} else { XCTFail("Expected failure") }
         let isPlus = await store.isPlus
+        let message = await store.lastMessageKey
         XCTAssertFalse(isPlus)
+        XCTAssertEqual(message, "state.error.body")
     }
 
     func testPendingPurchaseSetsMessage() async {
@@ -39,6 +41,24 @@ final class SubscriptionTests: XCTestCase {
         await store.restore()
         let isPlus = await store.isPlus
         XCTAssertTrue(isPlus)
+    }
+
+    func testUnknownRestoreShowsRetryableErrorInsteadOfNothingToRestore() async {
+        let provider = SequencedSubscriptionProvider(states: [.unknown])
+        let store = await SubscriptionStore(provider: provider)
+        await store.restore()
+        let key = await store.lastMessageKey
+        XCTAssertEqual(key, "state.error.body")
+    }
+
+    func testEmptyProductLoadExposesRetryState() async {
+        let provider = SequencedSubscriptionProvider(states: [.free])
+        let store = await SubscriptionStore(provider: provider)
+        await store.loadProductsIfNeeded()
+        let failed = await store.productLoadFailed
+        let loading = await store.isLoadingProducts
+        XCTAssertTrue(failed)
+        XCTAssertFalse(loading)
     }
 
     func testEntitlementStatesUnlockCorrectly() {
