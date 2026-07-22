@@ -91,6 +91,44 @@ final class SubscriptionTests: XCTestCase {
         XCTAssertTrue(secondRead,
                       "A transient unknown StoreKit read must preserve known access")
     }
+
+    func testNewestConcurrentRefreshWinsAcrossRepeatedInterleavings() async {
+        for iteration in 0..<10 {
+            let provider = DelayedSubscriptionProvider(responses: [
+                (.free, .milliseconds(80 + iteration * 3)),
+                (.active(expiresAt: nil), .milliseconds(2)),
+            ])
+            let store = await SubscriptionStore(provider: provider)
+
+            async let older: Void = store.refresh()
+            try? await Task.sleep(for: .milliseconds(10))
+            async let newer: Void = store.refresh()
+            _ = await (older, newer)
+
+            let finalState = await store.entitlement
+            XCTAssertTrue(finalState.isPlusUnlocked,
+                          "The newest refresh must win even when an older call finishes last")
+            let refreshing = await store.isRefreshing
+            XCTAssertFalse(refreshing)
+        }
+    }
+}
+
+private actor DelayedSubscriptionProvider: SubscriptionProviding {
+    private var responses: [(EntitlementState, Duration)]
+
+    init(responses: [(EntitlementState, Duration)]) { self.responses = responses }
+
+    nonisolated var manageSubscriptionsURL: URL? { nil }
+    func loadProducts() async -> [SubscriptionProduct] { [] }
+    func purchase(productID: String) async -> PurchaseOutcome { .userCancelled }
+    func restore() async -> EntitlementState { .unknown }
+    func currentEntitlement() async -> EntitlementState {
+        guard !responses.isEmpty else { return .unknown }
+        let (state, delay) = responses.removeFirst()
+        try? await Task.sleep(for: delay)
+        return state
+    }
 }
 
 private actor SequencedSubscriptionProvider: SubscriptionProviding {
