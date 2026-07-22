@@ -1,0 +1,36 @@
+name: Release Readiness
+
+on:
+  pull_request:
+  push:
+    branches: [main, "agent/**", "release/**"]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      strict:
+        description: "Fail until every App Store gate is complete"
+        required: false
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Generate readiness report
+        run: python3 scripts/release_readiness.py --report release-readiness.md
+
+      - name: Upload readiness report
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-readiness
+          path: release-readiness.md
+
+      - name: Enforce release gates
+        if: startsWith(github.ref, 'refs/tags/v') || inputs.strict == true
+        run: python3 scripts/release_readiness.py --strict
