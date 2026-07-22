@@ -11,7 +11,8 @@ struct SettingsView: View {
     @State private var recentsCount = 0
     @State private var confirmClear = false
 
-    // Per-topic preferences (only meaningful once OS authorization is granted).
+    // Per-topic preferences (only meaningful once OS authorization is granted
+    // and notification delivery is connected end-to-end).
     @AppStorage("notif.daily") private var notifDaily = false
     @AppStorage("notif.major") private var notifMajor = false
     @AppStorage("notif.saved") private var notifSaved = false
@@ -22,7 +23,7 @@ struct SettingsView: View {
         NavigationStack {
             Form {
                 subscriptionSection
-                notificationsSection
+                if env.flags.notificationsEnabled { notificationsSection }
                 refreshSection($settings)
                 appearanceSection($settings)
                 dataSection
@@ -36,7 +37,10 @@ struct SettingsView: View {
             .background(SkyColor.canvas)
             .navigationTitle(SkyStrings.t("settings.title"))
         }
-        .task { await notifications.refresh(); recentsCount = await env.library.recentlyViewedCount() }
+        .task {
+            if env.flags.notificationsEnabled { await notifications.refresh() }
+            recentsCount = await env.library.recentlyViewedCount()
+        }
         .sheet(item: $paywall) { PaywallView(context: $0) }
         .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
     }
