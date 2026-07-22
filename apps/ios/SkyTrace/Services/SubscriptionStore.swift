@@ -17,6 +17,9 @@ final class SubscriptionStore {
 
     private var provider: any SubscriptionProviding
     private var observationTask: Task<Void, Never>?
+    /// Monotonic token so a slower, older StoreKit refresh cannot overwrite the
+    /// result of a newer foreground/app-lifecycle refresh.
+    private var refreshGeneration = 0
 
     var manageSubscriptionsURL: URL? { provider.manageSubscriptionsURL }
     var isPlus: Bool { entitlement.isPlusUnlocked }
@@ -29,6 +32,8 @@ final class SubscriptionStore {
     /// StoreKit listener is replaced so duplicate listeners cannot accumulate.
     func setProvider(_ newProvider: any SubscriptionProviding) {
         stopObservingTransactions()
+        refreshGeneration &+= 1
+        isRefreshing = false
         provider = newProvider
         products = []
         productLoadFailed = false
@@ -41,13 +46,19 @@ final class SubscriptionStore {
     }
 
     func refresh() async {
+        refreshGeneration &+= 1
+        let generation = refreshGeneration
         isRefreshing = true
-        defer { isRefreshing = false }
+        defer {
+            // An older request must not turn off the spinner while the newest
+            // refresh is still running.
+            if generation == refreshGeneration { isRefreshing = false }
+        }
 
         async let ent = provider.currentEntitlement()
         async let prods = provider.loadProducts()
         let (newEntitlement, newProducts) = await (ent, prods)
-        guard !Task.isCancelled else { return }
+        guard !Task.isCancelled, generation == refreshGeneration else { return }
 
         apply(newEntitlement)
         if newProducts.isEmpty {
