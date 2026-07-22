@@ -10,6 +10,7 @@ final class SubscriptionStore {
     private(set) var entitlement: EntitlementState = .unknown
     private(set) var products: [SubscriptionProduct] = []
     private(set) var isPurchasing = false
+    private(set) var isRestoring = false
     private(set) var isRefreshing = false
     private(set) var isLoadingProducts = false
     private(set) var productLoadFailed = false
@@ -18,7 +19,7 @@ final class SubscriptionStore {
     private var provider: any SubscriptionProviding
     private var observationTask: Task<Void, Never>?
     /// Monotonic token so a slower, older StoreKit refresh cannot overwrite the
-    /// result of a newer foreground/app-lifecycle refresh.
+    /// result of a newer refresh, purchase, restore, or transaction update.
     private var refreshGeneration = 0
 
     var manageSubscriptionsURL: URL? { provider.manageSubscriptionsURL }
@@ -32,8 +33,7 @@ final class SubscriptionStore {
     /// StoreKit listener is replaced so duplicate listeners cannot accumulate.
     func setProvider(_ newProvider: any SubscriptionProviding) {
         stopObservingTransactions()
-        refreshGeneration &+= 1
-        isRefreshing = false
+        invalidateRefreshes()
         provider = newProvider
         products = []
         productLoadFailed = false
@@ -94,7 +94,7 @@ final class SubscriptionStore {
         guard observationTask == nil else { return }
         observationTask = provider.observeTransactionUpdates { [weak self] state in
             Task { @MainActor [weak self] in
-                self?.apply(state)
+                self?.applyAuthoritative(state)
             }
         }
     }
@@ -106,6 +106,9 @@ final class SubscriptionStore {
 
     @discardableResult
     func purchase(_ productID: String) async -> PurchaseOutcome {
+        // SwiftUI disables the button, but the service must also reject rapid
+        // duplicate calls before the disabled state has rendered.
+        guard !isPurchasing else { return .pending }
         lastMessageKey = nil
         isPurchasing = true
         defer { isPurchasing = false }
@@ -113,7 +116,9 @@ final class SubscriptionStore {
         guard !Task.isCancelled else { return .userCancelled }
         switch outcome {
         case .success:
-            apply(await provider.currentEntitlement())
+            let state = await provider.currentEntitlement()
+            guard !Task.isCancelled else { return .userCancelled }
+            applyAuthoritative(state)
             Haptics.success()
         case .pending:
             lastMessageKey = "paywall.pending"
@@ -127,10 +132,13 @@ final class SubscriptionStore {
     }
 
     func restore() async {
+        guard !isRestoring else { return }
+        isRestoring = true
+        defer { isRestoring = false }
         lastMessageKey = nil
         let state = await provider.restore()
         guard !Task.isCancelled else { return }
-        apply(state)
+        applyAuthoritative(state)
         switch state {
         case .unknown:
             lastMessageKey = "state.error.body"
@@ -139,6 +147,18 @@ final class SubscriptionStore {
             lastMessageKey = state.isPlusUnlocked ? "paywall.restored" : "paywall.nothingToRestore"
             if state.isPlusUnlocked { Haptics.success() }
         }
+    }
+
+    /// Invalidate every older refresh before applying a transaction-derived state.
+    /// This prevents a slow pre-purchase `.free` read from relocking new access.
+    private func applyAuthoritative(_ newState: EntitlementState) {
+        invalidateRefreshes()
+        apply(newState)
+    }
+
+    private func invalidateRefreshes() {
+        refreshGeneration &+= 1
+        isRefreshing = false
     }
 
     /// `.unknown` means StoreKit could not prove a state; it must not erase a
