@@ -10,7 +10,14 @@ struct RootTabView: View {
 
     var body: some View {
         @Bindable var router = router
-        TabView(selection: $router.selectedTab) {
+        tabs(selection: $router.selectedTab)
+            .skyTraceTopLevelTabStyle()
+            .tint(SkyColor.accentPrimary)
+            .background(SkyColor.canvas)
+    }
+
+    private func tabs(selection: Binding<AppTab>) -> some View {
+        TabView(selection: selection) {
             NavigationStack { TodayV2View() }
                 .tabItem {
                     Label(SkyStrings.t("tab.today"), systemImage: "sun.max")
@@ -37,8 +44,20 @@ struct RootTabView: View {
                 }
                 .tag(AppTab.settings)
         }
-        .tint(SkyColor.accentPrimary)
-        .background(SkyColor.canvas)
+    }
+}
+
+private extension View {
+    /// iPadOS can adapt automatic tabs into a sidebar representation whose
+    /// controls are hidden until expanded. SkyTrace has only four peer
+    /// destinations, so keep them continuously reachable as a tab bar.
+    @ViewBuilder
+    func skyTraceTopLevelTabStyle() -> some View {
+        if #available(iOS 18.0, *) {
+            tabViewStyle(.tabBarOnly)
+        } else {
+            self
+        }
     }
 }
 
