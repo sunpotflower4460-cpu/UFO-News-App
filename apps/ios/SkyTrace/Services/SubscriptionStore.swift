@@ -11,6 +11,8 @@ final class SubscriptionStore {
     private(set) var products: [SubscriptionProduct] = []
     private(set) var isPurchasing = false
     private(set) var isRefreshing = false
+    private(set) var isLoadingProducts = false
+    private(set) var productLoadFailed = false
     var lastMessageKey: String?
 
     private var provider: any SubscriptionProviding
@@ -28,6 +30,9 @@ final class SubscriptionStore {
     func setProvider(_ newProvider: any SubscriptionProviding) {
         stopObservingTransactions()
         provider = newProvider
+        products = []
+        productLoadFailed = false
+        lastMessageKey = nil
         Task { [weak self] in
             guard let self else { return }
             await self.refresh()
@@ -42,17 +47,34 @@ final class SubscriptionStore {
         async let ent = provider.currentEntitlement()
         async let prods = provider.loadProducts()
         let (newEntitlement, newProducts) = await (ent, prods)
+        guard !Task.isCancelled else { return }
 
         apply(newEntitlement)
-        // Preserve StoreKit products through a transient empty read. On first
-        // launch an empty list remains empty and the paywall can show retry UI.
-        if !newProducts.isEmpty || products.isEmpty { products = newProducts }
+        if newProducts.isEmpty {
+            // Preserve a previously loaded catalogue through a transient failure,
+            // but expose an actionable error when the first load produced none.
+            if products.isEmpty { productLoadFailed = true }
+        } else {
+            products = newProducts
+            productLoadFailed = false
+        }
     }
 
-    func loadProductsIfNeeded() async {
-        guard products.isEmpty else { return }
+    func loadProductsIfNeeded(force: Bool = false) async {
+        guard force || products.isEmpty else { return }
+        guard !isLoadingProducts else { return }
+        isLoadingProducts = true
+        productLoadFailed = false
+        defer { isLoadingProducts = false }
+
         let loaded = await provider.loadProducts()
-        if !loaded.isEmpty { products = loaded }
+        guard !Task.isCancelled else { return }
+        if loaded.isEmpty {
+            productLoadFailed = true
+        } else {
+            products = loaded
+            productLoadFailed = false
+        }
     }
 
     /// Start exactly one app-lifetime transaction listener. It covers renewals,
@@ -73,9 +95,11 @@ final class SubscriptionStore {
 
     @discardableResult
     func purchase(_ productID: String) async -> PurchaseOutcome {
+        lastMessageKey = nil
         isPurchasing = true
         defer { isPurchasing = false }
         let outcome = await provider.purchase(productID: productID)
+        guard !Task.isCancelled else { return .userCancelled }
         switch outcome {
         case .success:
             apply(await provider.currentEntitlement())
@@ -83,6 +107,7 @@ final class SubscriptionStore {
         case .pending:
             lastMessageKey = "paywall.pending"
         case .failed:
+            lastMessageKey = "state.error.body"
             Haptics.error()
         case .userCancelled:
             break
@@ -91,10 +116,18 @@ final class SubscriptionStore {
     }
 
     func restore() async {
+        lastMessageKey = nil
         let state = await provider.restore()
+        guard !Task.isCancelled else { return }
         apply(state)
-        lastMessageKey = state.isPlusUnlocked ? "paywall.restored" : "paywall.nothingToRestore"
-        if state.isPlusUnlocked { Haptics.success() }
+        switch state {
+        case .unknown:
+            lastMessageKey = "state.error.body"
+            Haptics.error()
+        default:
+            lastMessageKey = state.isPlusUnlocked ? "paywall.restored" : "paywall.nothingToRestore"
+            if state.isPlusUnlocked { Haptics.success() }
+        }
     }
 
     /// `.unknown` means StoreKit could not prove a state; it must not erase a
