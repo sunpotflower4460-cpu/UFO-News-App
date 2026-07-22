@@ -107,7 +107,6 @@ final class ResearchViewModel {
     /// Debounced + cancellable. Skips empty queries with no active filter.
     func onQueryChange() {
         cancelDebounce()
-        searchGeneration &+= 1 // invalidate any already-running request
         let generation = searchGeneration
         let requestedQuery = query
         let requestedFilter = filter
@@ -134,11 +133,12 @@ final class ResearchViewModel {
         }
     }
 
-    /// Cancels only the queued debounce. Running repository calls are invalidated
-    /// by the generation token created by the next immediate/debounced request.
+    /// Cancels queued debounce work and immediately invalidates every older
+    /// repository call. This closes the gap while submit/tag persistence awaits.
     func cancelDebounce() {
         searchTask?.cancel()
         searchTask = nil
+        searchGeneration &+= 1
     }
 
     /// Immediate search (submit, tag tap, filter change). Captures the current
