@@ -35,6 +35,10 @@ struct MapV2View: View {
             .task(id: refresh.generation) {
                 if model == nil { model = MapViewModel(caseRepo: env.caseRepository) }
                 await model?.load()
+                if let selected,
+                   model?.plottableCases.contains(where: { $0.id == selected.id }) != true {
+                    self.selected = nil
+                }
                 focusRequestedCase()
             }
             .onChange(of: router.mapFocusCaseID) { _, _ in focusRequestedCase() }
@@ -43,10 +47,14 @@ struct MapV2View: View {
 
     /// Consume a cross-tab focus request (e.g. "View on map" from Case Detail):
     /// select the case, centre the camera on it, raise the sheet, then clear the
-    /// request so it fires once. No-op until the cases have loaded.
+    /// request so it fires once. Withheld coordinates are never consumed.
     private func focusRequestedCase() {
         guard let id = router.mapFocusCaseID,
               let model, let c = model.allCases.first(where: { $0.id == id }) else { return }
+        guard c.locationPrecision != .withheld else {
+            router.mapFocusCaseID = nil
+            return
+        }
         selected = c
         withAnimation {
             camera = .region(MKCoordinateRegion(
@@ -132,6 +140,8 @@ struct MapV2View: View {
     }
 
     /// Zoom to fit all member points (with padding) rather than a fixed span.
+    /// Longitudes are unwrapped around the circular cluster centre so a cluster
+    /// spanning 179°E/179°W stays near the dateline instead of zooming Greenwich.
     private func region(around cluster: MapCluster) -> MKCoordinateRegion {
         let coords = cluster.cases.map {
             CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
@@ -141,13 +151,22 @@ struct MapV2View: View {
                                       span: MKCoordinateSpan(latitudeDelta: 12, longitudeDelta: 12))
         }
         var minLat = first.latitude, maxLat = first.latitude
-        var minLon = first.longitude, maxLon = first.longitude
+        let referenceLongitude = cluster.coordinate.longitude
+        var unwrappedLongitudes: [Double] = []
         for c in coords {
             minLat = min(minLat, c.latitude); maxLat = max(maxLat, c.latitude)
-            minLon = min(minLon, c.longitude); maxLon = max(maxLon, c.longitude)
+            var delta = c.longitude - referenceLongitude
+            while delta > 180 { delta -= 360 }
+            while delta < -180 { delta += 360 }
+            unwrappedLongitudes.append(referenceLongitude + delta)
         }
+        let minLon = unwrappedLongitudes.min() ?? referenceLongitude
+        let maxLon = unwrappedLongitudes.max() ?? referenceLongitude
+        var centerLongitude = (minLon + maxLon) / 2
+        while centerLongitude > 180 { centerLongitude -= 360 }
+        while centerLongitude < -180 { centerLongitude += 360 }
         let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
-                                            longitude: (minLon + maxLon) / 2)
+                                            longitude: centerLongitude)
         let span = MKCoordinateSpan(latitudeDelta: max((maxLat - minLat) * 1.6, 2),
                                     longitudeDelta: max((maxLon - minLon) * 1.6, 2))
         return MKCoordinateRegion(center: center, span: span)
