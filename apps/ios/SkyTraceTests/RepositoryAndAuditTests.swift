@@ -143,6 +143,41 @@ final class RepositoryAndAuditTests: XCTestCase {
             XCTFail("Fixture set should include a case without missing information")
         }
     }
+
+    func testVideoPreviewUsesThumbnailInsteadOfMP4URL() throws {
+        let source = try XCTUnwrap(URL(string: "https://example.org/case"))
+        let video = try XCTUnwrap(URL(string: "https://example.org/evidence.mp4"))
+        let thumbnail = try XCTUnwrap(URL(string: "https://example.org/evidence.jpg"))
+        let asset = MediaAsset(id: "video", kind: .video, rights: .official,
+                               sourceID: "source", attribution: "Official",
+                               sourceURL: source, mediaURL: video, thumbnailURL: thumbnail,
+                               caption: nil, licenseNote: nil)
+
+        XCTAssertEqual(asset.previewURL, thumbnail)
+    }
+
+    func testVideoWithoutThumbnailDoesNotSendMP4ToAsyncImage() throws {
+        let source = try XCTUnwrap(URL(string: "https://example.org/case"))
+        let video = try XCTUnwrap(URL(string: "https://example.org/evidence.mp4"))
+        let asset = MediaAsset(id: "video", kind: .video, rights: .official,
+                               sourceID: "source", attribution: "Official",
+                               sourceURL: source, mediaURL: video, thumbnailURL: nil,
+                               caption: nil, licenseNote: nil)
+
+        XCTAssertNil(asset.previewURL)
+    }
+
+    func testImagePreviewPrefersDirectImageURL() throws {
+        let source = try XCTUnwrap(URL(string: "https://example.org/case"))
+        let image = try XCTUnwrap(URL(string: "https://example.org/full.jpg"))
+        let thumbnail = try XCTUnwrap(URL(string: "https://example.org/thumb.jpg"))
+        let asset = MediaAsset(id: "image", kind: .image, rights: .official,
+                               sourceID: "source", attribution: "Official",
+                               sourceURL: source, mediaURL: image, thumbnailURL: thumbnail,
+                               caption: nil, licenseNote: nil)
+
+        XCTAssertEqual(asset.previewURL, image)
+    }
 }
 
 private struct DetailOnlyRepository: CaseRepository {
