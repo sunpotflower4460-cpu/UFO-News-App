@@ -7,7 +7,7 @@ struct AssessmentDimensionRow: View {
     let dimension: AssessmentDimension
 
     var body: some View {
-        let tint = SkyColor.signal(dimension.level.signal)
+        let tint = SkyColor.signal(dimension.signal)
         VStack(alignment: .leading, spacing: SkySpacing.x1) {
             HStack {
                 Text(SkyStrings.t(dimension.kind.labelKey))
