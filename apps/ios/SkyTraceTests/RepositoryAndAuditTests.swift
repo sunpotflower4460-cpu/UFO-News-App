@@ -26,6 +26,21 @@ final class RepositoryAndAuditTests: XCTestCase {
         catch { XCTFail() }
     }
 
+    func testFixtureRepositoryPropagatesCancellation() async {
+        let repo = FixtureFeedRepository(artificialDelay: .seconds(2))
+        let task = Task { try await repo.todayFeed() }
+        await Task.yield()
+        task.cancel()
+        do {
+            _ = try await task.value
+            XCTFail("A cancelled repository call must not continue to publish stale fixture data")
+        } catch is CancellationError {
+            // Expected.
+        } catch {
+            XCTFail("Expected CancellationError, got \(error)")
+        }
+    }
+
     func testBookmarkToggle() async {
         let store = LibraryStore(suiteName: "test.\(UUID().uuidString)")
         let id = DemoCases.starlink.id
@@ -92,6 +107,21 @@ final class RepositoryAndAuditTests: XCTestCase {
         }
     }
 
+    @MainActor
+    func testCaseDetailSurvivesOptionalArticleFailure() async {
+        let store = LibraryStore(suiteName: "test.\(UUID().uuidString)")
+        let model = CaseDetailViewModel(caseID: DemoCases.starlink.id,
+                                        caseRepo: DetailOnlyRepository(),
+                                        library: store)
+
+        await model.load()
+
+        XCTAssertEqual(model.state.value?.id, DemoCases.starlink.id)
+        XCTAssertNil(model.article)
+        XCTAssertNil(model.state.error,
+                     "Optional synthesis failure must not replace factual detail with an error")
+    }
+
     func testReleaseDefaultsHideUnimplementedNotifications() {
         XCTAssertFalse(FeatureFlags.releaseDefaults.notificationsEnabled)
     }
@@ -113,4 +143,19 @@ final class RepositoryAndAuditTests: XCTestCase {
             XCTFail("Fixture set should include a case without missing information")
         }
     }
+}
+
+private struct DetailOnlyRepository: CaseRepository {
+    func allCases() async throws -> [UAPCase] { DemoCases.all }
+
+    func caseDetail(id: String) async throws -> UAPCase {
+        guard id == DemoCases.starlink.id else { throw RepositoryError.notFound }
+        return DemoCases.starlink
+    }
+
+    func article(for caseID: String) async throws -> SynthesizedArticle? {
+        throw RepositoryError.offline
+    }
+
+    func search(query: String, filters: CaseFilter) async throws -> [UAPCase] { [] }
 }
