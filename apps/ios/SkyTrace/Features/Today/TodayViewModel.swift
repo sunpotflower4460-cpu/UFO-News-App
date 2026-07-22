@@ -22,8 +22,13 @@ final class TodayViewModel {
         if state.value == nil { state = .loading }
         do {
             let feed = try await feedRepo.todayFeed()
+            try Task.checkCancellation()
             state = feed.isPartial ? .partial(feed) : .loaded(feed)
             await loadSavedUpdates()
+        } catch is CancellationError {
+            // Superseded SwiftUI tasks must not replace fresher content with an
+            // error when navigation or a newer refresh cancels this load.
+            return
         } catch let error as RepositoryError {
             state = .failed(error, cached: state.value)
         } catch {
@@ -33,14 +38,25 @@ final class TodayViewModel {
 
     func refresh() async {
         await load()
+        guard !Task.isCancelled else { return }
         Haptics.light()
     }
 
     private func loadSavedUpdates() async {
         let ids = Set(await library.bookmarkedIDs())
+        guard !Task.isCancelled else { return }
         guard !ids.isEmpty else { savedUpdates = []; return }
-        let all = (try? await caseRepo.allCases()) ?? []
-        savedUpdates = all.filter { ids.contains($0.id) && $0.hasRecentUpdate }
+        do {
+            let all = try await caseRepo.allCases()
+            try Task.checkCancellation()
+            savedUpdates = all.filter { ids.contains($0.id) && $0.hasRecentUpdate }
+        } catch is CancellationError {
+            return
+        } catch {
+            // Saved updates are secondary to the feed. Preserve the previous list
+            // through a transient failure instead of flashing it empty.
+            return
+        }
     }
 
     /// Debug preview-state override support.

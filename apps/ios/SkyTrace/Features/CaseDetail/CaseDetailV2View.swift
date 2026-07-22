@@ -41,8 +41,18 @@ struct CaseDetailV2View: View {
             model = CaseDetailViewModel(caseID: caseID, caseRepo: env.caseRepository, library: env.library)
         }
         await model?.load()
-        allCases = (try? await env.caseRepository.allCases()) ?? []
-        if let c = model?.state.value { related = c.relatedRefs(in: allCases) }
+        guard !Task.isCancelled else { return }
+        do {
+            let loadedCases = try await env.caseRepository.allCases()
+            try Task.checkCancellation()
+            allCases = loadedCases
+            if let c = model?.state.value { related = c.relatedRefs(in: loadedCases) }
+        } catch is CancellationError {
+            return
+        } catch {
+            // Related cases are secondary. Preserve the previous list through a
+            // transient failure instead of erasing a working detail screen.
+        }
     }
 
     /// Only sections with content — overview/assessment are always derived;
@@ -61,26 +71,20 @@ struct CaseDetailV2View: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: SkySpacing.x8, pinnedViews: [.sectionHeaders]) {
                     if c.isDemo { InlineBanner(kind: .demo) }
-                    header(model, c)                                   // 1
-                    CaseExecutiveSummary(snapshot: c.executiveSnapshot) // 現時点 (V3 §5.1)
+                    header(model, c)
+                    CaseExecutiveSummary(snapshot: c.executiveSnapshot)
                     Section {
                         EditorialSurface {
                             VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                // 概要
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
                                     whatChanged(c); whatHappened(c); confirmedFacts(c)
                                 }.id(CaseSection.overview.anchor)
-                                // 評価
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
                                     assessment(c); agreements(c); contradictions(c); explanations(c)
                                 }.id(CaseSection.assessment.anchor)
-                                // 資料
                                 evidence(c).id(CaseSection.evidence.anchor)
-                                // 映像・画像
                                 media(c).id(CaseSection.media.anchor)
-                                // 経緯
                                 timeline(c).id(CaseSection.timeline.anchor)
-                                // 出典
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
                                     sources(c); relatedCases(); aiDisclosure(model.article, caseSources: c.sources)
                                 }.id(CaseSection.sources.anchor)
@@ -113,13 +117,15 @@ struct CaseDetailV2View: View {
                 Text(c.localityName ?? c.regionName)
                 Text("·"); Text(SkyStrings.t(c.locationPrecision.labelKey))
                 Spacer(minLength: SkySpacing.x2)
-                Button { router.openMap(focus: c.id) } label: {
-                    Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
-                        .font(SkyTypography.metadata.weight(.semibold))
-                        .foregroundStyle(SkyColor.accentPrimary)
+                if c.locationPrecision != .withheld {
+                    Button { router.openMap(focus: c.id) } label: {
+                        Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                            .font(SkyTypography.metadata.weight(.semibold))
+                            .foregroundStyle(SkyColor.accentPrimary)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityHint(SkyStrings.t("map.focusHint"))
                 }
-                .buttonStyle(.plain)
-                .accessibilityHint(SkyStrings.t("map.focusHint"))
             }
             .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
             HStack(spacing: SkySpacing.x4) {
@@ -204,6 +210,7 @@ struct CaseDetailV2View: View {
             }
         }
     }
+
     @ViewBuilder private func contradictions(_ c: UAPCase) -> some View {
         if !c.contradictions.isEmpty {
             EditorialSection(title: SkyStrings.t("evidence.contradictions"), systemImage: "exclamationmark.triangle") {
@@ -212,7 +219,7 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 8. Evidence (records the case rests on — not the citation list)
+    // MARK: 8. Evidence
 
     @ViewBuilder private func evidence(_ c: UAPCase) -> some View {
         let items = c.evidenceItems
@@ -225,7 +232,7 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 8b. Media (rights-gated: cleared inline, unknown links out)
+    // MARK: 8b. Media
 
     @ViewBuilder private func media(_ c: UAPCase) -> some View {
         if !c.media.isEmpty {
@@ -372,10 +379,6 @@ struct CaseDetailV2View: View {
     }
 }
 
-/// Structural loading placeholder that mirrors the Case Detail layout — a
-/// header slab, title/metadata lines, and two stacked section blocks — so the
-/// wait reads as "this page is loading", not a lone spinner. VoiceOver hears a
-/// single "loading" label; shimmer honours Reduce Motion / UI-test flags.
 private struct CaseDetailSkeleton: View {
     var body: some View {
         ScrollView {

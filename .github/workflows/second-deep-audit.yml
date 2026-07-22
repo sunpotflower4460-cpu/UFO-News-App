@@ -1,0 +1,221 @@
+name: Second Deep Audit
+
+on:
+  push:
+    branches: [agent/second-deep-audit]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: second-deep-audit-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  metadata-and-static-scan:
+    name: Metadata, localization and source scan
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate plist, privacy manifest and StoreKit JSON
+        run: |
+          set -euo pipefail
+          plutil -lint apps/ios/SkyTrace/Resources/Info.plist
+          plutil -lint apps/ios/SkyTrace/Resources/PrivacyInfo.xcprivacy
+          python3 -m json.tool apps/ios/SkyTrace.storekit >/dev/null
+
+      - name: Validate String Catalog coverage and dangerous source constructs
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          import pathlib
+          import re
+          import sys
+
+          root = pathlib.Path('.')
+          catalog_path = root / 'apps/ios/SkyTrace/Resources/Localizable.xcstrings'
+          catalog = json.loads(catalog_path.read_text(encoding='utf-8'))
+          required = {'ja','en','es','fr','de','pt-PT','zh-Hans','zh-Hant','ko','ar','hi','ru'}
+          missing = []
+          needs_review = []
+          for key, entry in catalog.get('strings', {}).items():
+              localizations = entry.get('localizations', {})
+              for locale in required:
+                  if locale not in localizations:
+                      missing.append((key, locale))
+                      continue
+                  payload = localizations[locale]
+                  blob = json.dumps(payload, ensure_ascii=False)
+                  if 'needs_review' in blob:
+                      needs_review.append((key, locale))
+          print(f'String Catalog keys: {len(catalog.get("strings", {}))}')
+          print(f'Missing localizations: {len(missing)}')
+          for item in missing[:100]: print('MISSING', *item)
+          print(f'Needs-review localizations: {len(needs_review)}')
+          for item in needs_review[:100]: print('NEEDS_REVIEW', *item)
+
+          dangerous_patterns = {
+              'fatalError': re.compile(r'\bfatalError\s*\('),
+              'preconditionFailure': re.compile(r'\bpreconditionFailure\s*\('),
+              'try!': re.compile(r'\btry!'),
+              'as!': re.compile(r'\bas!\s'),
+              'unowned': re.compile(r'\bunowned\b'),
+          }
+          dangerous = []
+          hardcoded = []
+          ui_literal = re.compile(r'\b(?:Text|Button|Label|navigationTitle|accessibilityLabel|alert)\s*\(\s*"([^"\\]*(?:\\.[^"\\]*)*)"')
+          for path in sorted((root / 'apps/ios').rglob('*.swift')):
+              text = path.read_text(encoding='utf-8')
+              for name, pattern in dangerous_patterns.items():
+                  for match in pattern.finditer(text):
+                      line = text.count('\n', 0, match.start()) + 1
+                      dangerous.append((str(path), line, name))
+              if 'Tests/' not in str(path) and 'UITests/' not in str(path):
+                  for match in ui_literal.finditer(text):
+                      literal = bytes(match.group(1), 'utf-8').decode('unicode_escape', errors='ignore')
+                      # Ignore symbols, empty strings, debug previews and interpolation-only values.
+                      if not literal or literal.startswith(('sf.', 'com.')) or '\\(' in match.group(1):
+                          continue
+                      line = text.count('\n', 0, match.start()) + 1
+                      hardcoded.append((str(path), line, match.group(0)[:140]))
+
+          print(f'Dangerous constructs: {len(dangerous)}')
+          for item in dangerous: print('DANGEROUS', *item)
+          print(f'Potential hard-coded UI literals: {len(hardcoded)}')
+          for item in hardcoded[:200]: print('HARDCODED', *item)
+
+          # Missing catalog entries and dangerous constructs are objective failures.
+          if missing or needs_review or dangerous:
+              sys.exit(1)
+          PY
+
+      - name: Run release-readiness report
+        run: python3 scripts/release_readiness.py --report second-release-readiness.md
+
+      - name: Upload metadata audit
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-audit-metadata
+          path: second-release-readiness.md
+          if-no-files-found: ignore
+
+  xcode-static-analysis:
+    name: Xcode 26 static analysis and project reproducibility
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26+
+        run: |
+          set -euo pipefail
+          XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' ! -name '*beta*' ! -name '*Beta*' ! -name '*RC*' | sort | tail -1)
+          if [ -z "$XCODE_APP" ]; then XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' | sort | tail -1); fi
+          test -n "$XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          xcodebuild -version
+
+      - name: Recreate project and require zero diff
+        run: |
+          set -euo pipefail
+          brew install xcodegen
+          make ios-project
+          git diff --exit-code -- apps/ios/SkyTrace.xcodeproj
+
+      - name: Analyze Debug simulator build
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Debug -destination 'generic/platform=iOS Simulator' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-debug.log
+
+      - name: Analyze Release device build
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' CODE_SIGNING_ALLOWED=NO analyze 2>&1 | tee analyze-release.log
+
+      - name: Upload analyzer logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-audit-xcode-analysis
+          path: analyze-*.log
+          if-no-files-found: ignore
+
+  ipad-critical-flows:
+    name: iPad build and critical UI flows
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26+ and generate project
+        run: |
+          set -euo pipefail
+          XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' ! -name '*beta*' ! -name '*Beta*' ! -name '*RC*' | sort | tail -1)
+          if [ -z "$XCODE_APP" ]; then XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' | sort | tail -1); fi
+          test -n "$XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          brew install xcodegen
+          make ios-project
+
+      - name: Select and boot an iPad simulator
+        id: ipad
+        run: |
+          set -euo pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import sys,json; d=json.load(sys.stdin); devs=[x for v in d['devices'].values() for x in v if x.get('isAvailable') and 'iPad' in x.get('name','')]; devs.sort(key=lambda x: x.get('name','')); print(devs[-1]['udid'] if devs else '')")
+          if [ -z "$UDID" ]; then echo 'No iPad simulator available'; exit 1; fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl bootstatus "$UDID" -b || true
+
+      - name: Run unit and critical UI tests on iPad
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.ipad.outputs.udid }}" -only-testing:SkyTraceTests -only-testing:SkyTraceUITests/CriticalFlowUITests test 2>&1 | tee ipad-tests.log
+
+      - name: Upload iPad test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-audit-ipad-tests
+          path: ipad-tests.log
+          if-no-files-found: ignore
+
+  sanitizer-tests:
+    name: Address and thread sanitizer tests
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Select Xcode 26+, generate project and simulator
+        id: setup
+        run: |
+          set -euo pipefail
+          XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' ! -name '*beta*' ! -name '*Beta*' ! -name '*RC*' | sort | tail -1)
+          if [ -z "$XCODE_APP" ]; then XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' | sort | tail -1); fi
+          test -n "$XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          brew install xcodegen
+          make ios-project
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import sys,json; d=json.load(sys.stdin); devs=[x for v in d['devices'].values() for x in v if x.get('isAvailable') and 'iPhone' in x.get('name','')]; devs.sort(key=lambda x: x.get('name','')); print(devs[-1]['udid'] if devs else '')")
+          test -n "$UDID"
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          xcrun simctl bootstatus "$UDID" -b || true
+
+      - name: Unit tests with Address Sanitizer
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.setup.outputs.udid }}" -only-testing:SkyTraceTests -enableAddressSanitizer YES test 2>&1 | tee asan-tests.log
+
+      - name: Unit tests with Thread Sanitizer
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.setup.outputs.udid }}" -only-testing:SkyTraceTests -enableThreadSanitizer YES test 2>&1 | tee tsan-tests.log
+
+      - name: Upload sanitizer logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: second-audit-sanitizers
+          path: '*san-tests.log'
+          if-no-files-found: ignore

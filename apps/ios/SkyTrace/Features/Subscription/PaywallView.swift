@@ -39,7 +39,11 @@ struct PaywallView: View {
                         .font(.caption)
                 }
             }
-            .task { await subscription.loadProductsIfNeeded(); selectDefault() }
+            .task {
+                await subscription.loadProductsIfNeeded()
+                guard !Task.isCancelled else { return }
+                selectDefault()
+            }
             .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
             .onChange(of: subscription.isPlus) { _, isPlus in if isPlus { dismiss() } }
         }
@@ -79,7 +83,17 @@ struct PaywallView: View {
                 .buttonStyle(.plain)
             }
             if subscription.products.isEmpty {
-                ProgressView().padding()
+                if subscription.isLoadingProducts || !subscription.productLoadFailed {
+                    ProgressView().padding()
+                } else {
+                    InlineBanner(kind: .error) {
+                        Task {
+                            await subscription.loadProductsIfNeeded(force: true)
+                            guard !Task.isCancelled else { return }
+                            selectDefault()
+                        }
+                    }
+                }
             }
         }
     }
@@ -94,9 +108,9 @@ struct PaywallView: View {
                     Text(SkyStrings.t("paywall.perMonth", eq))
                         .font(.caption2).foregroundStyle(SkyColor.textTertiary)
                 }
-                if let intro = product.introDescription {
-                    Text(intro).font(.caption2).foregroundStyle(SkyColor.signalGreen)
-                }
+                // StoreKit's confirmation sheet presents any introductory offer
+                // using the App Store locale. Do not render the provider's legacy
+                // Japanese-only helper string in every supported language here.
             }
             Spacer()
             Text(product.displayPrice).font(SkyTypography.cardHeadline.monospacedDigit())

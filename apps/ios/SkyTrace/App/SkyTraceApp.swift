@@ -40,6 +40,10 @@ struct SkyTraceApp: App {
                 .task {
                     await environment.subscription.refresh()
                     environment.subscription.startObservingTransactions()
+                    // `scenePhase` may already be active when this view is first
+                    // installed, in which case `onChange` does not fire. Start the
+                    // idempotent poller here as well so cold launches refresh too.
+                    refresh.startPolling()
                 }
                 .onChange(of: scenePhase) { _, phase in
                     switch phase {

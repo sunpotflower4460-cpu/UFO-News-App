@@ -54,4 +54,13 @@ struct MediaAsset: Codable, Sendable, Hashable, Identifiable {
 
     /// True when the asset may be rendered inline (rights are cleared).
     var canDisplayInline: Bool { rights.allowsInlineDisplay }
+
+    /// URL suitable for `AsyncImage`. Video media URLs commonly point to MP4
+    /// files, so prefer the still thumbnail; images prefer their direct media.
+    var previewURL: URL? {
+        switch kind {
+        case .image: mediaURL ?? thumbnailURL
+        case .video: thumbnailURL
+        }
+    }
 }
