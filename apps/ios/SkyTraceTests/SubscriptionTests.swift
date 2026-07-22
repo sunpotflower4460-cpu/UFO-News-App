@@ -112,6 +112,68 @@ final class SubscriptionTests: XCTestCase {
             XCTAssertFalse(refreshing)
         }
     }
+
+    func testSuccessfulPurchaseCannotBeOverwrittenByOlderFreeRefresh() async {
+        let provider = PurchaseRaceProvider()
+        let store = await SubscriptionStore(provider: provider)
+
+        async let staleRefresh: Void = store.refresh()
+        try? await Task.sleep(for: .milliseconds(10))
+        let outcome = await store.purchase(SubscriptionIDs.monthly)
+        await staleRefresh
+
+        XCTAssertEqual(outcome, .success)
+        let finalState = await store.entitlement
+        XCTAssertTrue(finalState.isPlusUnlocked,
+                      "A pre-purchase free read must not relock newly purchased access")
+    }
+
+    func testRapidDuplicatePurchaseInvokesProviderOnlyOnce() async {
+        let provider = CountingPurchaseProvider()
+        let store = await SubscriptionStore(provider: provider)
+
+        async let first = store.purchase(SubscriptionIDs.monthly)
+        try? await Task.sleep(for: .milliseconds(10))
+        let duplicate = await store.purchase(SubscriptionIDs.monthly)
+        let original = await first
+
+        XCTAssertEqual(original, .userCancelled)
+        XCTAssertEqual(duplicate, .pending)
+        let calls = await provider.purchaseCount
+        XCTAssertEqual(calls, 1)
+    }
+}
+
+private actor PurchaseRaceProvider: SubscriptionProviding {
+    private var entitlementReads = 0
+
+    nonisolated var manageSubscriptionsURL: URL? { nil }
+    func loadProducts() async -> [SubscriptionProduct] { [] }
+    func purchase(productID: String) async -> PurchaseOutcome { .success }
+    func restore() async -> EntitlementState { .unknown }
+    func currentEntitlement() async -> EntitlementState {
+        entitlementReads += 1
+        if entitlementReads == 1 {
+            try? await Task.sleep(for: .milliseconds(100))
+            return .free
+        }
+        try? await Task.sleep(for: .milliseconds(2))
+        return .active(expiresAt: nil)
+    }
+}
+
+private actor CountingPurchaseProvider: SubscriptionProviding {
+    private(set) var purchaseCount = 0
+
+    nonisolated var manageSubscriptionsURL: URL? { nil }
+    func loadProducts() async -> [SubscriptionProduct] { [] }
+    func purchase(productID: String) async -> PurchaseOutcome {
+        purchaseCount += 1
+        try? await Task.sleep(for: .milliseconds(80))
+        return .userCancelled
+    }
+    func restore() async -> EntitlementState { .unknown }
+    func currentEntitlement() async -> EntitlementState { .free }
 }
 
 private actor DelayedSubscriptionProvider: SubscriptionProviding {
