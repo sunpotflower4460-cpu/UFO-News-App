@@ -23,9 +23,13 @@ enum SkyFormat {
         date.formatted(.dateTime.year().month().day())
     }
 
-    /// Relative, e.g. "3時間前" / "3 hours ago".
+    /// Relative to the supplied reference instant, e.g. "3時間前" / "3 hours ago".
+    /// `Date.FormatStyle.relative` implicitly uses the wall clock and cannot honour
+    /// an injected `now`, which made fixture/server-time calculations incorrect.
     static func relative(_ date: Date, now: Date = .now) -> String {
-        date.formatted(.relative(presentation: .named))
+        let formatter = RelativeDateTimeFormatter()
+        formatter.unitsStyle = .full
+        return formatter.localizedString(for: date, relativeTo: now)
     }
 
     /// Adaptive freshness: a relative phrase within `window` days ("3日前"),
