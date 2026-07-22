@@ -1,4 +1,4 @@
-import SwiftUI
+import Foundation
 import Observation
 
 @MainActor
@@ -22,10 +22,13 @@ final class ResearchViewModel {
 
     private let caseRepo: any CaseRepository
     private let library: LibraryStore
+    private let now: @Sendable () -> Date
 
-    init(caseRepo: any CaseRepository, library: LibraryStore) {
+    init(caseRepo: any CaseRepository, library: LibraryStore,
+         now: @escaping @Sendable () -> Date = { .now }) {
         self.caseRepo = caseRepo
         self.library = library
+        self.now = now
     }
 
     var isSearching: Bool { !query.trimmingCharacters(in: .whitespaces).isEmpty || filter.isActive }
@@ -42,7 +45,8 @@ final class ResearchViewModel {
     var statusFacets: [(status: SkyCaseStatus, count: Int)] {
         var base = filter
         base.statuses = []
-        let matched = CaseSearch.run(query: query, filters: base, in: allCases)
+        let matched = CaseSearch.run(query: query, filters: base, in: allCases,
+                                     now: now())
         let grouped = Dictionary(grouping: matched) { SkyCaseStatus($0.status) }
         return SkyCaseStatus.allCases.compactMap { s in
             guard let n = grouped[s]?.count, n > 0 else { return nil }
@@ -77,7 +81,8 @@ final class ResearchViewModel {
         recentlyViewed = recentIDs.compactMap { id in allCases.first { $0.id == id } }
         let savedIDs = Set(await library.bookmarkedIDs())
         saved = allCases.filter { savedIDs.contains($0.id) }
-        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: FixtureClock.today)!
+        let current = now()
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: current) ?? current
         updatedThisWeek = allCases.filter { $0.hasRecentUpdate && $0.updatedAt >= weekAgo }
         recentSearches = await library.recentSearches()
         didLoad = true
