@@ -108,9 +108,9 @@ struct PaywallView: View {
                     Text(SkyStrings.t("paywall.perMonth", eq))
                         .font(.caption2).foregroundStyle(SkyColor.textTertiary)
                 }
-                if let intro = product.introDescription {
-                    Text(intro).font(.caption2).foregroundStyle(SkyColor.signalGreen)
-                }
+                // StoreKit's confirmation sheet presents any introductory offer
+                // using the App Store locale. Do not render the provider's legacy
+                // Japanese-only helper string in every supported language here.
             }
             Spacer()
             Text(product.displayPrice).font(SkyTypography.cardHeadline.monospacedDigit())
