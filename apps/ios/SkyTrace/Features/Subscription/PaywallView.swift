@@ -39,7 +39,11 @@ struct PaywallView: View {
                         .font(.caption)
                 }
             }
-            .task { await subscription.loadProductsIfNeeded(); selectDefault() }
+            .task {
+                await subscription.loadProductsIfNeeded()
+                guard !Task.isCancelled else { return }
+                selectDefault()
+            }
             .sheet(item: $linkToOpen) { SafariView(url: $0.url) }
             .onChange(of: subscription.isPlus) { _, isPlus in if isPlus { dismiss() } }
         }
@@ -79,7 +83,17 @@ struct PaywallView: View {
                 .buttonStyle(.plain)
             }
             if subscription.products.isEmpty {
-                ProgressView().padding()
+                if subscription.isLoadingProducts || !subscription.productLoadFailed {
+                    ProgressView().padding()
+                } else {
+                    InlineBanner(kind: .error) {
+                        Task {
+                            await subscription.loadProductsIfNeeded(force: true)
+                            guard !Task.isCancelled else { return }
+                            selectDefault()
+                        }
+                    }
+                }
             }
         }
     }
