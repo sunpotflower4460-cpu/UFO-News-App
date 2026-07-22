@@ -1,5 +1,5 @@
 # SkyTrace developer commands.
-# Phase 1 targets require only macOS + Xcode 26. Backend targets arrive in Phase 2.
+# iOS targets require macOS + Xcode 26 and XcodeGen.
 
 IOS_DIR := apps/ios
 SCHEME := SkyTrace
@@ -9,7 +9,7 @@ DESTINATION ?= platform=iOS Simulator,name=iPhone 16
 .PHONY: help
 help:
 	@echo "SkyTrace make targets:"
-	@echo "  make ios-project   Regenerate the Xcode project (prefers XcodeGen; falls back to the Python generator)"
+	@echo "  make ios-project   Regenerate the canonical Xcode project with XcodeGen"
 	@echo "  make ios-build     Build the app for the simulator"
 	@echo "  make ios-test      Run unit + UI tests"
 	@echo "  make open          Open the Xcode project"
@@ -17,13 +17,12 @@ help:
 
 .PHONY: ios-project
 ios-project:
-	@if command -v xcodegen >/dev/null 2>&1; then \
-		echo "Generating with XcodeGen (canonical)"; \
-		cd $(IOS_DIR) && xcodegen generate; \
-	else \
-		echo "XcodeGen not found; using bundled Python generator"; \
-		python3 scripts/generate_xcodeproj.py; \
+	@if ! command -v xcodegen >/dev/null 2>&1; then \
+		echo "XcodeGen is required. Install it with: brew install xcodegen"; \
+		exit 1; \
 	fi
+	@echo "Generating with XcodeGen (canonical)"
+	@cd $(IOS_DIR) && xcodegen generate
 
 .PHONY: ios-build
 ios-build:
