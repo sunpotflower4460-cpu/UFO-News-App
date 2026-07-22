@@ -44,14 +44,44 @@ final class SubscriptionTests: XCTestCase {
     func testEntitlementStatesUnlockCorrectly() {
         XCTAssertTrue(EntitlementState.active(expiresAt: nil).isPlusUnlocked)
         XCTAssertTrue(EntitlementState.gracePeriod(expiresAt: nil).isPlusUnlocked)
-        XCTAssertTrue(EntitlementState.billingRetry.isPlusUnlocked)
+        XCTAssertFalse(EntitlementState.billingRetry.isPlusUnlocked,
+                       "Billing retry without grace is not entitled to service")
         XCTAssertFalse(EntitlementState.expired.isPlusUnlocked)
         XCTAssertFalse(EntitlementState.revoked.isPlusUnlocked)
         XCTAssertFalse(EntitlementState.free.isPlusUnlocked)
     }
 
     func testGracePeriodDoesNotLockKnownAccess() {
-        // Grace period must still show Plus (network/billing hiccup tolerance).
         XCTAssertTrue(EntitlementState.gracePeriod(expiresAt: nil).isPlusUnlocked)
+    }
+
+    func testTransientUnknownDoesNotEraseKnownActiveEntitlement() async {
+        let provider = SequencedSubscriptionProvider(states: [
+            .active(expiresAt: nil),
+            .unknown,
+        ])
+        let store = await SubscriptionStore(provider: provider)
+
+        await store.refresh()
+        XCTAssertTrue(await store.isPlus)
+
+        await store.refresh()
+        XCTAssertTrue(await store.isPlus,
+                      "A transient unknown StoreKit read must preserve known access")
+    }
+}
+
+private actor SequencedSubscriptionProvider: SubscriptionProviding {
+    private var states: [EntitlementState]
+
+    init(states: [EntitlementState]) { self.states = states }
+
+    nonisolated var manageSubscriptionsURL: URL? { nil }
+    func loadProducts() async -> [SubscriptionProduct] { [] }
+    func purchase(productID: String) async -> PurchaseOutcome { .userCancelled }
+    func restore() async -> EntitlementState { await currentEntitlement() }
+    func currentEntitlement() async -> EntitlementState {
+        guard !states.isEmpty else { return .unknown }
+        return states.removeFirst()
     }
 }
