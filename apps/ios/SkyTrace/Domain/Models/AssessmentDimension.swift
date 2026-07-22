@@ -47,10 +47,10 @@ struct AssessmentDimension: Codable, Sendable, Hashable, Identifiable {
     var signal: SignalRole {
         guard kind.isAdverse else { return level.signal }
         switch level {
-        case .strong: .red
-        case .moderate: .red
-        case .limited: .amber
-        case .insufficient: .green
+        case .strong: return .red
+        case .moderate: return .red
+        case .limited: return .amber
+        case .insufficient: return .green
         }
     }
 }
