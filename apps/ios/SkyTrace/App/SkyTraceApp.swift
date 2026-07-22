@@ -9,11 +9,19 @@ struct SkyTraceApp: App {
     @Environment(\.scenePhase) private var scenePhase
 
     init() {
-        // Fixture-backed by default; real StoreKit provider drives purchases via
-        // the local .storekit config. No external credentials required.
         let settings = AppSettings()
         _settings = State(initialValue: settings)
-        _environment = State(initialValue: AppEnvironment())
+
+        // Fixtures are for development, previews, and deterministic UI tests.
+        // Release starts on the production seam; if that seam is not configured,
+        // repositories fail visibly instead of presenting demo cases as live news.
+        #if DEBUG
+        let source: DataSourceMode = .fixture
+        #else
+        let source: DataSourceMode = .localAPI
+        #endif
+        _environment = State(initialValue: AppEnvironment(dataSource: source))
+
         // The refresh controller reads live settings at poll time.
         _refresh = State(initialValue: DataRefreshController(
             isEnabled: { settings.autoRefreshEnabled },
@@ -29,11 +37,16 @@ struct SkyTraceApp: App {
                 .environment(refresh)
                 .tint(SkyColor.signalCyan)
                 .preferredColorScheme(settings.appearance.colorScheme)
-                .task { await environment.subscription.refresh() }
+                .task {
+                    await environment.subscription.refresh()
+                    environment.subscription.startObservingTransactions()
+                }
                 .onChange(of: scenePhase) { _, phase in
                     switch phase {
                     case .active:
-                        // Returning to the foreground: refresh once, then poll.
+                        // Returning to the foreground: refresh StoreKit and data,
+                        // then resume foreground polling.
+                        Task { await environment.subscription.refresh() }
                         if settings.autoRefreshEnabled { refresh.requestRefresh() }
                         refresh.startPolling()
                     case .background, .inactive:
