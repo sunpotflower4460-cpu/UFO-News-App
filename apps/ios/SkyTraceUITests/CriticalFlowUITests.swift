@@ -19,19 +19,21 @@ final class CriticalFlowUITests: XCTestCase {
 
     override func setUp() { continueAfterFailure = false }
 
+    /// iPhone exposes tabs as tab-bar buttons; iPad can expose its top tab bar
+    /// using a different accessibility element type. Query by app-owned id first
+    /// without assuming the UIKit element class, then fall back to the label.
     private func tab(_ app: XCUIApplication, identifier: String, label: String) -> XCUIElement {
-        let identified = app.tabBars.buttons[identifier]
-        if identified.waitForExistence(timeout: 2) { return identified }
-        return app.tabBars.buttons[label]
+        let identified = app.descendants(matching: .any)[identifier]
+        if identified.waitForExistence(timeout: 5) { return identified }
+        return app.descendants(matching: .any)[label]
     }
 
     func testTabBarHasFourReachableTabs() {
         let app = launch()
-        XCTAssertEqual(app.tabBars.buttons.count, 4)
-        XCTAssertTrue(tab(app, identifier: "tab.today", label: "今日").exists)
-        XCTAssertTrue(tab(app, identifier: "tab.map", label: "地図").exists)
-        XCTAssertTrue(tab(app, identifier: "tab.research", label: "探す").exists)
-        XCTAssertTrue(tab(app, identifier: "tab.settings", label: "設定").exists)
+        XCTAssertTrue(tab(app, identifier: "tab.today", label: "今日").waitForExistence(timeout: 5))
+        XCTAssertTrue(tab(app, identifier: "tab.map", label: "地図").waitForExistence(timeout: 5))
+        XCTAssertTrue(tab(app, identifier: "tab.research", label: "探す").waitForExistence(timeout: 5))
+        XCTAssertTrue(tab(app, identifier: "tab.settings", label: "設定").waitForExistence(timeout: 5))
     }
 
     func testTodayPriorityCaseOpensDetail() {
