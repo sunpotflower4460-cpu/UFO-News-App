@@ -75,10 +75,10 @@ jobs:
           set -o pipefail
           xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceUITests/CriticalFlowUITests test-without-building 2>&1 | tee ui-tests.log
 
-      - name: Build Release configuration
+      - name: Build Release configuration for device
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build 2>&1 | tee release-build.log
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build 2>&1 | tee release-build.log
 
       - name: Upload Xcode diagnostics
         if: always()
