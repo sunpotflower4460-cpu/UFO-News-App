@@ -37,7 +37,10 @@ struct FixtureCaseRepository: CaseRepository {
 
     func search(query: String, filters: CaseFilter) async throws -> [UAPCase] {
         try await simulate(.milliseconds(150), forcedError)
-        return CaseSearch.run(query: query, filters: filters, in: DemoCases.all)
+        // Fixture data is anchored to a deterministic date so screenshots and
+        // tests remain stable. Production callers use CaseSearch's live default.
+        return CaseSearch.run(query: query, filters: filters, in: DemoCases.all,
+                              now: FixtureClock.today)
     }
 }
 
@@ -49,12 +52,15 @@ struct FixtureBriefingRepository: BriefingRepository {
     }
 }
 
-/// Shared search/filter logic so Map, Research and tests agree.
+/// Shared search/filter logic so Map, Research and tests agree. The reference
+/// time is injectable: production uses the actual current time, while fixtures
+/// pass their deterministic clock explicitly.
 enum CaseSearch {
-    static func run(query: String, filters: CaseFilter, in cases: [UAPCase]) -> [UAPCase] {
+    static func run(query: String, filters: CaseFilter, in cases: [UAPCase],
+                    now: Date = .now) -> [UAPCase] {
         let q = query.trimmingCharacters(in: .whitespaces).lowercased()
         return cases.filter { c in
-            matchesText(c, q) && matchesFilters(c, filters)
+            matchesText(c, q) && matchesFilters(c, filters, now: now)
         }
     }
 
@@ -65,20 +71,20 @@ enum CaseSearch {
         return haystack.joined(separator: " ").lowercased().contains(q)
     }
 
-    static func matchesFilters(_ c: UAPCase, _ f: CaseFilter) -> Bool {
+    static func matchesFilters(_ c: UAPCase, _ f: CaseFilter,
+                               now: Date = .now) -> Bool {
         if !f.statuses.isEmpty && !f.statuses.contains(c.status) { return false }
         if c.scores.unresolvedness < f.minUnresolvedness { return false }
         if !f.shapeTags.isEmpty && f.shapeTags.isDisjoint(with: Set(c.shapeTags)) { return false }
         if f.withUpdatesOnly && !c.hasRecentUpdate { return false }
-        if let cutoff = window(f.dateWindow) {
+        if let cutoff = window(f.dateWindow, now: now) {
             let ref = c.occurredAtStart ?? c.publishedAt
             if ref < cutoff { return false }
         }
         return true
     }
 
-    private static func window(_ w: CaseFilter.DateWindow) -> Date? {
-        let now = FixtureClock.today
+    private static func window(_ w: CaseFilter.DateWindow, now: Date) -> Date? {
         let cal = Calendar(identifier: .gregorian)
         switch w {
         case .anyTime: return nil
