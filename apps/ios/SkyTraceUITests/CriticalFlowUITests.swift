@@ -90,13 +90,13 @@ final class CriticalFlowUITests: XCTestCase {
         let app = launch(language: "en", locale: "en_US")
         XCTAssertTrue(tab(app, identifier: "tab.today", label: "Today").waitForExistence(timeout: 5))
         XCTAssertTrue(tab(app, identifier: "tab.map", label: "Map").waitForExistence(timeout: 5))
-        XCTAssertTrue(tab(app, identifier: "tab.research", label: "Search").waitForExistence(timeout: 5))
+        XCTAssertTrue(tab(app, identifier: "tab.research", label: "Explore").waitForExistence(timeout: 5))
         XCTAssertTrue(tab(app, identifier: "tab.settings", label: "Settings").waitForExistence(timeout: 5))
     }
 
     func testArabicRTLShellKeepsSearchAndSettingsReachable() {
         let app = launch(language: "ar", locale: "ar_SA")
-        let searchTab = tab(app, identifier: "tab.research", label: "بحث")
+        let searchTab = tab(app, identifier: "tab.research", label: "استكشاف")
         XCTAssertTrue(searchTab.waitForExistence(timeout: 5))
         searchTab.tap()
         XCTAssertTrue(app.searchFields.firstMatch.waitForExistence(timeout: 5))
