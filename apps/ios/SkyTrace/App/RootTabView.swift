@@ -18,6 +18,7 @@ struct RootTabView: View {
                 }
                 .tag(AppTab.today)
             NavigationStack { MapV2View() }
+                .accessibilityIdentifier("screen.map")
                 .tabItem {
                     Label(SkyStrings.t("tab.map"), systemImage: "map")
                         .accessibilityIdentifier("tab.map")
