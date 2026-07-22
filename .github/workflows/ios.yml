@@ -33,7 +33,7 @@ jobs:
       - name: Build for testing
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation clean build-for-testing
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation clean build-for-testing 2>&1 | tee build-for-testing.log
 
       - name: Select simulator
         id: simulator
@@ -48,14 +48,26 @@ jobs:
       - name: Run unit tests
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceTests test-without-building
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceTests test-without-building 2>&1 | tee unit-tests.log
 
       - name: Run critical UI tests
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceUITests/CriticalFlowUITests test-without-building
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceUITests/CriticalFlowUITests test-without-building 2>&1 | tee ui-tests.log
 
       - name: Build Release configuration
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build 2>&1 | tee release-build.log
+
+      - name: Upload Xcode diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-diagnostics
+          path: |
+            *-for-testing.log
+            unit-tests.log
+            ui-tests.log
+            release-build.log
+          if-no-files-found: ignore
