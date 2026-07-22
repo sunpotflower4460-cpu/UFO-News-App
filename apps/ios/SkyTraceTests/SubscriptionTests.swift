@@ -81,7 +81,7 @@ private actor SequencedSubscriptionProvider: SubscriptionProviding {
     nonisolated var manageSubscriptionsURL: URL? { nil }
     func loadProducts() async -> [SubscriptionProduct] { [] }
     func purchase(productID: String) async -> PurchaseOutcome { .userCancelled }
-    func restore() async -> EntitlementState { currentEntitlement() }
+    func restore() async -> EntitlementState { await currentEntitlement() }
     func currentEntitlement() async -> EntitlementState {
         guard !states.isEmpty else { return .unknown }
         return states.removeFirst()
