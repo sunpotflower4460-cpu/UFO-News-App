@@ -2,7 +2,7 @@ name: iOS CI
 
 on:
   push:
-    branches: [ main, "claude/**", "uiux/**", "auto-refresh/**", "i18n/**" ]
+    branches: [ main, "claude/**", "uiux/**", "auto-refresh/**", "i18n/**", "agent/**", "release/**" ]
   pull_request:
 
 concurrency:
@@ -11,14 +11,36 @@ concurrency:
 
 jobs:
   build-test:
-    name: Build & Test (Xcode)
+    name: Build, Unit, UI & Release (Xcode 26)
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
 
+      - name: Select and require Xcode 26+
+        run: |
+          set -euo pipefail
+          XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' ! -name '*beta*' ! -name '*Beta*' ! -name '*RC*' | sort | tail -1)
+          if [ -z "$XCODE_APP" ]; then
+            XCODE_APP=$(find /Applications -maxdepth 1 -type d -name 'Xcode_26*.app' | sort | tail -1)
+          fi
+          if [ -z "$XCODE_APP" ]; then
+            echo "::error::Xcode 26 or newer is not installed on this runner"
+            ls -d /Applications/Xcode*.app || true
+            exit 1
+          fi
+          echo "Selecting $XCODE_APP"
+          sudo xcode-select -s "$XCODE_APP/Contents/Developer"
+          XCODE_MAJOR=$(xcodebuild -version | awk 'NR==1 { split($2, v, "."); print v[1] }')
+          if [ "$XCODE_MAJOR" -lt 26 ]; then
+            echo "::error::Expected Xcode 26+, got $(xcodebuild -version | head -1)"
+            exit 1
+          fi
+
       - name: Environment
         run: |
+          set -euo pipefail
           xcodebuild -version
+          xcodebuild -showsdks
           echo "--- available iOS simulators ---"
           xcrun simctl list devices available | grep -i iphone || true
 
@@ -31,19 +53,41 @@ jobs:
       - name: Build for testing
         run: |
           set -o pipefail
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation clean build-for-testing
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination 'generic/platform=iOS Simulator' -skipPackagePluginValidation clean build-for-testing 2>&1 | tee build-for-testing.log
 
-      - name: Run tests
+      - name: Select simulator
+        id: simulator
+        run: |
+          set -euo pipefail
+          UDID=$(xcrun simctl list devices available -j | python3 -c "import sys,json; d=json.load(sys.stdin); devs=[x for v in d['devices'].values() for x in v if x.get('isAvailable') and 'iPhone' in x.get('name','')]; devs.sort(key=lambda x: (0 if 'Pro' in x.get('name','') else 1, x.get('name',''))); print(devs[0]['udid'] if devs else '')")
+          if [ -z "$UDID" ]; then echo 'No iPhone simulator available'; exit 1; fi
+          echo "udid=$UDID" >> "$GITHUB_OUTPUT"
+          echo "Booting simulator $UDID"
+          xcrun simctl bootstatus "$UDID" -b || true
+
+      - name: Run unit tests
         run: |
           set -o pipefail
-          UDID=$(xcrun simctl list devices available -j | python3 -c "import sys,json; d=json.load(sys.stdin); devs=[x for v in d['devices'].values() for x in v if x.get('isAvailable') and 'iPhone' in x.get('name','')]; print(devs[0]['udid'] if devs else '')")
-          if [ -z "$UDID" ]; then echo 'No iPhone simulator available'; exit 1; fi
-          echo "Booting simulator $UDID"
-          # Boot and wait for the device to be ready to avoid intermittent
-          # "Simulator device failed to install the application" errors.
-          xcrun simctl bootstatus "$UDID" -b || true
-          echo "Testing on simulator $UDID"
-          # build-for-testing (above) compiles ALL targets incl. UI tests, so the
-          # UI test target is compile-verified. Run only the deterministic unit
-          # tests here to keep CI stable; run UI tests locally in Xcode.
-          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=$UDID" -skipPackagePluginValidation -only-testing:SkyTraceTests test-without-building
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceTests test-without-building 2>&1 | tee unit-tests.log
+
+      - name: Run critical UI tests
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}" -skipPackagePluginValidation -only-testing:SkyTraceUITests/CriticalFlowUITests test-without-building 2>&1 | tee ui-tests.log
+
+      - name: Build Release configuration for device
+        run: |
+          set -o pipefail
+          xcodebuild -project apps/ios/SkyTrace.xcodeproj -scheme SkyTrace -configuration Release -destination 'generic/platform=iOS' -skipPackagePluginValidation CODE_SIGNING_ALLOWED=NO build 2>&1 | tee release-build.log
+
+      - name: Upload Xcode diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcode-diagnostics
+          path: |
+            *-for-testing.log
+            unit-tests.log
+            ui-tests.log
+            release-build.log
+          if-no-files-found: ignore

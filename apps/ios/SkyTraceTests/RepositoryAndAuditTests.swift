@@ -48,15 +48,12 @@ final class RepositoryAndAuditTests: XCTestCase {
     }
 
     func testReleaseLinkAuditPassesForProductionHosts() {
-        // Legal/support URLs now resolve to the GitHub Pages site (docs/site),
-        // so the audit must be clean — a prerequisite for a Release build.
         let problems = ReleaseLinkAudit.audit()
         XCTAssertTrue(problems.isEmpty,
                       "Legal/support URLs must be valid HTTPS with no placeholder host before submission; got \(problems)")
     }
 
     func testReleaseLinkAuditFlagsPlaceholderHost() {
-        // The audit still catches a regression back to a placeholder host.
         let bad = ReleaseLinkAudit.problems(page: "probe", url: URL(string: "https://skytrace.example.com/x"))
         XCTAssertTrue(bad.contains { $0.reason == "placeholder host" },
                       "A placeholder host must still be flagged")
@@ -73,5 +70,47 @@ final class RepositoryAndAuditTests: XCTestCase {
         let state = Loadable<TodayFeed>.failed(.offline, cached: cached)
         XCTAssertNotNil(state.value)
         XCTAssertEqual(state.error, .offline)
+    }
+
+    @MainActor
+    func testProductionSourceNeverFallsBackToFixtures() async {
+        let env = AppEnvironment(
+            dataSource: .localAPI,
+            subscription: SubscriptionStore(provider: FakeSubscriptionProvider()),
+            library: LibraryStore(suiteName: "test.\(UUID().uuidString)")
+        )
+        do {
+            _ = try await env.caseRepository.allCases()
+            XCTFail("Production source must fail while the API is unconfigured, not return fixtures")
+        } catch let error as RepositoryError {
+            guard case .unknown(let reason) = error else {
+                return XCTFail("Expected explicit production-not-configured error, got \(error)")
+            }
+            XCTAssertEqual(reason, "production_data_source_not_configured")
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
+    func testReleaseDefaultsHideUnimplementedNotifications() {
+        XCTAssertFalse(FeatureFlags.releaseDefaults.notificationsEnabled)
+    }
+
+    func testEmptyAdverseAssessmentDimensionsAreNotStrongOrRed() {
+        if let noContradictions = DemoCases.all.first(where: { $0.contradictions.isEmpty }),
+           let dimension = noContradictions.assessmentDimensions.first(where: { $0.kind == .unresolvedContradictions }) {
+            XCTAssertEqual(dimension.level, .insufficient)
+            XCTAssertEqual(dimension.signal, .green)
+        } else {
+            XCTFail("Fixture set should include a case without contradictions")
+        }
+
+        if let noMissing = DemoCases.all.first(where: { $0.missingInformation.isEmpty }),
+           let dimension = noMissing.assessmentDimensions.first(where: { $0.kind == .missingInformation }) {
+            XCTAssertEqual(dimension.level, .insufficient)
+            XCTAssertEqual(dimension.signal, .green)
+        } else {
+            XCTFail("Fixture set should include a case without missing information")
+        }
     }
 }

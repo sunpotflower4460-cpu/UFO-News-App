@@ -1,7 +1,7 @@
 import Foundation
 
-/// User entitlement state. A transient network failure must never instantly
-/// drop a known-valid entitlement (see ARCHITECTURE 15.2).
+/// User entitlement state. A transient StoreKit read failure must never
+/// instantly drop a known-valid entitlement (see ARCHITECTURE 15.2).
 enum EntitlementState: Equatable, Sendable {
     case unknown
     case loading
@@ -12,11 +12,22 @@ enum EntitlementState: Equatable, Sendable {
     case expired
     case revoked
 
-    /// Whether Plus content should currently be unlocked.
+    /// Whether Plus content should currently be unlocked. Apple documents only
+    /// `subscribed` and `inGracePeriod` as entitled renewal states. Billing retry
+    /// without grace is not entitled and must not retain paid access.
     var isPlusUnlocked: Bool {
         switch self {
-        case .active, .gracePeriod, .billingRetry: true
+        case .active, .gracePeriod: true
         default: false
+        }
+    }
+
+    /// Whether StoreKit has returned a meaningful state. Used to keep a previous
+    /// known-valid entitlement through a transient `.unknown` refresh.
+    var isResolved: Bool {
+        switch self {
+        case .unknown, .loading: false
+        default: true
         }
     }
 

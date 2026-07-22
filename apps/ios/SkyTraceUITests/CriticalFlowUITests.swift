@@ -1,58 +1,85 @@
 import XCTest
 
-/// Critical-flow UI tests (UI_UX_PLAN 21.1). These require a running Simulator.
-/// They launch with `-uitest-skip-welcome` so the app starts on the tab shell.
-///
-/// `@MainActor` because XCUIApplication / XCUIElement are main-actor-isolated in
-/// the current SDK. CI compiles this target (build-for-testing) but runs only
-/// the deterministic unit tests; run these UI tests locally in Xcode.
+/// Critical-flow UI tests. These launch with deterministic fixture data, a fixed
+/// Japanese locale, the Welcome flow skipped, and continuous animations off.
 @MainActor
 final class CriticalFlowUITests: XCTestCase {
 
     private func launch() -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchArguments += ["-uitest-skip-welcome"]
+        app.launchArguments += [
+            "-uitest-skip-welcome",
+            "-uitest-no-animations",
+            "-AppleLanguages", "(ja)",
+            "-AppleLocale", "ja_JP",
+        ]
         app.launch()
         return app
     }
 
     override func setUp() { continueAfterFailure = false }
 
-    func testTabBarHasFourTabs() {
-        let app = launch()
-        XCTAssertGreaterThanOrEqual(app.tabBars.buttons.count, 4)
+    private func tab(_ app: XCUIApplication, identifier: String, label: String) -> XCUIElement {
+        let identified = app.tabBars.buttons[identifier]
+        if identified.waitForExistence(timeout: 2) { return identified }
+        return app.tabBars.buttons[label]
     }
 
-    func testTodayToCaseDetailToSource() {
+    func testTabBarHasFourReachableTabs() {
         let app = launch()
-        // Today is the first tab and shows at least one case card.
-        let firstLink = app.scrollViews.otherElements.buttons.firstMatch
-        XCTAssertTrue(firstLink.waitForExistence(timeout: 5))
-        firstLink.tap()
-        // Detail should show a Sources section eventually.
-        XCTAssertTrue(app.staticTexts.count > 0)
+        XCTAssertEqual(app.tabBars.buttons.count, 4)
+        XCTAssertTrue(tab(app, identifier: "tab.today", label: "今日").exists)
+        XCTAssertTrue(tab(app, identifier: "tab.map", label: "地図").exists)
+        XCTAssertTrue(tab(app, identifier: "tab.research", label: "探す").exists)
+        XCTAssertTrue(tab(app, identifier: "tab.settings", label: "設定").exists)
     }
 
-    func testMapTabOpens() {
+    func testTodayPriorityCaseOpensDetail() {
         let app = launch()
-        app.tabBars.buttons.element(boundBy: 1).tap()
-        XCTAssertTrue(app.otherElements.firstMatch.waitForExistence(timeout: 5))
+        let priority = app.buttons["today.priorityCase"]
+        XCTAssertTrue(priority.waitForExistence(timeout: 10))
+        priority.tap()
+
+        // A detail push must produce a navigation back button; this verifies an
+        // actual destination rather than merely asserting that some text exists.
+        XCTAssertTrue(app.navigationBars.buttons.firstMatch.waitForExistence(timeout: 5))
     }
 
-    func testResearchSearch() {
+    func testMapTabLoadsMapExperience() {
         let app = launch()
-        app.tabBars.buttons.element(boundBy: 2).tap()
+        let mapTab = tab(app, identifier: "tab.map", label: "地図")
+        XCTAssertTrue(mapTab.waitForExistence(timeout: 5))
+        mapTab.tap()
+
+        // MapKit's raw accessibility element type differs across OS/Xcode
+        // versions. Assert the app-owned screen identifier instead.
+        let mapScreen = app.descendants(matching: .any)["screen.map"]
+        XCTAssertTrue(mapScreen.waitForExistence(timeout: 10))
+    }
+
+    func testResearchSearchReturnsTokyoCase() {
+        let app = launch()
+        let researchTab = tab(app, identifier: "tab.research", label: "探す")
+        XCTAssertTrue(researchTab.waitForExistence(timeout: 5))
+        researchTab.tap()
+
         let searchField = app.searchFields.firstMatch
-        if searchField.waitForExistence(timeout: 5) {
-            searchField.tap()
-            searchField.typeText("東京")
-        }
+        XCTAssertTrue(searchField.waitForExistence(timeout: 5))
+        searchField.tap()
+        searchField.typeText("東京")
+
+        XCTAssertTrue(app.staticTexts["東京湾上空で停止して見えた3つの灯火"]
+            .waitForExistence(timeout: 10))
     }
 
-    func testSettingsRestoreExists() {
+    func testSettingsShowsRestoreButNotUnimplementedNotifications() {
         let app = launch()
-        app.tabBars.buttons.element(boundBy: 3).tap()
-        XCTAssertTrue(app.tables.firstMatch.waitForExistence(timeout: 5)
-                      || app.collectionViews.firstMatch.waitForExistence(timeout: 5))
+        let settingsTab = tab(app, identifier: "tab.settings", label: "設定")
+        XCTAssertTrue(settingsTab.waitForExistence(timeout: 5))
+        settingsTab.tap()
+
+        XCTAssertTrue(app.buttons["購入を復元"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["通知を有効にする"].exists,
+                       "Notification controls must remain hidden until delivery is implemented")
     }
 }

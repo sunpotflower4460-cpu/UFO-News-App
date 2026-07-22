@@ -31,6 +31,7 @@ struct TodayV2View: View {
             }
         }
         .background(SkyColor.canvas)
+        .accessibilityIdentifier("screen.today")
         .navigationTitle(SkyStrings.t("today.title"))
         // Re-runs whenever the refresh controller bumps its generation
         // (foreground return / interval poll), in addition to first appearance.
@@ -98,6 +99,7 @@ struct TodayV2View: View {
                         .foregroundStyle(SkyColor.signalViolet)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("today.briefing")
             }
         }
     }
@@ -114,6 +116,7 @@ struct TodayV2View: View {
                         CaseCard(uapCase: lead, variant: .featured)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("today.priorityCase")
                 }
             }
         }

@@ -32,8 +32,6 @@ targets:
     platform: iOS
     sources:
       - path: SkyTrace
-      - path: SkyTrace.storekit
-        buildPhase: resources
     settings:
       base:
         INFOPLIST_FILE: SkyTrace/Resources/Info.plist
@@ -76,6 +74,8 @@ schemes:
         SkyTrace: all
     run:
       config: Debug
+      # Development-only StoreKit configuration. It is connected to the Run
+      # action but intentionally not copied into the Release app bundle.
       storeKitConfiguration: SkyTrace.storekit
     test:
       config: Debug

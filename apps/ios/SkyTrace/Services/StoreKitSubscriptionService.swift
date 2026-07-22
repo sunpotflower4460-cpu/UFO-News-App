@@ -60,28 +60,57 @@ actor StoreKitSubscriptionService: SubscriptionProviding {
         return await currentEntitlement()
     }
 
+    /// Resolve the subscription group's signed renewal status. Unlike reading
+    /// expiration dates alone, this distinguishes grace period, billing retry,
+    /// expiration, and revocation. Apple only grants service for subscribed and
+    /// in-grace-period states.
     func currentEntitlement() async -> EntitlementState {
-        var best: EntitlementState = .free
-        for await result in Transaction.currentEntitlements {
-            guard case .verified(let transaction) = result else { continue }
-            guard SubscriptionIDs.all.contains(transaction.productID) else { continue }
-            if let revoked = transaction.revocationDate, revoked <= Date() {
-                best = .revoked
-                continue
+        do {
+            let products = try await Product.products(for: SubscriptionIDs.all)
+            guard !products.isEmpty else {
+                // Empty products normally means StoreKit/App Store Connect is not
+                // configured or temporarily unavailable; it does not prove Free.
+                return .unknown
             }
-            if let expiry = transaction.expirationDate, expiry < Date() {
-                if case .free = best { best = .expired }
-                continue
+            for product in products { productsByID[product.id] = product }
+
+            var states: [EntitlementState] = []
+            var sawSubscriptionStatus = false
+
+            for product in products {
+                guard let subscription = product.subscription else { continue }
+                let statuses = try await subscription.status
+                if !statuses.isEmpty { sawSubscriptionStatus = true }
+
+                for status in statuses {
+                    guard case .verified(let transaction) = status.transaction,
+                          SubscriptionIDs.all.contains(transaction.productID) else {
+                        continue
+                    }
+                    states.append(Self.map(status.state,
+                                           expiresAt: transaction.expirationDate))
+                }
             }
-            best = .active(expiresAt: transaction.expirationDate)
+
+            if let best = states.max(by: { Self.rank($0) < Self.rank($1) }) {
+                return best
+            }
+            return sawSubscriptionStatus ? .unknown : .free
+        } catch {
+            // On a transient product/status failure, currentEntitlements can still
+            // prove paid access. An empty fallback is ambiguous, so return unknown
+            // and let SubscriptionStore preserve a previously-known valid state.
+            return await fallbackCurrentEntitlement()
         }
-        return best
     }
 
-    /// Observe transaction updates for the app lifetime. Returns a task the app
-    /// stores so entitlement stays fresh on renewals/refunds.
-    func observeTransactionUpdates(_ onChange: @escaping @Sendable (EntitlementState) -> Void) -> Task<Void, Never> {
-        Task.detached {
+    /// Observe purchases, renewals, refunds, Ask to Buy, and changes made on
+    /// other devices for the app lifetime. The returned task is retained and
+    /// cancelled by SubscriptionStore so only one listener exists.
+    nonisolated func observeTransactionUpdates(
+        _ onChange: @escaping @Sendable (EntitlementState) -> Void
+    ) -> Task<Void, Never>? {
+        Task.detached { [self] in
             for await update in Transaction.updates {
                 if case .verified(let transaction) = update {
                     await transaction.finish()
@@ -92,7 +121,51 @@ actor StoreKitSubscriptionService: SubscriptionProviding {
         }
     }
 
-    // MARK: Mapping
+    // MARK: Entitlement mapping
+
+    private func fallbackCurrentEntitlement() async -> EntitlementState {
+        for await result in Transaction.currentEntitlements {
+            guard case .verified(let transaction) = result,
+                  SubscriptionIDs.all.contains(transaction.productID) else { continue }
+            if transaction.revocationDate != nil { continue }
+            return .active(expiresAt: transaction.expirationDate)
+        }
+        return .unknown
+    }
+
+    private static func map(_ state: Product.SubscriptionInfo.RenewalState,
+                            expiresAt: Date?) -> EntitlementState {
+        switch state {
+        case .subscribed:
+            return .active(expiresAt: expiresAt)
+        case .inGracePeriod:
+            return .gracePeriod(expiresAt: expiresAt)
+        case .inBillingRetryPeriod:
+            return .billingRetry
+        case .expired:
+            return .expired
+        case .revoked:
+            return .revoked
+        default:
+            return .unknown
+        }
+    }
+
+    /// Higher rank wins when Family Sharing or multiple statuses produce more
+    /// than one record for the subscription group.
+    private static func rank(_ state: EntitlementState) -> Int {
+        switch state {
+        case .active: 60
+        case .gracePeriod: 50
+        case .billingRetry: 40
+        case .expired: 30
+        case .revoked: 20
+        case .free: 10
+        case .unknown, .loading: 0
+        }
+    }
+
+    // MARK: Product mapping
 
     private static func map(_ product: Product) -> SubscriptionProduct {
         let period: SubscriptionProduct.Period =

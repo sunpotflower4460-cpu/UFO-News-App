@@ -12,16 +12,29 @@ struct RootTabView: View {
         @Bindable var router = router
         TabView(selection: $router.selectedTab) {
             NavigationStack { TodayV2View() }
-                .tabItem { Label(SkyStrings.t("tab.today"), systemImage: "sun.max") }
+                .tabItem {
+                    Label(SkyStrings.t("tab.today"), systemImage: "sun.max")
+                        .accessibilityIdentifier("tab.today")
+                }
                 .tag(AppTab.today)
             NavigationStack { MapV2View() }
-                .tabItem { Label(SkyStrings.t("tab.map"), systemImage: "map") }
+                .accessibilityIdentifier("screen.map")
+                .tabItem {
+                    Label(SkyStrings.t("tab.map"), systemImage: "map")
+                        .accessibilityIdentifier("tab.map")
+                }
                 .tag(AppTab.map)
             NavigationStack { SearchV2View() }
-                .tabItem { Label(SkyStrings.t("tab.research"), systemImage: "magnifyingglass") }
+                .tabItem {
+                    Label(SkyStrings.t("tab.research"), systemImage: "magnifyingglass")
+                        .accessibilityIdentifier("tab.research")
+                }
                 .tag(AppTab.explore)
             SettingsView()
-                .tabItem { Label(SkyStrings.t("tab.settings"), systemImage: "gearshape") }
+                .tabItem {
+                    Label(SkyStrings.t("tab.settings"), systemImage: "gearshape")
+                        .accessibilityIdentifier("tab.settings")
+                }
                 .tag(AppTab.settings)
         }
         .tint(SkyColor.accentPrimary)

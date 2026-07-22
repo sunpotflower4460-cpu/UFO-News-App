@@ -15,6 +15,12 @@ struct AssessmentDimension: Codable, Sendable, Hashable, Identifiable {
         case missingInformation
 
         var labelKey: String { "assess.\(rawValue)" }
+
+        /// These dimensions measure the amount of a problem, unlike the other
+        /// dimensions where a stronger level is favourable.
+        var isAdverse: Bool {
+            self == .unresolvedContradictions || self == .missingInformation
+        }
     }
 
     /// Qualitative level. Deliberately coarse; not a numeric score.
@@ -35,6 +41,18 @@ struct AssessmentDimension: Codable, Sendable, Hashable, Identifiable {
     var level: Level
     /// Short basis, e.g. "3件中2件は相互の接触を確認できません".
     var basis: String
+
+    /// Risk dimensions invert the colour meaning: more unresolved contradiction
+    /// or missing information must become warmer/redder, never greener.
+    var signal: SignalRole {
+        guard kind.isAdverse else { return level.signal }
+        switch level {
+        case .strong: return .red
+        case .moderate: return .red
+        case .limited: return .amber
+        case .insufficient: return .green
+        }
+    }
 }
 
 /// A "What Changed" delta shown first for returning users (03 §7.2).

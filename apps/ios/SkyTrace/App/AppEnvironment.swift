@@ -24,10 +24,13 @@ final class AppEnvironment {
         self.dataSource = dataSource
         self.flags = flags
         self.library = library
+        // Initialise stored existential properties before applying the selected
+        // source below. They are never exposed before init completes.
         self.feedRepository = FixtureFeedRepository()
         self.caseRepository = FixtureCaseRepository()
         self.briefingRepository = FixtureBriefingRepository()
         self.subscription = subscription ?? SubscriptionStore(provider: StoreKitSubscriptionService())
+        rebuildRepositories()
     }
 
     private func rebuildRepositories() {
@@ -37,11 +40,12 @@ final class AppEnvironment {
             caseRepository = FixtureCaseRepository()
             briefingRepository = FixtureBriefingRepository()
         case .localAPI:
-            // Phase 2 wires a URLSession-backed client here. Until then, fall
-            // back to fixtures so the toggle never yields an empty app.
-            feedRepository = FixtureFeedRepository()
-            caseRepository = FixtureCaseRepository()
-            briefingRepository = FixtureBriefingRepository()
+            // Production must never silently fall back to demo cases. Until the
+            // URLSession-backed repositories are connected, expose an explicit
+            // unavailable state so a Release build cannot masquerade as live news.
+            feedRepository = UnconfiguredFeedRepository()
+            caseRepository = UnconfiguredCaseRepository()
+            briefingRepository = UnconfiguredBriefingRepository()
         }
     }
 
@@ -59,3 +63,25 @@ final class AppEnvironment {
         return env
     }
 }
+
+// MARK: - Release-safe production placeholders
+
+/// These repositories deliberately fail instead of serving fixtures. They are a
+/// compile-safe seam for the Phase 2 URLSession repositories and a guard against
+/// publishing fabricated/demo information as current news.
+private struct UnconfiguredFeedRepository: FeedRepository {
+    func todayFeed() async throws -> TodayFeed { throw notConfigured }
+}
+
+private struct UnconfiguredCaseRepository: CaseRepository {
+    func allCases() async throws -> [UAPCase] { throw notConfigured }
+    func caseDetail(id: String) async throws -> UAPCase { throw notConfigured }
+    func article(for caseID: String) async throws -> SynthesizedArticle? { throw notConfigured }
+    func search(query: String, filters: CaseFilter) async throws -> [UAPCase] { throw notConfigured }
+}
+
+private struct UnconfiguredBriefingRepository: BriefingRepository {
+    func briefing(for date: Date) async throws -> DailyBriefing { throw notConfigured }
+}
+
+private let notConfigured = RepositoryError.unknown("production_data_source_not_configured")
