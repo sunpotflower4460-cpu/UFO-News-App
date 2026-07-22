@@ -1,0 +1,166 @@
+name: Apply second-audit source patches once
+
+on:
+  push:
+    branches: [agent/second-deep-audit]
+    paths: [.github/workflows/apply-second-audit-patches-once.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/second-deep-audit
+
+      - name: Apply exact reviewed patches
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              if old not in text:
+                  raise SystemExit(f'Expected source block not found in {path}')
+              p.write_text(text.replace(old, new, 1))
+
+          replace(
+              'apps/ios/SkyTrace/Features/Map/MapV2View.swift',
+              '''                await model?.load()
+                  focusRequestedCase()
+''',
+              '''                await model?.load()
+                  if let selected,
+                     model?.plottableCases.contains(where: { $0.id == selected.id }) != true {
+                      self.selected = nil
+                  }
+                  focusRequestedCase()
+''')
+
+          replace(
+              'apps/ios/SkyTrace/Features/Map/MapV2View.swift',
+              '''        guard let id = router.mapFocusCaseID,
+                    let model, let c = model.allCases.first(where: { $0.id == id }) else { return }
+          selected = c
+''',
+              '''        guard let id = router.mapFocusCaseID,
+                    let model, let c = model.allCases.first(where: { $0.id == id }) else { return }
+          guard c.locationPrecision != .withheld else {
+              router.mapFocusCaseID = nil
+              return
+          }
+          selected = c
+''')
+
+          replace(
+              'apps/ios/SkyTrace/Features/Map/MapV2View.swift',
+              '''    /// Zoom to fit all member points (with padding) rather than a fixed span.
+        private func region(around cluster: MapCluster) -> MKCoordinateRegion {
+            let coords = cluster.cases.map {
+                CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+            }
+            guard let first = coords.first else {
+                return MKCoordinateRegion(center: cluster.coordinate,
+                                          span: MKCoordinateSpan(latitudeDelta: 12, longitudeDelta: 12))
+            }
+            var minLat = first.latitude, maxLat = first.latitude
+            var minLon = first.longitude, maxLon = first.longitude
+            for c in coords {
+                minLat = min(minLat, c.latitude); maxLat = max(maxLat, c.latitude)
+                minLon = min(minLon, c.longitude); maxLon = max(maxLon, c.longitude)
+            }
+            let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
+                                                longitude: (minLon + maxLon) / 2)
+            let span = MKCoordinateSpan(latitudeDelta: max((maxLat - minLat) * 1.6, 2),
+                                        longitudeDelta: max((maxLon - minLon) * 1.6, 2))
+            return MKCoordinateRegion(center: center, span: span)
+        }
+''',
+              '''    /// Zoom to fit all member points (with padding) rather than a fixed span.
+        private func region(around cluster: MapCluster) -> MKCoordinateRegion {
+            let coords = cluster.cases.map {
+                CLLocationCoordinate2D(latitude: $0.latitude, longitude: $0.longitude)
+            }
+            guard let first = coords.first else {
+                return MKCoordinateRegion(center: cluster.coordinate,
+                                          span: MKCoordinateSpan(latitudeDelta: 12, longitudeDelta: 12))
+            }
+            var minLat = first.latitude, maxLat = first.latitude
+            let referenceLongitude = cluster.coordinate.longitude
+            var unwrappedLongitudes: [Double] = []
+            for c in coords {
+                minLat = min(minLat, c.latitude); maxLat = max(maxLat, c.latitude)
+                var delta = c.longitude - referenceLongitude
+                while delta > 180 { delta -= 360 }
+                while delta < -180 { delta += 360 }
+                unwrappedLongitudes.append(referenceLongitude + delta)
+            }
+            let minLon = unwrappedLongitudes.min() ?? referenceLongitude
+            let maxLon = unwrappedLongitudes.max() ?? referenceLongitude
+            var centerLongitude = (minLon + maxLon) / 2
+            while centerLongitude > 180 { centerLongitude -= 360 }
+            while centerLongitude < -180 { centerLongitude += 360 }
+            let center = CLLocationCoordinate2D(latitude: (minLat + maxLat) / 2,
+                                                longitude: centerLongitude)
+            let span = MKCoordinateSpan(latitudeDelta: max((maxLat - minLat) * 1.6, 2),
+                                        longitudeDelta: max((maxLon - minLon) * 1.6, 2))
+            return MKCoordinateRegion(center: center, span: span)
+        }
+''')
+
+          replace(
+              'apps/ios/SkyTrace/Features/CaseDetail/CaseDetailV2View.swift',
+              '''        await model?.load()
+          allCases = (try? await env.caseRepository.allCases()) ?? []
+          if let c = model?.state.value { related = c.relatedRefs(in: allCases) }
+''',
+              '''        await model?.load()
+          guard !Task.isCancelled else { return }
+          do {
+              let loadedCases = try await env.caseRepository.allCases()
+              try Task.checkCancellation()
+              allCases = loadedCases
+              if let c = model?.state.value { related = c.relatedRefs(in: loadedCases) }
+          } catch is CancellationError {
+              return
+          } catch {
+              // Related cases are secondary. Preserve the previous list through
+              // transient failures instead of erasing a working detail screen.
+          }
+''')
+
+          replace(
+              'apps/ios/SkyTrace/Features/CaseDetail/CaseDetailV2View.swift',
+              '''            Spacer(minLength: SkySpacing.x2)
+                  Button { router.openMap(focus: c.id) } label: {
+                      Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                          .font(SkyTypography.metadata.weight(.semibold))
+                          .foregroundStyle(SkyColor.accentPrimary)
+                  }
+                  .buttonStyle(.plain)
+                  .accessibilityHint(SkyStrings.t("map.focusHint"))
+''',
+              '''            Spacer(minLength: SkySpacing.x2)
+                  if c.locationPrecision != .withheld {
+                      Button { router.openMap(focus: c.id) } label: {
+                          Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
+                              .font(SkyTypography.metadata.weight(.semibold))
+                              .foregroundStyle(SkyColor.accentPrimary)
+                      }
+                      .buttonStyle(.plain)
+                      .accessibilityHint(SkyStrings.t("map.focusHint"))
+                  }
+''')
+          PY
+
+      - name: Commit patched source
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add apps/ios/SkyTrace/Features/Map/MapV2View.swift apps/ios/SkyTrace/Features/CaseDetail/CaseDetailV2View.swift
+          git commit -m "Protect withheld locations and preserve secondary detail data"
+          git push origin HEAD:agent/second-deep-audit
