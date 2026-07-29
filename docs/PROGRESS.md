@@ -198,6 +198,39 @@ AskUserQuestionで方針を確認した上で**準拠版**（AIによる判定�
 - `MANUAL_ACTIONS.md`「SNSでの目撃報告」節（M-065）：実SNS Providerの規約確認・許諾が
   取れるまで、本番では空表示のまま（fixtureへのフォールバックなし）。
 
+## SNSでの目撃報告 — ブラッシュアップ（2026-07-29、追加要望）
+
+「自動でできる範囲でSNS周りをブラッシュアップしてほしい」との要望を受け、判定・スコアリングを
+一切加えない範囲で以下を実施（詳細は`docs/DECISIONS.md` D-NF-010）。
+
+### Implemented
+- **専用Repository層**：`SocialReportsRepository`プロトコル＋
+  `FixtureSocialReportsRepository`/`UnconfiguredSocialReportsRepository`/
+  `ProductionSocialReportsRepository`を新設し、`AppEnvironment`に配線
+  （既存`CaseRepository`とは独立、D-008のパターンを踏襲）。
+- **バックエンド**：`docs/openapi/skytrace-v1.yaml` + `services/api`に
+  `GET /v1/social/reports`を追加。`.social`出典のみ・スコア/ランクフィールドなしを
+  pytestで構造的に固定（新規4件、計13件green）。fixtureに`.social`出典を1件追加
+  （権利未確認プロバイダのメディア付き、rights gateの実例として）。
+- **iOS UI**：見え方（shapeTags）フィルターチップ、日付ソート（事例順/新しい順/古い順）、
+  ページ位置表示、Loadable導入によるオフライン/エラー再試行状態、pull-to-refresh、
+  元投稿への共有（ShareLink）を追加。並べ替え・絞り込みの軸は常に「日付」か「カテゴリ」で、
+  連続値スコアは一切使わない。
+
+### Tests
+- Python: `test_social_reports_only_includes_social_source_type`、
+  `test_social_reports_media_is_rights_gated_and_linked_to_its_own_source`、
+  `test_social_reports_response_never_contains_a_score_or_likelihood_field`、
+  `test_social_reports_ordering_matches_case_then_source_order_with_no_sorting`
+  （`cd services/api && pytest tests/ -v` で13件green、実行・確認済み）。
+- Swift: `ProductionRepositoryTests`に`ProductionSocialReportsRepository`のデコード検証と
+  Unconfigured維持テストを追加。`SocialReportCandidateTests`の構造テストを
+  `caseShapeTags`追加後も更新済み（Xcode実行待ち）。
+
+### Remaining / Manual actions
+`docs/MANUAL_ACTIONS.md`「SNSでの目撃報告」節 M-066/M-067（Xcodeビルド確認、
+ローカルAPI疎通確認）。
+
 ### Risks / known limitations
 
 - 本セッションもLinux環境のため、Swiftコード全体のコンパイル確認ができていない

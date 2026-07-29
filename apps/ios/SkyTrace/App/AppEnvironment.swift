@@ -10,6 +10,7 @@ final class AppEnvironment {
     private(set) var feedRepository: any FeedRepository
     private(set) var caseRepository: any CaseRepository
     private(set) var briefingRepository: any BriefingRepository
+    private(set) var socialReportsRepository: any SocialReportsRepository
     let library: LibraryStore
     let subscription: SubscriptionStore
     var flags: FeatureFlags
@@ -39,6 +40,7 @@ final class AppEnvironment {
         self.feedRepository = FixtureFeedRepository()
         self.caseRepository = FixtureCaseRepository()
         self.briefingRepository = FixtureBriefingRepository()
+        self.socialReportsRepository = FixtureSocialReportsRepository()
         self.subscription = subscription ?? SubscriptionStore(provider: StoreKitSubscriptionService())
         rebuildRepositories()
     }
@@ -49,12 +51,14 @@ final class AppEnvironment {
             feedRepository = FixtureFeedRepository()
             caseRepository = FixtureCaseRepository()
             briefingRepository = FixtureBriefingRepository()
+            socialReportsRepository = FixtureSocialReportsRepository()
         case .localAPI:
             if let apiBaseURL {
                 let client = SkyTraceAPIClient(baseURL: apiBaseURL)
                 feedRepository = ProductionFeedRepository(client: client)
                 caseRepository = ProductionCaseRepository(client: client)
                 briefingRepository = ProductionBriefingRepository(client: client)
+                socialReportsRepository = ProductionSocialReportsRepository(client: client)
             } else {
                 // Production must never silently fall back to demo cases. With
                 // no configured URL, expose an explicit unavailable state so a
@@ -62,6 +66,7 @@ final class AppEnvironment {
                 feedRepository = UnconfiguredFeedRepository()
                 caseRepository = UnconfiguredCaseRepository()
                 briefingRepository = UnconfiguredBriefingRepository()
+                socialReportsRepository = UnconfiguredSocialReportsRepository()
             }
         }
     }
@@ -99,6 +104,10 @@ private struct UnconfiguredCaseRepository: CaseRepository {
 
 private struct UnconfiguredBriefingRepository: BriefingRepository {
     func briefing(for date: Date) async throws -> DailyBriefing { throw notConfigured }
+}
+
+private struct UnconfiguredSocialReportsRepository: SocialReportsRepository {
+    func socialReports() async throws -> [SocialReportCandidate] { throw notConfigured }
 }
 
 private let notConfigured = RepositoryError.unknown("production_data_source_not_configured")

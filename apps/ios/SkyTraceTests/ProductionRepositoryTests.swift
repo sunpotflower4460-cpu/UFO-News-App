@@ -26,6 +26,27 @@ final class ProductionRepositoryTests: XCTestCase {
         }
     }
 
+    /// The Premium SNS feed must obey the exact same "never fall back to
+    /// fixtures" rule as every other repository — a reader must never see
+    /// demo social posts relabelled as live ones just because the API host
+    /// is unset.
+    @MainActor
+    func testSocialReportsRepositoryStaysUnconfiguredWithNoBaseURL() async {
+        let env = AppEnvironment(
+            dataSource: .localAPI,
+            subscription: SubscriptionStore(provider: FakeSubscriptionProvider()),
+            library: LibraryStore(suiteName: "test.\(UUID().uuidString)")
+        )
+        do {
+            _ = try await env.socialReportsRepository.socialReports()
+            XCTFail("Must stay unconfigured until apiBaseURL is set")
+        } catch let error as RepositoryError {
+            XCTAssertEqual(error, .unknown("production_data_source_not_configured"))
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     @MainActor
     func testSettingAPIBaseURLSwitchesAwayFromUnconfigured() async throws {
         // `AppEnvironment` builds its own client internally, so this proves
@@ -56,6 +77,23 @@ final class ProductionRepositoryTests: XCTestCase {
         let client = SkyTraceAPIClient(baseURL: URL(string: "https://stub.invalid")!, session: Self.stubSession)
         let cases = try await ProductionCaseRepository(client: client).allCases()
         XCTAssertEqual(cases.first?.id, "case_demo_001")
+    }
+
+    func testProductionSocialReportsRepositoryDecodesAndMapsWithNoScoreField() async throws {
+        StubURLProtocol.stub(path: "/v1/social/reports") { _ in
+            (200, ["ETag": "\"s1\""], Self.socialReportEnvelopeJSON)
+        }
+        let client = SkyTraceAPIClient(baseURL: URL(string: "https://stub.invalid")!, session: Self.stubSession)
+        let reports = try await ProductionSocialReportsRepository(client: client).socialReports()
+        let report = try XCTUnwrap(reports.first)
+        XCTAssertEqual(report.source.sourceType, .social)
+        XCTAssertEqual(report.caseTitle, "アタカマ砂漠で観測された整列する光の列")
+        XCTAssertEqual(report.caseShapeTags, ["光点", "整列"])
+        // Structural guard mirroring the Python contract test: the mapped
+        // Swift type must not have grown a score/likelihood field either.
+        let mirror = Mirror(reflecting: report)
+        XCTAssertEqual(Set(mirror.children.compactMap(\.label)),
+                       ["id", "caseID", "caseTitle", "caseStatus", "source", "media", "caseShapeTags", "isDemo"])
     }
 
     // MARK: SkyTraceAPIClient
@@ -131,6 +169,32 @@ final class ProductionRepositoryTests: XCTestCase {
       "contentRevision": 1, "sourceRevision": 1, "rightsState": "approved",
       "locale": "ja", "cacheTTL": 30,
       "data": [\(caseJSON)]
+    }
+    """.data(using: .utf8)!
+
+    private static let socialReportEnvelopeJSON: Data = """
+    {
+      "schemaVersion": "1.0.0", "generatedAt": "2026-07-29T08:16:22.907102Z",
+      "retrievedAt": "2026-07-29T08:16:22.907102Z", "verifiedAt": null,
+      "contentRevision": 1, "sourceRevision": 1, "rightsState": "approved",
+      "locale": "ja", "cacheTTL": 300,
+      "data": [{
+        "id": "case_demo_001_src_social_1", "caseId": "case_demo_001",
+        "caseTitle": "アタカマ砂漠で観測された整列する光の列", "caseStatus": "explained",
+        "caseShapeTags": ["光点", "整列"],
+        "source": {
+          "id": "src_social_1", "outletName": "Demo Social Platform user", "sourceType": "social",
+          "title": "夜空の光点を撮影したという投稿", "publishedAt": "2026-07-13T22:40:00Z",
+          "retrievedAt": "2026-07-13T22:40:00Z", "role": "contextualizes",
+          "url": "https://example.org/social/post-1"
+        },
+        "media": [{
+          "id": "media_3", "kind": "video", "rightsState": "pending", "displayPermission": "link_only",
+          "sourcePageURL": "https://example.org/social/post-1", "mediaURL": null, "thumbnailURL": null,
+          "attributionText": "Demo Social Platform user post", "licenseNote": null
+        }],
+        "isDemo": true
+      }]
     }
     """.data(using: .utf8)!
 

@@ -74,3 +74,19 @@
   `SocialReportsSwipeView`は本番では対応するSNS Providerが`SourceProviderPolicy.status == approved`
   になるまで実質的に空（Debug fixtureのみ表示）。Premium価値としては「元の投稿への導線をまとめて
   読める」ことを提供し、"AIがUFOらしさを判定してくれる"という体験は提供しない。
+- **D-NF-010 SNSブラッシュアップは「判定なし」の範囲でのみ実施**（2026-07-29追加要望への対応）:
+  「自動でできる範囲でSNS周りをブラッシュアップしてほしい」という追加要望に対し、以下を実装。
+  いずれもスコア・ランキング・AI判定を一切含まない：
+  - 専用`SocialReportsRepository`（Fixture/Unconfigured/Production）を新設し、既存の
+    `CaseRepository`から分離。`AppEnvironment`に`socialReportsRepository`を追加し、
+    D-008と同じ「本番は`apiBaseURL`未設定なら`Unconfigured`のまま」を踏襲。
+  - `docs/openapi/skytrace-v1.yaml` + `services/api`に`GET /v1/social/reports`を追加。
+    レスポンスに score/likelihood/probability/confidence/rank に類するキーが一切含まれない
+    ことをpytestで構造的に固定（`test_social_reports_response_never_contains_a_score_or_likelihood_field`）。
+  - iOS側の見え方フィルター（`caseShapeTags`、既存Researchのタグと同じ概念）と日付ソート
+    （事例順/新しい順/古い順）のみを追加。並べ替えの基準は常に「日付」か「カテゴリ」であり、
+    "それらしさ"のような連続値スコアには一切しない。
+  - Swift/Python両側に、型が score/likelihood フィールドを持たないことを固定する構造テストを追加
+    （`SocialReportCandidateTests.testNoLikelihoodOrScoreFieldExistsOnTheCandidateType`、
+    `test_social_reports_response_never_contains_a_score_or_likelihood_field`）。将来のPRでこれらの
+    テストを削除・弱体化する変更は、方針転換として要ユーザー承認・DECISIONS.md更新。

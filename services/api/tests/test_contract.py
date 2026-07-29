@@ -46,6 +46,7 @@ def test_every_documented_endpoint_returns_the_full_envelope():
         "/v1/briefings/today",
         "/v1/search?q=",
         "/v1/regions",
+        "/v1/social/reports",
     ]
     for path in endpoints:
         resp = client.get(path)
@@ -97,6 +98,60 @@ def test_media_rights_gate_only_allows_display_for_approved_provider():
     assert pending_asset["displayPermission"] == "link_only"
     assert pending_asset["mediaURL"] is None
     assert pending_asset["sourcePageURL"]  # the link-out target must still exist
+
+
+def test_social_reports_only_includes_social_source_type():
+    """The "SNSでの目撃報告" feed must only ever surface `.social` sources —
+    a press/official/scientific source must never appear here even if it's
+    otherwise eligible, since this feed's whole identity is "user posts", not
+    "any source" (D-NF-008)."""
+    reports = _client().get("/v1/social/reports").json()["data"]
+    assert reports, "fixtures should include at least one social report"
+    assert all(r["source"]["sourceType"] == "social" for r in reports)
+
+
+def test_social_reports_media_is_rights_gated_and_linked_to_its_own_source():
+    reports = _client().get("/v1/social/reports").json()["data"]
+    report = next(r for r in reports if r["id"] == "case_demo_001_src_social_1")
+    assert len(report["media"]) == 1
+    asset = report["media"][0]
+    # The linked provider (`demo_social_platform`) is `pending`, so this must
+    # degrade to link-only exactly like any other ungated provider's media.
+    assert asset["displayPermission"] == "link_only"
+    assert asset["mediaURL"] is None
+    assert asset["sourcePageURL"] == report["source"]["url"]
+
+
+def test_social_reports_response_never_contains_a_score_or_likelihood_field():
+    """Structural guard: scan the raw JSON keys for anything resembling a
+    computed plausibility score. Locks in D-NF-008 at the wire-format level,
+    not just in the Python/Swift model definitions."""
+    banned_key_fragments = ("score", "likelihood", "probability", "confidence", "rank")
+    body = _client().get("/v1/social/reports").json()
+
+    def walk(node):
+        if isinstance(node, dict):
+            for key, value in node.items():
+                assert not any(fragment in key.lower() for fragment in banned_key_fragments), key
+                walk(value)
+        elif isinstance(node, list):
+            for item in node:
+                walk(item)
+
+    walk(body)
+
+
+def test_social_reports_ordering_matches_case_then_source_order_with_no_sorting():
+    reports = _client().get("/v1/social/reports").json()["data"]
+    from app import fixtures as fx
+
+    expected_ids = [
+        f"{case['id']}_{source['id']}"
+        for case in fx.CASES
+        for source in case["sources"]
+        if source["sourceType"] == "social"
+    ]
+    assert [r["id"] for r in reports] == expected_ids
 
 
 def test_production_mode_refuses_to_start():

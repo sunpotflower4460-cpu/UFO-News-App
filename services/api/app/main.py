@@ -18,7 +18,7 @@ import uuid
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import JSONResponse
 
-from .routers import briefings, cases, feed, health, regions, search
+from .routers import briefings, cases, feed, health, regions, search, social
 from .schemas import SCHEMA_VERSION
 
 RUNTIME_MODE = os.environ.get("SKYTRACE_ENV", "fixture")
@@ -42,6 +42,7 @@ app.include_router(cases.router)
 app.include_router(briefings.router)
 app.include_router(search.router)
 app.include_router(regions.router)
+app.include_router(social.router)
 
 
 @app.middleware("http")

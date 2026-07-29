@@ -89,6 +89,24 @@ class TodayFeedOut(BaseModel):
     model_config = {"populate_by_name": True}
 
 
+class SocialReportOut(BaseModel):
+    """One item in the Premium "SNSでの目撃報告" feed. Deliberately carries no
+    score/likelihood/rank field — see the iOS `SocialReportCandidate` doc
+    comment and D-NF-008/009 in docs/DECISIONS.md.
+    """
+
+    id: str
+    case_id: str = Field(alias="caseId")
+    case_title: str = Field(alias="caseTitle")
+    case_status: str = Field(alias="caseStatus")
+    case_shape_tags: list[str] = Field(default_factory=list, alias="caseShapeTags")
+    source: SourceOut
+    media: list[MediaAssetOut] = []
+    is_demo: bool = Field(default=True, alias="isDemo")
+
+    model_config = {"populate_by_name": True}
+
+
 class RegionOut(BaseModel):
     country_code: str = Field(alias="countryCode")
     region_name: str = Field(alias="regionName")

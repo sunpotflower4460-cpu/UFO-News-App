@@ -15,7 +15,8 @@ _NOW = datetime(2026, 7, 13, 22, 40, tzinfo=timezone.utc)
 
 
 def _media_asset(
-    id: str, kind: str, provider_id: str, rights_state: MediaRightsState, source_page_url: str, caption: str
+    id: str, kind: str, provider_id: str, rights_state: MediaRightsState, source_page_url: str, caption: str,
+    *, source_id: str,
 ) -> dict:
     policy = DEMO_PROVIDER_REGISTRY[provider_id]
     # The gate is evaluated here, once, from the provider's real approval
@@ -35,6 +36,11 @@ def _media_asset(
         "thumbnailURL": None,
         "attributionText": policy.attribution_text,
         "licenseNote": None,
+        # Internal-only: which SourceReference this asset illustrates. Not part
+        # of the public `MediaAssetOut` schema (pydantic drops unknown keys by
+        # default) — used only by `social_reports()` below to attach the right
+        # media to the right `.social` source.
+        "sourceID": source_id,
     }
 
 
@@ -55,9 +61,13 @@ CASES: list[dict] = [
         "regionName": "アントファガスタ州",
         "localityName": "アタカマ砂漠",
         "status": "explained",
-        "sourceCount": 2,
+        "sourceCount": 3,
         "independentReportCount": 2,
         "isDemo": True,
+        # Internal-only, mirrors the iOS `UAPCase.shapeTags` fixture field —
+        # not part of the minimal v1 `Case` schema (D-NF-007), used only by
+        # `social_reports()` for the SNS feed's plain categorical filter.
+        "shapeTags": ["光点", "整列", "移動"],
         "sources": [
             {
                 "id": "src_1",
@@ -79,15 +89,29 @@ CASES: list[dict] = [
                 "role": "supports",
                 "url": "https://example.org/wire/lights",
             },
+            {
+                "id": "src_social_1",
+                "outletName": "Demo Social Platform user",
+                "sourceType": "social",
+                "title": "夜空の光点を撮影したという投稿",
+                "publishedAt": _NOW.isoformat(),
+                "retrievedAt": _NOW.isoformat(),
+                "role": "contextualizes",
+                "url": "https://example.org/social/post-1",
+            },
         ],
         "media": [
             _media_asset(
                 "media_1", "image", "demo_official_registry", MediaRightsState.approved,
-                "https://example.org/records/pass-1", "衛星パスの記録画像",
+                "https://example.org/records/pass-1", "衛星パスの記録画像", source_id="src_1",
             ),
             _media_asset(
                 "media_2", "video", "demo_wire_service", MediaRightsState.pending,
-                "https://example.org/wire/lights", "住民撮影の映像（権利確認待ち）",
+                "https://example.org/wire/lights", "住民撮影の映像（権利確認待ち）", source_id="src_2",
+            ),
+            _media_asset(
+                "media_3", "video", "demo_social_platform", MediaRightsState.pending,
+                "https://example.org/social/post-1", "投稿映像（権利確認待ち）", source_id="src_social_1",
             ),
         ],
     },
@@ -110,6 +134,7 @@ CASES: list[dict] = [
         "sourceCount": 1,
         "independentReportCount": 1,
         "isDemo": True,
+        "shapeTags": ["光点", "静止"],
         "sources": [
             {
                 "id": "src_3",
@@ -125,6 +150,32 @@ CASES: list[dict] = [
         "media": [],
     },
 ]
+
+def social_reports() -> list[dict]:
+    """Builds the "SNSでの目撃報告" feed items from `CASES`, in case-then-source
+    order — never sorted or filtered by a computed likelihood (mirrors the iOS
+    `[UAPCase].socialReportCandidates` derivation exactly, so both sides stay
+    the same shape even before the two are wired together end-to-end).
+    """
+    reports: list[dict] = []
+    for case in CASES:
+        for source in case["sources"]:
+            if source["sourceType"] != "social":
+                continue
+            reports.append({
+                "id": f"{case['id']}_{source['id']}",
+                "caseId": case["id"],
+                "caseTitle": case["title"],
+                "caseStatus": case["status"],
+                "caseShapeTags": case.get("shapeTags", []),
+                "source": source,
+                "media": [m for m in case["media"] if m.get("sourceID") == source["id"]],
+                "isDemo": case["isDemo"],
+            })
+    return reports
+
+
+SOCIAL_REPORTS: list[dict] = social_reports()
 
 BRIEFING_TODAY: dict = {
     "id": "briefing_demo_today",

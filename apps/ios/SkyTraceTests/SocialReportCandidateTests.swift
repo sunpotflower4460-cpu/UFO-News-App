@@ -46,6 +46,6 @@ final class SocialReportCandidateTests: XCTestCase {
         // documents the current, intentional shape.
         let mirror = Mirror(reflecting: DemoCases.all.socialReportCandidates.first!)
         let fieldNames = Set(mirror.children.compactMap(\.label))
-        XCTAssertEqual(fieldNames, ["id", "caseID", "caseTitle", "caseStatus", "source", "media", "isDemo"])
+        XCTAssertEqual(fieldNames, ["id", "caseID", "caseTitle", "caseStatus", "source", "media", "caseShapeTags", "isDemo"])
     }
 }

@@ -83,6 +83,16 @@ enum APIMapping {
         )
     }
 
+    /// No score/likelihood field exists on either side of this mapping —
+    /// see `SocialReportCandidate`'s doc comment.
+    static func socialReport(_ dto: APISocialReport) -> SocialReportCandidate {
+        SocialReportCandidate(
+            id: dto.id, caseID: dto.caseId, caseTitle: dto.caseTitle, caseStatus: caseStatus(dto.caseStatus),
+            source: source(dto.source), media: dto.media.map(media),
+            caseShapeTags: dto.caseShapeTags, isDemo: dto.isDemo
+        )
+    }
+
     /// `/v1/feed/today` and `/v1/briefings/today` are separate endpoints in
     /// the v1 contract, so the repository fetches both and passes the mapped
     /// briefing in here rather than this mapper making a second network call.

@@ -52,6 +52,16 @@ struct FixtureBriefingRepository: BriefingRepository {
     }
 }
 
+struct FixtureSocialReportsRepository: SocialReportsRepository {
+    var artificialDelay: Duration = .milliseconds(200)
+    var forcedError: RepositoryError? = nil
+
+    func socialReports() async throws -> [SocialReportCandidate] {
+        try await simulate(artificialDelay, forcedError)
+        return DemoCases.all.socialReportCandidates
+    }
+}
+
 /// Shared search/filter logic so Map, Research and tests agree. The reference
 /// time is injectable: production uses the actual current time, while fixtures
 /// pass their deterministic clock explicitly.

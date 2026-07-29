@@ -41,7 +41,13 @@ pytest tests/ -v
 - Every endpoint in `docs/openapi/skytrace-v1.yaml`:
   `/v1/health`, `/v1/feed/today`, `/v1/cases`, `/v1/cases/{id}`,
   `/v1/cases/{id}/sources`, `/v1/cases/{id}/media`, `/v1/briefings/today`,
-  `/v1/search`, `/v1/regions`.
+  `/v1/search`, `/v1/social/reports`, `/v1/regions`.
+- `/v1/social/reports` — the Premium "SNSでの目撃報告" feed. `.social`-typed
+  sources only, case-then-source order, with the same per-item media rights
+  gate as `/v1/cases/{id}/media`. It intentionally has **no** score/rank/
+  likelihood field or query parameter (docs/DECISIONS.md D-NF-008/009/010) —
+  `test_social_reports_response_never_contains_a_score_or_likelihood_field`
+  scans the raw JSON to enforce this at the wire level, not just in the model.
 - The required response envelope (`schemaVersion`, `generatedAt`,
   `retrievedAt`, `verifiedAt`, `contentRevision`, `sourceRevision`,
   `rightsState`, `locale`, `cacheTTL`) on every response.

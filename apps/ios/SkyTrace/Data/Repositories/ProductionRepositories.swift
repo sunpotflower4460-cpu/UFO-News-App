@@ -82,6 +82,21 @@ struct ProductionCaseRepository: CaseRepository {
     }
 }
 
+struct ProductionSocialReportsRepository: SocialReportsRepository {
+    let client: SkyTraceAPIClient
+
+    func socialReports() async throws -> [SocialReportCandidate] {
+        do {
+            let envelope: APIEnvelope<[APISocialReport]> = try await client.get("/v1/social/reports")
+            return envelope.data.map(APIMapping.socialReport)
+        } catch is CancellationError {
+            throw CancellationError()
+        } catch {
+            throw mapError(error)
+        }
+    }
+}
+
 struct ProductionBriefingRepository: BriefingRepository {
     let client: SkyTraceAPIClient
 

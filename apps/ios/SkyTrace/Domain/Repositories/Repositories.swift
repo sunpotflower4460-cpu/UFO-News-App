@@ -27,6 +27,16 @@ protocol BriefingRepository: Sendable {
     func briefing(for date: Date) async throws -> DailyBriefing
 }
 
+/// Supplies the Premium "SNSでの目撃報告" feed (`SocialReportCandidate`) — an
+/// unranked, unscored list, never a computed "likelihood" ranking (see
+/// Domain/Models/SocialReportCandidate.swift). A separate protocol from
+/// `CaseRepository` so this Premium-only, still-Tier-D-gated feed can evolve
+/// (a dedicated backend endpoint, its own cache TTL) without touching the
+/// core case-reading path.
+protocol SocialReportsRepository: Sendable {
+    func socialReports() async throws -> [SocialReportCandidate]
+}
+
 /// Local bookmarks + recently-viewed, persisted on-device.
 protocol LibraryRepository: Sendable {
     func bookmarkedIDs() async -> [String]

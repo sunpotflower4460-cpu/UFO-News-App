@@ -109,6 +109,13 @@ Claude Codeでは実行できない**もののみ：
   一切行わない設計。実際にSNS（X/Instagram等）から自動収集するには、各プラットフォームの
   API利用規約確認・書面許諾（必要な場合）・`SourceProviderPolicy.status = approved`化が必須。
   それまでは本番でも空状態のまま（fixtureへのフォールバックはしない）。
+- **M-066 Xcodeでのビルド・テスト確認（ブラッシュアップ分、必須）**（D-NF-010）。
+  `SocialReportsRepository`（Fixture/Unconfigured/Production）、フィルター/ソートUI、
+  `ProductionRepositoryTests`/`SocialReportCandidateTests`の追加分をmacOS + Xcode 26で
+  `make ios-test`実行し確認する。本セッションもLinux環境のため未確認。
+- **M-067 `make dev-backend`経由で`/v1/social/reports`の疎通確認**。M-063と合わせて、
+  Settings → 開発者 → データソースを「Local API」にした状態でSNSタブが実際に
+  ローカルモックサーバからデータを取得できることをSimulatorで確認する。
 
 ## V2 UI/UX（追加）
 

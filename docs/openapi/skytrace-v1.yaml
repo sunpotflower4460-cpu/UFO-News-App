@@ -125,6 +125,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/Envelope_CaseList"
 
+  /v1/social/reports:
+    get:
+      operationId: getSocialReports
+      summary: >
+        Premium "SNSでの目撃報告" feed: `.social`-sourced references only, in
+        case-then-source order. No parameter here ever sorts, filters, or
+        scores by a computed "likelihood" of showing a genuine sighting — see
+        docs/DECISIONS.md D-NF-008/009. Any client-side narrowing (shape tag,
+        date) must not be requested from this endpoint with a new "relevance"
+        parameter without a documented decision update.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_SocialReportList"
+
   /v1/regions:
     get:
       operationId: listRegions
@@ -353,6 +371,34 @@ components:
         regionName: { type: string }
         caseCount: { type: integer }
 
+    SocialReport:
+      type: object
+      description: >
+        One item in the Premium "SNSでの目撃報告" feed. Intentionally has no
+        score/likelihood/rank/confidence field of any kind — see D-NF-008/009
+        in docs/DECISIONS.md. Do not add one to this schema without a
+        documented product-policy decision; CLAUDE.md §2 and the News First
+        directive §17 ban presenting an AI-computed "UFOらしさ"/probability.
+      required: [id, caseId, caseTitle, caseStatus, source, isDemo]
+      properties:
+        id: { type: string }
+        caseId: { type: string }
+        caseTitle: { type: string }
+        caseStatus:
+          type: string
+          enum:
+            [explained, likely_explained, insufficient_data, under_review,
+             notable_unresolved, disputed, withdrawn]
+        caseShapeTags:
+          type: array
+          items: { type: string }
+          description: Plain categorical tags (e.g. "光点") for client-side filtering — never a ranking signal.
+        source: { $ref: "#/components/schemas/Source" }
+        media:
+          type: array
+          items: { $ref: "#/components/schemas/MediaAsset" }
+        isDemo: { type: boolean }
+
     Envelope_Case:
       allOf:
         - $ref: "#/components/schemas/EnvelopeMeta"
@@ -401,6 +447,15 @@ components:
           required: [data]
           properties:
             data: { $ref: "#/components/schemas/TodayFeed" }
+    Envelope_SocialReportList:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/SocialReport" }
     Envelope_RegionList:
       allOf:
         - $ref: "#/components/schemas/EnvelopeMeta"

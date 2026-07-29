@@ -90,6 +90,19 @@ struct APIRegion: Decodable {
     let caseCount: Int
 }
 
+/// One item in the Premium "SNSでの目撃報告" feed. Deliberately has no
+/// score/likelihood/rank field — see `SocialReportCandidate`'s doc comment.
+struct APISocialReport: Decodable {
+    let id: String
+    let caseId: String
+    let caseTitle: String
+    let caseStatus: String
+    let caseShapeTags: [String]
+    let source: APISource
+    let media: [APIMediaAsset]
+    let isDemo: Bool
+}
+
 struct APIErrorBody: Decodable {
     let code: String
     let message: String

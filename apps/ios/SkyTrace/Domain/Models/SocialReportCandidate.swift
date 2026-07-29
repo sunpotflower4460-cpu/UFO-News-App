@@ -16,7 +16,15 @@ struct SocialReportCandidate: Identifiable, Sendable, Hashable {
     /// Media tied to this specific source (still subject to the normal rights
     /// gate — a rights-unknown asset renders as a link-out, never an image).
     let media: [MediaAsset]
+    /// The parent case's shape tags (e.g. "光点", "三角配置"). Exposed only so
+    /// the feed can offer a plain categorical filter — never a computed
+    /// "likelihood" facet.
+    let caseShapeTags: [String]
     let isDemo: Bool
+
+    /// The date used for the (optional, non-judgmental) newest/oldest sort —
+    /// when the source has no publish date, its retrieval date instead.
+    var sortDate: Date { source.publishedAt ?? source.retrievedAt }
 }
 
 extension Array where Element == UAPCase {
@@ -34,7 +42,8 @@ extension Array where Element == UAPCase {
                 .map { source in
                     SocialReportCandidate(
                         id: "\(c.id)_\(source.id)", caseID: c.id, caseTitle: c.title, caseStatus: c.status,
-                        source: source, media: c.media.filter { $0.sourceID == source.id }, isDemo: c.isDemo
+                        source: source, media: c.media.filter { $0.sourceID == source.id },
+                        caseShapeTags: c.shapeTags, isDemo: c.isDemo
                     )
                 }
         }

@@ -98,4 +98,22 @@ DEMO_PROVIDER_REGISTRY: dict[str, SourceProviderPolicy] = {
         approved_at=None,
         status=ApprovalStatus.pending,
     ),
+    # Tier D (SNS) — no automated-retrieval agreement exists with any social
+    # platform yet, so this stays `pending` indefinitely until a real, signed
+    # Tier D provider agreement replaces it (docs/DATA_SOURCE_REGISTRY.md).
+    # `automated_retrieval_allowed=False` means the ingestion worker (Phase 3+)
+    # must not poll this platform at all, regardless of this status flag.
+    "demo_social_platform": SourceProviderPolicy(
+        provider_id="demo_social_platform",
+        provider_name="Demo Social Platform",
+        terms_url="https://example.org/terms-social",
+        commercial_use=False,
+        automated_retrieval_allowed=False,
+        excerpt_allowed=False,
+        image_use_allowed=False,
+        video_use_allowed=True,
+        attribution_text="Demo Social Platform user post",
+        approved_at=None,
+        status=ApprovalStatus.pending,
+    ),
 }
