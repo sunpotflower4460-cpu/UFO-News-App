@@ -60,7 +60,7 @@ struct MediaAssetView: View {
     }
 
     @ViewBuilder private var preview: some View {
-        if let url = asset.mediaURL ?? asset.thumbnailURL {
+        if let url = asset.previewURL {
             AsyncImage(url: url) { phase in
                 switch phase {
                 case .success(let image): image.resizable().scaledToFill()

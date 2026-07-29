@@ -5,39 +5,62 @@ import SwiftUI
 struct BriefingDetailView: View {
     let date: Date
     @Environment(AppEnvironment.self) private var env
-    @State private var briefing: DailyBriefing?
+    @State private var state: Loadable<DailyBriefing> = .idle
     @State private var paywall: PaywallContext?
 
     var body: some View {
+        Group {
+            if let briefing = state.value {
+                briefingContent(briefing)
+            } else if case .failed = state {
+                ErrorStateView { Task { await load() } }
+            } else {
+                ProgressView().frame(maxWidth: .infinity).padding()
+            }
+        }
+        .background(SkyColor.canvas)
+        .navigationTitle(SkyStrings.t("briefing.title"))
+        .navigationBarTitleDisplayMode(.inline)
+        .task(id: date) { await load() }
+        .sheet(item: $paywall) { PaywallView(context: $0) }
+    }
+
+    private func briefingContent(_ briefing: DailyBriefing) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: SkySpacing.x4) {
-                if let briefing {
-                    header(briefing)
-                    if env.subscription.isPlus {
-                        ForEach(briefing.blocks) { ArticleBlockView(block: $0) }
-                        tomorrow(briefing)
-                    } else {
-                        ForEach(briefing.blocks.prefix(2)) { ArticleBlockView(block: $0) }
-                        PremiumLockView(
-                            title: SkyStrings.t("briefing.readFull"),
-                            unlocks: [SkyStrings.t("paywall.feature.briefing"),
-                                      SkyStrings.t("paywall.feature.tracking")],
-                            ctaTitle: SkyStrings.t("paywall.cta"),
-                            onUnlock: { paywall = PaywallContext(trigger: .briefing) })
-                    }
+                header(briefing)
+                if env.subscription.isPlus {
+                    ForEach(briefing.blocks) { ArticleBlockView(block: $0) }
+                    tomorrow(briefing)
                 } else {
-                    ProgressView().frame(maxWidth: .infinity).padding()
+                    ForEach(briefing.blocks.prefix(2)) { ArticleBlockView(block: $0) }
+                    PremiumLockView(
+                        title: SkyStrings.t("briefing.readFull"),
+                        unlocks: [SkyStrings.t("paywall.feature.briefing"),
+                                  SkyStrings.t("paywall.feature.tracking")],
+                        ctaTitle: SkyStrings.t("paywall.cta"),
+                        onUnlock: { paywall = PaywallContext(trigger: .briefing) })
                 }
             }
             .padding(.horizontal, SkySpacing.screenEdge)
             .padding(.vertical, SkySpacing.x4)
             .readingWidth()
         }
-        .background(SkyColor.canvas)
-        .navigationTitle(SkyStrings.t("briefing.title"))
-        .navigationBarTitleDisplayMode(.inline)
-        .task { briefing = try? await env.briefingRepository.briefing(for: date) }
-        .sheet(item: $paywall) { PaywallView(context: $0) }
+    }
+
+    private func load() async {
+        if state.value == nil { state = .loading }
+        do {
+            let briefing = try await env.briefingRepository.briefing(for: date)
+            try Task.checkCancellation()
+            state = .loaded(briefing)
+        } catch is CancellationError {
+            return
+        } catch let error as RepositoryError {
+            state = .failed(error, cached: state.value)
+        } catch {
+            state = .failed(.unknown(error.localizedDescription), cached: state.value)
+        }
     }
 
     private func header(_ b: DailyBriefing) -> some View {

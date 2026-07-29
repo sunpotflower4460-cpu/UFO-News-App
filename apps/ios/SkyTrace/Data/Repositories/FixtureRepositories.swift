@@ -96,8 +96,9 @@ enum CaseSearch {
     }
 }
 
-/// Injects an optional delay and error to exercise UI states.
+/// Injects an optional delay and error to exercise UI states. Cancellation must
+/// propagate so a superseded SwiftUI task cannot publish stale data afterward.
 private func simulate(_ delay: Duration, _ error: RepositoryError?) async throws {
-    if delay > .zero { try? await Task.sleep(for: delay) }
+    if delay > .zero { try await Task.sleep(for: delay) }
     if let error { throw error }
 }

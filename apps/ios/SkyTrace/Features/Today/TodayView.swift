@@ -33,9 +33,11 @@ struct TodayView: View {
     @ViewBuilder
     private func content(_ model: TodayViewModel) -> some View {
         switch model.state {
-        case .idle, .loading where model.state.value == nil:
+        case .idle, .loading:
             loadingSkeleton
-        case .failed(let error, nil) where error != .offline:
+        case .failed(_, nil):
+            // Offline without cached content is still an actionable error; the
+            // previous pattern excluded it and could leave a blank legacy screen.
             ErrorStateView { Task { await model.load() } }
         default:
             feedScroll(model)

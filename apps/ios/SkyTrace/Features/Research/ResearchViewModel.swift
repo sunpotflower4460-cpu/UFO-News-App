@@ -19,6 +19,9 @@ final class ResearchViewModel {
     var loadFailed = false
     private var allCases: [UAPCase] = []
     private var searchTask: Task<Void, Never>?
+    /// Monotonic token. Only the newest request may publish results or stop the
+    /// activity indicator, even when an older repository ignores cancellation.
+    private var searchGeneration = 0
 
     private let caseRepo: any CaseRepository
     private let library: LibraryStore
@@ -31,7 +34,9 @@ final class ResearchViewModel {
         self.now = now
     }
 
-    var isSearching: Bool { !query.trimmingCharacters(in: .whitespaces).isEmpty || filter.isActive }
+    var isSearching: Bool {
+        !query.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || filter.isActive
+    }
 
     /// Phenomena/theme tags derived from the loaded data (not a fixture).
     var phenomenaTags: [String] {
@@ -63,61 +68,106 @@ final class ResearchViewModel {
     func toggleStatusFacet(_ s: SkyCaseStatus) {
         let legacy = CaseStatus.allCases.filter { SkyCaseStatus($0) == s }
         let anyOn = legacy.contains { filter.statuses.contains($0) }
-        for l in legacy { if anyOn { filter.statuses.remove(l) } else { filter.statuses.insert(l) } }
+        for l in legacy {
+            if anyOn { filter.statuses.remove(l) } else { filter.statuses.insert(l) }
+        }
         cancelDebounce()
         Task { await runSearch() }
     }
 
     func load() async {
         do {
-            allCases = try await caseRepo.allCases()
+            let loaded = try await caseRepo.allCases()
+            try Task.checkCancellation()
+            allCases = loaded
             loadFailed = false
+        } catch is CancellationError {
+            return
         } catch {
             loadFailed = true
             didLoad = true
             return
         }
+
         let recentIDs = await library.recentlyViewedIDs()
+        guard !Task.isCancelled else { return }
         recentlyViewed = recentIDs.compactMap { id in allCases.first { $0.id == id } }
         let savedIDs = Set(await library.bookmarkedIDs())
+        guard !Task.isCancelled else { return }
         saved = allCases.filter { savedIDs.contains($0.id) }
         let current = now()
         let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: current) ?? current
         updatedThisWeek = allCases.filter { $0.hasRecentUpdate && $0.updatedAt >= weekAgo }
         recentSearches = await library.recentSearches()
+        guard !Task.isCancelled else { return }
         didLoad = true
         // Do not run an empty search on load — discovery is shown instead.
     }
 
     /// Debounced + cancellable. Skips empty queries with no active filter.
     func onQueryChange() {
-        searchTask?.cancel()
-        let trimmed = query.trimmingCharacters(in: .whitespaces)
-        guard !trimmed.isEmpty || filter.isActive else {
+        cancelDebounce()
+        let generation = searchGeneration
+        let requestedQuery = query
+        let requestedFilter = filter
+        let trimmed = requestedQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty || requestedFilter.isActive else {
             isRunning = false
             results = []
             return
         }
+
         isRunning = true
         searchTask = Task { [weak self] in
-            try? await Task.sleep(for: .milliseconds(300))
-            if Task.isCancelled { return }
-            await self?.runSearch()
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+                guard !Task.isCancelled else { return }
+                await self?.performSearch(query: requestedQuery,
+                                          filter: requestedFilter,
+                                          generation: generation)
+            } catch is CancellationError {
+                return
+            } catch {
+                return
+            }
         }
     }
 
-    /// Cancels any pending debounced search. Call before an immediate search so
-    /// a queued debounce can't overwrite fresher results.
-    func cancelDebounce() { searchTask?.cancel() }
+    /// Cancels queued debounce work and immediately invalidates every older
+    /// repository call. This closes the gap while submit/tag persistence awaits.
+    func cancelDebounce() {
+        searchTask?.cancel()
+        searchTask = nil
+        searchGeneration &+= 1
+    }
 
-    /// Immediate search (submit, tag tap, filter change). Does NOT cancel
-    /// `searchTask` — when called from the debounce it would cancel the very
-    /// task running it, which a cancellation-aware repo would turn into an
-    /// empty result set.
+    /// Immediate search (submit, tag tap, filter change). Captures the current
+    /// inputs so mutations during an await cannot relabel an old response.
     func runSearch() async {
+        searchGeneration &+= 1
+        let generation = searchGeneration
+        await performSearch(query: query, filter: filter, generation: generation)
+    }
+
+    private func performSearch(query requestedQuery: String,
+                               filter requestedFilter: CaseFilter,
+                               generation: Int) async {
         isRunning = true
-        defer { isRunning = false }
-        results = (try? await caseRepo.search(query: query, filters: filter)) ?? []
+        defer {
+            if generation == searchGeneration { isRunning = false }
+        }
+        do {
+            let found = try await caseRepo.search(query: requestedQuery,
+                                                  filters: requestedFilter)
+            try Task.checkCancellation()
+            guard generation == searchGeneration else { return }
+            results = found
+        } catch is CancellationError {
+            return
+        } catch {
+            guard generation == searchGeneration else { return }
+            results = []
+        }
     }
 
     /// Commits the current query (from the search-bar submit): records it in
@@ -125,6 +175,7 @@ final class ResearchViewModel {
     func submitSearch() async {
         cancelDebounce()
         await recordSearch(query)
+        guard !Task.isCancelled else { return }
         await runSearch()
     }
 
@@ -133,21 +184,24 @@ final class ResearchViewModel {
         query = tag
         Task {
             await recordSearch(tag)
+            guard !Task.isCancelled else { return }
             await runSearch()
         }
     }
 
     /// Persists a committed query and refreshes the local list for the UI.
     private func recordSearch(_ q: String) async {
-        let trimmed = q.trimmingCharacters(in: .whitespaces)
+        let trimmed = q.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return }
         await library.addRecentSearch(trimmed)
+        guard !Task.isCancelled else { return }
         recentSearches = await library.recentSearches()
     }
 
     func clearRecentSearches() {
         Task {
             await library.clearRecentSearches()
+            guard !Task.isCancelled else { return }
             recentSearches = []
         }
     }
@@ -161,7 +215,7 @@ final class ResearchViewModel {
     /// Why this case matched — derived from the actual matched field, not the
     /// unrelated priority reason. Returns nil when only a filter is active.
     func matchReason(for c: UAPCase) -> String? {
-        let q = query.trimmingCharacters(in: .whitespaces).lowercased()
+        let q = query.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !q.isEmpty else { return nil }
         if c.title.lowercased().contains(q) { return SkyStrings.t("search.reason.title") }
         if (c.localityName?.lowercased().contains(q) ?? false) || c.regionName.lowercased().contains(q) {
