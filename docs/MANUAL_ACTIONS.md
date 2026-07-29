@@ -102,6 +102,14 @@ Claude Codeでは実行できない**もののみ：
   ja/enのみ`translated`、es/fr/de/pt-PT/zh-Hans/zh-Hant/ko/ar/hi/ruは英語文言の`needs_review`
   プレースホルダのまま。D-I18N-002/B3と合わせてネイティブレビューが必要。
 
+## SNSでの目撃報告（追加機能、Premium）
+
+- **M-065 SNS Providerの規約確認・許諾**（D-NF-008/009）。`SocialReportsSwipeView`は
+  現状フィクスチャの`.social`出典のみを表示し、AIによる「UFOらしさ」判定・スコアリングは
+  一切行わない設計。実際にSNS（X/Instagram等）から自動収集するには、各プラットフォームの
+  API利用規約確認・書面許諾（必要な場合）・`SourceProviderPolicy.status = approved`化が必須。
+  それまでは本番でも空状態のまま（fixtureへのフォールバックはしない）。
+
 ## V2 UI/UX（追加）
 
 - **M-050 Widget拡張ターゲットの追加（Xcode必須）**

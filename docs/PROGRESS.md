@@ -172,6 +172,32 @@ Status: Phase 2 local mock API foundation complete and tested (pytest green)
 
 `MANUAL_ACTIONS.md`「News First / AI Second」節（M-060〜M-064）を参照。
 
+## SNSでの目撃報告（追加機能、2026-07-29）
+
+ユーザーより「SNS投稿のうちUFO発見の可能性が高いものだけをスワイプで見られる機能」の要望。
+CLAUDE.md §2／ディレクティブ§17の禁止事項（AIによる可能性判定・「UFO確率」表示）に抵触するため、
+AskUserQuestionで方針を確認した上で**準拠版**（AIによる判定・スコア・並べ替えを一切行わない）
+として実装。詳細は`docs/DECISIONS.md` D-NF-008/D-NF-009。
+
+### Implemented
+- `Domain/Models/SocialReportCandidate.swift`：既存の`.social`出典を案件順・出典順でそのまま
+  列挙（スコアやランキングのフィールドを持たない）。
+- `Features/SocialReports/SocialReportsSwipeView.swift`：Premium、`TabView(.page)`によるスワイプ
+  カード。各カードは「未検証の報告」バッジ＋出典＋（許諾済みのみ）引用＋権利ゲート済みメディア＋
+  「元の投稿を見る」リンクのみ。Freeユーザーは`PremiumLockView`→文脈型Paywall
+  （新設`PaywallContext.Trigger.socialReports`）。
+- 探す（Research）画面に入口（`socialReportsEntry`）を追加。
+- 新規コピー10キーを`Localizable.xcstrings`へ追加（ja/en、他10言語は`needs_review`）。
+
+### Tests
+- `SocialReportCandidateTests.swift`：`.social`のみが対象になること、並び順がソートなしで
+  case→source順であること、メディアが自ソースのものだけ紐づくこと、型に
+  score/likelihoodフィールドが存在しないことを構造的に固定するテストを追加（Xcode実行待ち）。
+
+### Remaining / Manual actions
+- `MANUAL_ACTIONS.md`「SNSでの目撃報告」節（M-065）：実SNS Providerの規約確認・許諾が
+  取れるまで、本番では空表示のまま（fixtureへのフォールバックなし）。
+
 ### Risks / known limitations
 
 - 本セッションもLinux環境のため、Swiftコード全体のコンパイル確認ができていない

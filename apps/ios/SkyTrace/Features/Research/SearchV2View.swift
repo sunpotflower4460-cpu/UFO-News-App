@@ -76,6 +76,7 @@ struct SearchV2View: View {
                     section(SkyStrings.t("research.updatedThisWeek"), "arrow.triangle.2.circlepath", model.updatedThisWeek)
                 }
                 phenomena(model)
+                socialReportsEntry
                 savedSection(model)
             }
             .padding(.horizontal, SkySpacing.screenEdge).padding(.vertical, SkySpacing.x4)
@@ -156,6 +157,31 @@ struct SearchV2View: View {
                 }
             }
         }
+    }
+
+    // "SNSでの目撃報告" (Plus) — an unverified-report reading aid, never a
+    // scored/ranked "UFO likelihood" feed (see SocialReportsSwipeView doc).
+    private var socialReportsEntry: some View {
+        NavigationLink { SocialReportsSwipeView() } label: {
+            HStack(spacing: SkySpacing.x3) {
+                Image(systemName: "bubble.left.and.bubble.right").foregroundStyle(SkyColor.signalCyan)
+                VStack(alignment: .leading, spacing: 1) {
+                    HStack(spacing: SkySpacing.x1) {
+                        Text(SkyStrings.t("social.title"))
+                            .font(SkyTypography.supporting.weight(.semibold))
+                            .foregroundStyle(SkyColor.textPrimary)
+                        PremiumBadge()
+                    }
+                    Text(SkyStrings.t("social.entrySubtitle"))
+                        .font(.caption2).foregroundStyle(SkyColor.textTertiary)
+                }
+                Spacer(minLength: 0)
+                Image(systemName: "chevron.right").font(.caption).foregroundStyle(SkyColor.textTertiary)
+            }
+            .cardSurface()
+        }
+        .buttonStyle(.plain)
+        .accessibilityIdentifier("research.socialReportsEntry")
     }
 
     @ViewBuilder private func savedSection(_ model: ResearchViewModel) -> some View {

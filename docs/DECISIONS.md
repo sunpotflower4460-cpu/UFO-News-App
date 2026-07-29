@@ -56,3 +56,21 @@
 - **D-NF-005 Today のAggregate（世界全体の数値）は「小さく」ではなく「後段」で満たす**: `WorldSkyPulse`（250pt高さの雰囲気ヒーロー）を縮小改修すると崩れるリスクが大きいため、コンポーネント自体は変更せず**表示順を最後段**へ移動。これは指示書§5.1の「1.今日の主なニュース〜7.データ取得範囲・最終更新」の順序要件を満たすが、「小さく置く」という視覚サイズ要件は部分的にしか満たしていない。視覚サイズの縮小は`docs/MANUAL_ACTIONS.md`の追加項目として残す。
 - **D-NF-006 Phase 2ローカルAPIはFastAPI実装＋pytest契約テストを実際に実行**: このセッションの実行環境にPython/pipが使えたため、`services/api`は設計文書に留めず実装・`pytest`実行（9件green）まで完了。`SKYTRACE_ENV=production`では起動を拒否し、fixture以外のデータソースを持たないことを明示。iOS側`SkyTraceAPIClient`/`ProductionRepositories`は`AppEnvironment.apiBaseURL`が明示設定された場合のみ有効化し、未設定時は既存の`UnconfiguredXRepository`（`production_data_source_not_configured`）のまま — 既存テスト`testProductionSourceNeverFallsBackToFixtures`は無改変で成立する。
 - **D-NF-007 v1 APIコントラクトにclustering/scoring/AI synthesisフィールドを含めない**: `docs/openapi/skytrace-v1.yaml`の`Case`スキーマは、報じられたニュースの表示に必須な最小フィールド（title/media/sources/status等）のみを含む。`agreements`/`explanationCandidates`/`timeline`/8軸評価等はPhase 3（クラスタリング）・Phase 4（AI要約パイプライン）で追加する。`APIMapping.uapCase`はこれらを空配列/プレースホルダで埋め、"未実装のAPIフィールドをでっち上げない"方針を保つ。
+
+## SNSでの目撃報告（ユーザー追加要望への対応）
+
+- **D-NF-008 「UFO発見の可能性が高い投稿」を判定・スコア化する機能は実装しない**: ユーザーから
+  「画像と内容がUFOの発見を言っている可能性が高い投稿だけをスワイプで見る」機能の要望があったが、
+  これはCLAUDE.md §2（地球外起源を確率表示しない）およびディレクティブ§17（禁止表現「UFO確率」
+  「AIが判定」）に正面から抵触するため、**AIによる可能性判定・ランキングは行わない**準拠版として
+  実装した（ユーザーはAskUserQuestionでこの方針を選択）。`SocialReportCandidate`は既存の
+  `SourceReference`（`sourceType == .social`）をそのまま案件順・出典順で列挙するのみで、
+  スコア・並べ替え・フィルタリングの根拠となる数値フィールドを一切持たない
+  （`SocialReportCandidateTests.testNoLikelihoodOrScoreFieldExistsOnTheCandidateType`で構造を固定）。
+  各カードは「未検証の報告」ラベル＋出典＋（許諾済みなら）短い引用＋メディア権利ゲート＋
+  「元の投稿を見る」リンクのみで構成し、本文・画像の無断転載はしない（CLAUDE.md §7）。
+- **D-NF-009 SNS本番データはTier D Provider承認が前提**: `docs/DATA_SOURCE_REGISTRY.md`の
+  Tier D方針（自動取得を中核にしない、許諾取得までは手動入力/fixtureのみ）に従い、
+  `SocialReportsSwipeView`は本番では対応するSNS Providerが`SourceProviderPolicy.status == approved`
+  になるまで実質的に空（Debug fixtureのみ表示）。Premium価値としては「元の投稿への導線をまとめて
+  読める」ことを提供し、"AIがUFOらしさを判定してくれる"という体験は提供しない。
