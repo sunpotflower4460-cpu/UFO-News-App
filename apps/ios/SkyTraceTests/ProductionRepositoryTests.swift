@@ -224,7 +224,14 @@ final class ProductionRepositoryTests: XCTestCase {
 /// path fails loudly instead of hitting the real network.
 final class StubURLProtocol: URLProtocol {
     typealias Handler = (URLRequest) -> (Int, [String: String], Data)
-    private static var handlers: [String: Handler] = [:]
+    // `URLProtocol`'s override points (`startLoading`, etc.) are invoked by
+    // URLSession's own opaque threading, not through Swift concurrency's
+    // isolation model, so there is no actor to isolate this registry to.
+    // `nonisolated(unsafe)` accepts that — same as this pattern is written in
+    // every other Swift 6 URLProtocol-stub test helper — while keeping
+    // `Handler` a plain, non-`@Sendable` closure so tests can still capture
+    // and mutate a local `var` (e.g. a request counter) inside a handler.
+    nonisolated(unsafe) private static var handlers: [String: Handler] = [:]
 
     static func stub(path: String, _ handler: @escaping Handler) {
         handlers[path] = handler

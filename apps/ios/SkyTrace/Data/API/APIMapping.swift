@@ -27,7 +27,7 @@ enum APIMapping {
     }
 
     static func aiDisclosure(_ raw: String) -> AIDisclosure {
-        AIDisclosure(rawValue: raw) ?? .aiReviewed
+        AIDisclosure(rawValue: raw) ?? .editorReviewed
     }
 
     static func source(_ dto: APISource) -> SourceReference {
@@ -42,6 +42,14 @@ enum APIMapping {
     /// — never re-derived from `rightsState` alone — so the client's rendering
     /// gate (`MediaAsset.canDisplayInline`) can only ever be as permissive as
     /// the server's rights gate, never more (directive §11).
+    ///
+    /// `sourceID` is always empty: `APIMediaAsset`/`MediaAssetOut` has no field
+    /// linking a media item back to a specific `SourceReference` (the v1
+    /// contract only nests media under its own source inside
+    /// `/v1/social/reports`, which builds that association server-side). Do
+    /// not add client-side logic that filters an API-mapped `UAPCase.media`
+    /// by `sourceID` — it will silently match nothing. Fixture data (built
+    /// directly with real `sourceID`s in `DemoCases.swift`) is unaffected.
     static func media(_ dto: APIMediaAsset) -> MediaAsset {
         let rights: MediaRights = dto.displayPermission == "allowed" ? .licensed : .rightsUnknown
         return MediaAsset(
