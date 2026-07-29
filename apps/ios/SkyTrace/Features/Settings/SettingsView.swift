@@ -10,6 +10,7 @@ struct SettingsView: View {
     @State private var notifications = NotificationService()
     @State private var recentsCount = 0
     @State private var confirmClear = false
+    @State private var apiBaseURLText = ""
 
     // Per-topic preferences (only meaningful once OS authorization is granted
     // and notification delivery is connected end-to-end).
@@ -194,6 +195,19 @@ struct SettingsView: View {
             Picker(SkyStrings.t("settings.dev.dataSource"), selection: dataSourceBinding) {
                 Text(SkyStrings.t("settings.dev.fixture")).tag(DataSourceMode.fixture)
                 Text(SkyStrings.t("settings.dev.api")).tag(DataSourceMode.localAPI)
+            }
+            if env.dataSource == .localAPI {
+                TextField(SkyStrings.t("settings.dev.apiBaseURL"), text: $apiBaseURLText,
+                          prompt: Text("http://127.0.0.1:8000"))
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .keyboardType(.URL)
+                    .onAppear { apiBaseURLText = env.apiBaseURL?.absoluteString ?? "" }
+                    .onSubmit { env.apiBaseURL = URL(string: apiBaseURLText) }
+                if env.apiBaseURL == nil {
+                    Text(SkyStrings.t("settings.dev.apiBaseURLUnset"))
+                        .font(.caption).foregroundStyle(SkyColor.textTertiary)
+                }
             }
             Menu(SkyStrings.t("settings.dev.entitlement")) {
                 Button("Free") { overrideEntitlement(.free) }

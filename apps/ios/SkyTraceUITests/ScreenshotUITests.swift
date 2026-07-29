@@ -103,6 +103,26 @@ final class ScreenshotUITests: XCTestCase {
         snapshot(name: "05-case-detail-v2")
     }
 
+    /// News First (directive §15 Phase 1 "before / after screenshots"): the
+    /// same Case Detail screen with the AI reference disclosure opened, to
+    /// document that it is reachable but never the default view.
+    func testCaptureCaseDetailAIReferenceExpanded() {
+        let app = launchApp()
+        waitUntilLoaded(app)
+        let caseCard = app.buttons.matching(NSPredicate(format: "label CONTAINS %@", "北海")).firstMatch
+        guard caseCard.waitForExistence(timeout: 8) else { return }
+        caseCard.tap()
+        waitUntilLoaded(app)
+        let disclosure = app.descendants(matching: .any)
+            .matching(identifier: "caseDetail.aiReference.disclosure").firstMatch
+        guard disclosure.waitForExistence(timeout: 8) else { return }
+        app.swipeUp()
+        app.swipeUp()
+        if disclosure.waitForExistence(timeout: 4) { disclosure.tap() }
+        Thread.sleep(forTimeInterval: 1.0)
+        snapshot(name: "05b-case-detail-ai-reference-expanded")
+    }
+
     // MARK: - Helpers
 
     private func expandSheet(_ app: XCUIApplication) {

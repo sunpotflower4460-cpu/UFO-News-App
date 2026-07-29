@@ -90,3 +90,94 @@ Date: 2026-07-13
 残る手動（`MANUAL_ACTIONS.md` 冒頭の一覧）:
 - GitHub Pages を ON、サポートメール実アドレス化、Apple登録・Bundle ID/商品ID実値化、
   契約/税/銀行、Xcode Archive→Upload＋Sandbox実機確認、ASCメタデータ入力・提出。
+
+## News First / AI Second — Phase 1 + Phase 2 foundation（2026-07-29）
+
+Status: Phase 1 complete (code) / build unverified on this host（Linux、従来と同じ制約）
+Status: Phase 2 local mock API foundation complete and tested (pytest green)
+
+参照: `docs/product/NEWS_FIRST_BASELINE.md`（情報順序 before/after 詳細）、
+`docs/DECISIONS.md` D-NF-001〜D-NF-007。
+
+### Implemented — Phase 1（News First UI）
+
+- **Domain**: `Domain/Models/NewsFirstPresentation.swift` — 既存fixtureから導出する
+  `primarySources`／`primaryMedia`／`additionalMedia`／`leadOutletName`／
+  `reportingOutletNames`／`firstReportedAt`／`premiumSummary`（`PremiumSummaryContent`）。
+  新規並行モデルは作らず、既存`SourceReference`/`MediaAsset`を再利用（D-NF-001）。
+- **新規コンポーネント**（`DesignSystem/Components/NewsFirst/`）: `NewsCaseHeader`,
+  `PrimaryNewsMediaView`, `PrimarySourceActions`, `PremiumSummarySection`,
+  `AIReferenceDisclosure`/`DetailedAssessmentDisclosure`（共通`CollapsibleReferenceSection`、
+  既定`isExpanded = false`）。
+- **CaseDetailV2View**: News First順に全面再構成（D-NF-002）。ナビゲーションアンカー・
+  ブックマーク・共有ツールバーは維持。
+- **CaseCard**: 全variant（featured/standard/compact/mapSheet）でメディアを先頭表示に統一。
+  DEMOバッジは画像上のスクリム付きバッジへ（視認性維持、D-NF-004）。
+- **TodayV2View**: 「今日の空のニュース」を最上段へ、`WorldSkyPulse`（集計数値）を後段へ移動
+  （D-NF-005；視覚サイズの縮小は残課題 M-062）。Daily BriefingのAI表示を小さく。
+- **BriefingDetailView / LongFormView**: `AIDisclosureBadge`をヘッダー先頭から末尾へ移動。
+- **コピー**: `Localizable.xcstrings`に用語変換表を適用（既存23キー更新＋新規26キー追加、
+  ja/en `translated`、他10言語は`needs_review`プレースホルダ）。銀ぴょう性/真相/UFO確率等の
+  断定語は使わず、地球外起源への言及は全て否定文脈のみであることをテストで担保。
+
+### Implemented — Phase 2（local mock API foundation）
+
+- `docs/openapi/skytrace-v1.yaml`: 9エンドポイントのOpenAPI 3.1契約。
+- `services/api`: FastAPIローカルモックサーバ。fixture専用・`isDemo: true`固定、
+  `SKYTRACE_ENV=production`では起動を拒否。ETag/304、rights gate（`SourceProviderPolicy`）、
+  X-Request-Id、構造化エラーボディを実装。
+- iOS: `Data/API/SkyTraceAPIClient.swift`（actor、URLSession、ETag、指数バックオフ、
+  cancellation対応、locale header）、`APIModels.swift`／`APIMapping.swift`、
+  `Data/Repositories/ProductionRepositories.swift`。`AppEnvironment.apiBaseURL`が
+  明示設定された場合のみ有効化、未設定時は既存`UnconfiguredXRepository`のまま
+  （`testProductionSourceNeverFallsBackToFixtures`は無改変で成立）。
+  Settings開発者セクションにAPIのURL入力欄を追加（Debug-only）。
+
+### Tests
+
+- **iOS（Xcode必須、この環境では実行不可）**: 新規
+  `NewsFirstPresentationTests.swift`（premiumSummary導出・primarySources順位・
+  primaryMedia選定）、`CopyLintTests.swift`（禁止語スキャン、
+  `Localizable.xcstrings`をソースから直接読み込み）、`ProductionRepositoryTests.swift`
+  （`StubURLProtocol`によるAPIクライアント/マッピングの単体テスト、ETag 304、
+  404は再試行しない、`apiBaseURL`未設定時はUnconfigured維持）。
+  `CriticalFlowUITests`/`ScreenshotUITests`にAI補足disclosureの開閉テスト・
+  primary source導線テスト・展開後スクリーンショットを追加。
+- **Python（この環境で実行・green）**: `services/api/tests/test_contract.py`
+  9件 — envelope必須フィールド、404の構造化エラー、ETag/If-None-Match/304、
+  検索フィルタ、メディア権利ゲート（approved providerのみinline許可）、
+  production起動拒否。`cd services/api && pytest tests/ -v` で再実行可能。
+- **コピーLintの事前検証**: Pythonで同等ロジックを実行し、`CopyLintTests`が
+  現行カタログに対してgreenになることを確認済み（Xcode実行前の妥当性チェック）。
+
+### Visual review（Simulator/Previewで確認してほしい画面）
+
+- Today → 「今日の空のニュース」（画像付きヒーロー）→ 「記事を読む」→ Case Detail
+- Case Detail → NewsCaseHeader → 画像/映像 → 元記事ボタン → 3分でわかるまとめ
+  （Free: ロック / Plus: 全文）→ 出典一覧 → 「AIの補足を見る」（タップで展開）→
+  「詳しい確認データ」（タップで展開）
+- Today → Daily Briefing行の「AIで整理・出典を確認」（小さな表示）
+- 各新規コンポーネントの `#Preview`（Xcode Canvas）
+
+### Remaining
+
+- macOS + Xcode 26でのビルド・テスト・Simulator確認（`MANUAL_ACTIONS.md` M-060）。
+- before/afterの実スクリーンショット取得（M-061）。
+- `WorldSkyPulse`の視覚サイズ縮小（M-062、現状は表示順序のみ対応）。
+- ローカルAPIをSimulatorから疎通確認（M-063）。
+- 残り10言語のネイティブレビュー（M-064）。
+- Phase 3以降（実ソース契約・クラスタリング・AI要約パイプライン・Admin console・staging）。
+
+### Manual actions
+
+`MANUAL_ACTIONS.md`「News First / AI Second」節（M-060〜M-064）を参照。
+
+### Risks / known limitations
+
+- 本セッションもLinux環境のため、Swiftコード全体のコンパイル確認ができていない
+  （目視レビューで明白な誤りは修正済みだが、Swift 6 strict concurrencyの微細な指摘や
+  API差異が残る可能性がある）。
+- `WorldSkyPulse`の「小さく置く」要件は表示順序のみで対応し、視覚サイズは未縮小。
+- Phase 2 APIコントラクトはNews First表示に必要な最小フィールドのみで、
+  8軸評価・一致点/矛盾点・タイムライン等はPhase 3/4まで空のまま
+  （`APIMapping.uapCase`のコメント参照）。

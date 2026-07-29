@@ -1,24 +1,5 @@
 import SwiftUI
 
-/// The case's images/video. Rights-cleared assets render inline (with credit and
-/// a rights badge); rights-unknown assets are shown only as a link to the source
-/// — SkyTrace never hosts or redistributes unlicensed media (CLAUDE.md §7).
-struct CaseMediaSection: View {
-    let media: [MediaAsset]
-    var onOpenSource: (URL) -> Void
-
-    var body: some View {
-        EditorialSection(title: SkyStrings.t("case.media.title"), systemImage: "photo.on.rectangle.angled") {
-            VStack(alignment: .leading, spacing: SkySpacing.x4) {
-                Text(SkyStrings.t("media.sectionNote"))
-                    .font(SkyTypography.metadata).foregroundStyle(SkyColor.textTertiary)
-                    .fixedSize(horizontal: false, vertical: true)
-                ForEach(media) { MediaAssetView(asset: $0, onOpenSource: onOpenSource) }
-            }
-        }
-    }
-}
-
 /// One media asset. Cleared → inline preview (real image when the backend
 /// provides one, else an abstract observation placeholder) + credit + rights
 /// badge, tappable to the source. Rights-unknown → a link-out card only.

@@ -1,0 +1,412 @@
+openapi: 3.1.0
+info:
+  title: SkyTrace API
+  version: "1.0.0"
+  description: >
+    Public read API for the SkyTrace News First / AI Second product
+    (SKYTRACE_NEWS_FIRST_PRODUCTION_DIRECTIVE §9). This is the contract the
+    iOS `SkyTraceAPIClient` is written against; `services/api` is a local mock
+    implementation of it for development without production credentials, not
+    the production backend itself.
+servers:
+  - url: http://127.0.0.1:8000
+    description: Local mock server (services/api)
+
+paths:
+  /v1/health:
+    get:
+      operationId: health
+      summary: Liveness check.
+      responses:
+        "200":
+          description: OK
+
+  /v1/feed/today:
+    get:
+      operationId: getTodayFeed
+      summary: Today's news-first feed (top cases, aggregate counts).
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_TodayFeed"
+
+  /v1/cases:
+    get:
+      operationId: listCases
+      summary: All cases visible to the current locale/entitlement.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_CaseList"
+
+  /v1/cases/{id}:
+    get:
+      operationId: getCase
+      summary: A single case, News First ordered fields.
+      parameters:
+        - $ref: "#/components/parameters/CaseID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_Case"
+        "404":
+          description: Not found (merged/withdrawn/never existed).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /v1/cases/{id}/sources:
+    get:
+      operationId: getCaseSources
+      summary: The case's full source list ("元ニュース・資料").
+      parameters:
+        - $ref: "#/components/parameters/CaseID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_SourceList"
+
+  /v1/cases/{id}/media:
+    get:
+      operationId: getCaseMedia
+      summary: >
+        The case's media assets, already rights-gated server-side
+        (`displayPermission` reflects the Source Registry's approval status —
+        the client must not re-derive it).
+      parameters:
+        - $ref: "#/components/parameters/CaseID"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_MediaList"
+
+  /v1/briefings/today:
+    get:
+      operationId: getTodayBriefing
+      summary: Today's "3分でわかるまとめ"-style Premium daily summary.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_Briefing"
+
+  /v1/search:
+    get:
+      operationId: search
+      summary: Full-text search across case titles/summaries.
+      parameters:
+        - name: q
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_CaseList"
+
+  /v1/regions:
+    get:
+      operationId: listRegions
+      summary: Region/country aggregate counts, for the map and filters.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Envelope_RegionList"
+
+components:
+  parameters:
+    CaseID:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: string
+
+  schemas:
+    EnvelopeMeta:
+      type: object
+      description: >
+        Every `/v1/*` response wraps its payload in these nine fields
+        (directive §9). All are required — a response missing one is a
+        contract violation, since the iOS client's schema validation, ETag
+        cache, and "最終更新"/offline banners all depend on every one of them.
+      required:
+        - schemaVersion
+        - generatedAt
+        - retrievedAt
+        - contentRevision
+        - sourceRevision
+        - rightsState
+        - locale
+        - cacheTTL
+      properties:
+        schemaVersion:
+          type: string
+        generatedAt:
+          type: string
+          format: date-time
+        retrievedAt:
+          type: string
+          format: date-time
+        verifiedAt:
+          type: string
+          format: date-time
+          nullable: true
+        contentRevision:
+          type: integer
+        sourceRevision:
+          type: integer
+        rightsState:
+          type: string
+          enum: [approved, pending, rejected]
+        locale:
+          type: string
+        cacheTTL:
+          type: integer
+          description: Recommended client cache TTL, in seconds.
+
+    Error:
+      type: object
+      required: [code, message, requestId]
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        requestId:
+          type: string
+
+    Source:
+      type: object
+      required: [id, outletName, sourceType, title, retrievedAt, role]
+      properties:
+        id:
+          type: string
+        outletName:
+          type: string
+        sourceType:
+          type: string
+          enum: [official, press, scientific, database, social, open_data]
+        title:
+          type: string
+        publishedAt:
+          type: string
+          format: date-time
+          nullable: true
+        retrievedAt:
+          type: string
+          format: date-time
+        role:
+          type: string
+          enum: [supports, contradicts, contextualizes]
+        url:
+          type: string
+          format: uri
+          nullable: true
+
+    MediaAsset:
+      type: object
+      required: [id, kind, rightsState, displayPermission, sourcePageURL, attributionText]
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+          enum: [image, video]
+        rightsState:
+          type: string
+          enum: [pending, approved, rejected]
+        displayPermission:
+          type: string
+          enum: [allowed, link_only]
+          description: >
+            Computed server-side from the Source Registry policy gate
+            (directive §11). `allowed` requires `rightsState == approved` —
+            the client renders inline only when this is `allowed`, otherwise
+            it shows a link-out card, never a best-effort image.
+        sourcePageURL:
+          type: string
+          format: uri
+        mediaURL:
+          type: string
+          format: uri
+          nullable: true
+        thumbnailURL:
+          type: string
+          format: uri
+          nullable: true
+        attributionText:
+          type: string
+        licenseNote:
+          type: string
+          nullable: true
+
+    Case:
+      type: object
+      required:
+        - id
+        - slug
+        - title
+        - summary
+        - publishedAt
+        - updatedAt
+        - locationPrecision
+        - latitude
+        - longitude
+        - countryCode
+        - regionName
+        - status
+        - sourceCount
+        - independentReportCount
+        - isDemo
+      properties:
+        id: { type: string }
+        slug: { type: string }
+        title: { type: string }
+        summary: { type: string }
+        occurredAtStart: { type: string, format: date-time, nullable: true }
+        publishedAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        lastVerifiedAt: { type: string, format: date-time, nullable: true }
+        locationPrecision:
+          type: string
+          enum: [exact, approximate, region_only, withheld]
+        latitude: { type: number }
+        longitude: { type: number }
+        countryCode: { type: string }
+        regionName: { type: string }
+        localityName: { type: string, nullable: true }
+        status:
+          type: string
+          enum:
+            [explained, likely_explained, insufficient_data, under_review,
+             notable_unresolved, disputed, withdrawn]
+        sourceCount: { type: integer }
+        independentReportCount: { type: integer }
+        sources:
+          type: array
+          items: { $ref: "#/components/schemas/Source" }
+        media:
+          type: array
+          items: { $ref: "#/components/schemas/MediaAsset" }
+        isDemo:
+          type: boolean
+          description: Must be `true` for every response served outside a real production deployment.
+
+    Briefing:
+      type: object
+      required: [id, date, headline, summary, usedCaseCount, sourceCount, readingMinutes, generatedAt, disclosure]
+      properties:
+        id: { type: string }
+        date: { type: string, format: date-time }
+        headline: { type: string }
+        summary: { type: string }
+        usedCaseCount: { type: integer }
+        sourceCount: { type: integer }
+        readingMinutes: { type: integer }
+        generatedAt: { type: string, format: date-time }
+        disclosure:
+          type: string
+          enum: [ai_auto, ai_reviewed, human]
+
+    TodayFeed:
+      type: object
+      required: [date, lastUpdatedAt, topCases, newReportCount, mergedCaseCount]
+      properties:
+        date: { type: string, format: date-time }
+        lastUpdatedAt: { type: string, format: date-time }
+        topCases:
+          type: array
+          items: { $ref: "#/components/schemas/Case" }
+        newReportCount: { type: integer }
+        mergedCaseCount: { type: integer }
+
+    Region:
+      type: object
+      required: [countryCode, regionName, caseCount]
+      properties:
+        countryCode: { type: string }
+        regionName: { type: string }
+        caseCount: { type: integer }
+
+    Envelope_Case:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data: { $ref: "#/components/schemas/Case" }
+    Envelope_CaseList:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/Case" }
+    Envelope_SourceList:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/Source" }
+    Envelope_MediaList:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/MediaAsset" }
+    Envelope_Briefing:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data: { $ref: "#/components/schemas/Briefing" }
+    Envelope_TodayFeed:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data: { $ref: "#/components/schemas/TodayFeed" }
+    Envelope_RegionList:
+      allOf:
+        - $ref: "#/components/schemas/EnvelopeMeta"
+        - type: object
+          required: [data]
+          properties:
+            data:
+              type: array
+              items: { $ref: "#/components/schemas/Region" }

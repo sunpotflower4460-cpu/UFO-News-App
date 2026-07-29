@@ -93,7 +93,6 @@ struct LongFormView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: SkySpacing.x2) {
-            AIDisclosureBadge(disclosure: article.disclosure)
             Text(article.headline).font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
             Text(article.dek).font(SkyTypography.body).foregroundStyle(SkyColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -119,6 +118,7 @@ struct LongFormView: View {
     private var disclosureFooter: some View {
         VStack(alignment: .leading, spacing: SkySpacing.x1) {
             Divider().overlay(SkyColor.separator)
+            AIDisclosureBadge(disclosure: article.disclosure)
             Text(SkyStrings.t("ai.disclosureNote"))
                 .font(.caption2).foregroundStyle(SkyColor.textTertiary)
                 .fixedSize(horizontal: false, vertical: true)

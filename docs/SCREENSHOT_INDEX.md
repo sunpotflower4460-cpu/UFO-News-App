@@ -14,6 +14,7 @@
 | 4 | Daily Briefing 全文 | 今日(Plus)→続きを読む | `BriefingDetailView` | Dark | |
 | 5 | Case Detail（Free） | 今日→注目事例 | `Case · Free` | Dark | AI記事のPremiumLock |
 | 6 | Case Detail（Plus） | Debug active→事例 | `Case · Plus` | Dark | 4軸スコア＋AI記事全文 |
+| 6b | Case Detail — AIの補足を見る（展開後） | Case Detail→スクロール→AI補足タップ | `ScreenshotUITests.testCaptureCaseDetailAIReferenceExpanded` | Dark | News First: 既定閉のAI補足を開いた状態（before/after用） |
 | 7 | スコア根拠Sheet | Case Detail→スコアタップ | （実機） | Dark | |
 | 8 | Paywall | Free→ロック→CTA | `Paywall` | Dark | 月/年、実質月額、無料体験 |
 | 9 | 地図 | タブ2 | `Map` | Dark | クラスタ＋精度リング |

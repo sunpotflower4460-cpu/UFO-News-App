@@ -1,10 +1,10 @@
 import SwiftUI
 
-/// V2 Case Detail — the strongest, most trustworthy screen. Renders the exact
-/// 12-section hierarchy (docs/uiux 03 §7 / 09 §12) as editorial sections, not a
-/// stack of generic cards. Atmosphere appears in the header only; the body is a
-/// stable Editorial Surface. Reachable from the debug Design Gallery during V2
-/// bring-up; the production tab wiring switches over once Today V2 lands.
+/// Case Detail — News First / AI Second (SKYTRACE_NEWS_FIRST_PRODUCTION_DIRECTIVE
+/// §4, §16). Order is fixed: news header → media → primary source actions →
+/// Premium "3分でわかるまとめ" → what this news confirms → source list →
+/// updates → AI reference (closed) → detailed assessment (closed) → related.
+/// No AI judgment, score, or "未解明度" appears above the media or sources.
 struct CaseDetailV2View: View {
     let caseID: String
     @Environment(AppEnvironment.self) private var env
@@ -69,25 +69,36 @@ struct CaseDetailV2View: View {
     private func content(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
         ScrollViewReader { proxy in
             ScrollView {
-                LazyVStack(alignment: .leading, spacing: SkySpacing.x8, pinnedViews: [.sectionHeaders]) {
+                LazyVStack(alignment: .leading, spacing: SkySpacing.x6, pinnedViews: [.sectionHeaders]) {
                     if c.isDemo { InlineBanner(kind: .demo) }
-                    header(model, c)
-                    CaseExecutiveSummary(snapshot: c.executiveSnapshot)
+                    NewsCaseHeader(uapCase: c, onOpenMap: { router.openMap(focus: c.id) })
+                    PrimaryNewsMediaView(uapCase: c, onOpenSource: { linkToOpen = IdentifiedURL(url: $0) })
+                        .id(CaseSection.media.anchor)
+                    PrimarySourceActions(sources: c.primarySources,
+                                        onOpen: { linkToOpen = IdentifiedURL(url: $0) })
                     Section {
                         EditorialSurface {
                             VStack(alignment: .leading, spacing: SkySpacing.x8) {
+                                PremiumSummarySection(
+                                    summary: c.premiumSummary,
+                                    isPlus: env.subscription.isPlus,
+                                    onUnlock: { paywall = PaywallContext(trigger: .summary) }
+                                )
                                 VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                    whatChanged(c); whatHappened(c); confirmedFacts(c)
+                                    confirmedFacts(c); whatHappened(c); explanations(c)
                                 }.id(CaseSection.overview.anchor)
-                                VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                    assessment(c); agreements(c); contradictions(c); explanations(c)
-                                }.id(CaseSection.assessment.anchor)
                                 evidence(c).id(CaseSection.evidence.anchor)
-                                media(c).id(CaseSection.media.anchor)
-                                timeline(c).id(CaseSection.timeline.anchor)
-                                VStack(alignment: .leading, spacing: SkySpacing.x8) {
-                                    sources(c); relatedCases(); aiDisclosure(model.article, caseSources: c.sources)
-                                }.id(CaseSection.sources.anchor)
+                                sources(c).id(CaseSection.sources.anchor)
+                                VStack(alignment: .leading, spacing: SkySpacing.x6) {
+                                    whatChanged(c)
+                                    timeline(c)
+                                }.id(CaseSection.timeline.anchor)
+                                VStack(alignment: .leading, spacing: SkySpacing.x4) {
+                                    aiReferenceDisclosure(model.article, executive: c.executiveSnapshot, caseSources: c.sources)
+                                        .id(CaseSection.assessment.anchor)
+                                    assessmentDisclosure(c)
+                                    relatedCases()
+                                }
                             }
                         }
                     } header: {
@@ -102,50 +113,6 @@ struct CaseDetailV2View: View {
                 .padding(.vertical, SkySpacing.x4)
             }
             .toolbar { toolbar(model, c) }
-        }
-    }
-
-    // MARK: 1. Header (atmosphere allowed here only)
-
-    private func header(_ model: CaseDetailViewModel, _ c: UAPCase) -> some View {
-        VStack(alignment: .leading, spacing: SkySpacing.x3) {
-            CaseLeadVisual(status: c.v2Status)
-            CaseStatusLabel(status: c.v2Status, showsUpdateIndicator: c.hasRecentUpdate)
-            Text(c.title).font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
-            HStack(spacing: SkySpacing.x2) {
-                Image(systemName: "mappin.and.ellipse").imageScale(.small)
-                Text(c.localityName ?? c.regionName)
-                Text("·"); Text(SkyStrings.t(c.locationPrecision.labelKey))
-                Spacer(minLength: SkySpacing.x2)
-                if c.locationPrecision != .withheld {
-                    Button { router.openMap(focus: c.id) } label: {
-                        Label(SkyStrings.t("action.viewOnMap"), systemImage: "map")
-                            .font(SkyTypography.metadata.weight(.semibold))
-                            .foregroundStyle(SkyColor.accentPrimary)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityHint(SkyStrings.t("map.focusHint"))
-                }
-            }
-            .font(SkyTypography.metadata).foregroundStyle(SkyColor.textSecondary)
-            HStack(spacing: SkySpacing.x4) {
-                if let occurred = c.occurredAtStart {
-                    timeChip(SkyStrings.t("label.occurred"), SkyFormat.dateOnly(occurred))
-                }
-                timeChip(SkyStrings.t("label.published"), SkyFormat.dateOnly(c.publishedAt))
-                if let v = c.lastVerifiedAt {
-                    timeChip(SkyStrings.t("label.lastVerified", "").trimmingCharacters(in: .whitespaces),
-                             SkyFormat.adaptive(v))
-                }
-            }
-            ProvenanceRow(sourceCount: c.sourceCount, independentCount: c.independentReportCount)
-        }
-    }
-
-    private func timeChip(_ label: String, _ value: String) -> some View {
-        VStack(alignment: .leading, spacing: 1) {
-            Text(label).font(.caption2).foregroundStyle(SkyColor.textTertiary)
-            Text(value).font(.caption.monospacedDigit()).foregroundStyle(SkyColor.textSecondary)
         }
     }
 
@@ -178,16 +145,6 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 4. Current Assessment
-
-    private func assessment(_ c: UAPCase) -> some View {
-        EditorialSection(title: SkyStrings.t("assess.sectionTitle"), systemImage: "gauge.with.dots.needle.50percent") {
-            VStack(alignment: .leading, spacing: SkySpacing.x2) {
-                ForEach(c.assessmentDimensions) { AssessmentDimensionRow(dimension: $0) }
-            }
-        }
-    }
-
     // MARK: 5. Confirmed Facts
 
     @ViewBuilder private func confirmedFacts(_ c: UAPCase) -> some View {
@@ -201,7 +158,7 @@ struct CaseDetailV2View: View {
         }
     }
 
-    // MARK: 6/7. Agreement / Contradictions
+    // MARK: 6/7. Agreement / Contradictions (shown inside the assessment disclosure)
 
     @ViewBuilder private func agreements(_ c: UAPCase) -> some View {
         if !c.agreements.isEmpty {
@@ -229,14 +186,6 @@ struct CaseDetailV2View: View {
                     ForEach(items) { EvidenceItemRow(item: $0) }
                 }
             }
-        }
-    }
-
-    // MARK: 8b. Media
-
-    @ViewBuilder private func media(_ c: UAPCase) -> some View {
-        if !c.media.isEmpty {
-            CaseMediaSection(media: c.media) { url in linkToOpen = IdentifiedURL(url: url) }
         }
     }
 
@@ -313,9 +262,15 @@ struct CaseDetailV2View: View {
         }
     }
 
-    private func aiDisclosure(_ article: SynthesizedArticle?, caseSources: [SourceReference]) -> some View {
-        EditorialSection(title: SkyStrings.t("ai.sectionTitle"), systemImage: "sparkles") {
+    /// "AIの補足を見る" — collapsed by default (directive §4.6). Order inside:
+    /// where information agrees/disagrees (the former executive snapshot),
+    /// the synthesis article link, the disclosure note, then the Trust Center.
+    private func aiReferenceDisclosure(
+        _ article: SynthesizedArticle?, executive: CaseExecutiveSnapshot, caseSources: [SourceReference]
+    ) -> some View {
+        AIReferenceDisclosure {
             VStack(alignment: .leading, spacing: SkySpacing.x3) {
+                CaseExecutiveSummary(snapshot: executive)
                 if let article {
                     NavigationLink { LongFormView(article: article, sources: caseSources) } label: {
                         HStack {
@@ -346,6 +301,21 @@ struct CaseDetailV2View: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityHint(SkyStrings.t("trust.hero"))
+            }
+        }
+    }
+
+    /// "詳しい確認データ" — the 8-axis assessment plus agreement/contradiction
+    /// detail, collapsed by default (directive §4.7). Never shown as the
+    /// page's lead content; only reached by a reader who opens it on purpose.
+    @ViewBuilder private func assessmentDisclosure(_ c: UAPCase) -> some View {
+        DetailedAssessmentDisclosure {
+            VStack(alignment: .leading, spacing: SkySpacing.x4) {
+                VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                    ForEach(c.assessmentDimensions) { AssessmentDimensionRow(dimension: $0) }
+                }
+                agreements(c)
+                contradictions(c)
             }
         }
     }

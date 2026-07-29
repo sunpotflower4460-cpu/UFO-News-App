@@ -1310,6 +1310,160 @@
         }
       }
     },
+    "ai.referenceSubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数の情報を読み比べるための参考情報です"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reference notes for comparing multiple reports"
+          }
+        }
+      }
+    },
+    "ai.referenceTitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIの補足を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See the AI's notes"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See the AI's notes"
+          }
+        }
+      }
+    },
     "ai.sectionTitle": {
       "extractionState": "manual",
       "localizations": {
@@ -1383,6 +1537,83 @@
           "stringUnit": {
             "state": "needs_review",
             "value": "AI & editorial"
+          }
+        }
+      }
+    },
+    "ai.smallLabel": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "AIで整理・出典を確認"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Organized by AI — check the sources"
           }
         }
       }
@@ -2696,79 +2927,156 @@
         }
       }
     },
+    "assess.disclosureSubtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "数字だけでなく、そう考えた理由も添えています"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Includes the reasoning behind each figure, not just the numbers"
+          }
+        }
+      }
+    },
     "assess.knownPhenomenonFit": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "既知現象との一致"
+            "value": "飛行機や人工衛星などで説明できそうか"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Known-phenomenon fit"
+            "value": "Whether aircraft, satellites, etc. could explain it"
           }
         }
       }
@@ -3164,73 +3472,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "映像資料の来歴"
+            "value": "画像や記録の確かさ"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Media provenance"
+            "value": "How reliable the images/records are"
           }
         }
       }
@@ -3241,73 +3549,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "不足情報"
+            "value": "まだ足りない情報"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Missing information"
+            "value": "Information still missing"
           }
         }
       }
@@ -3395,73 +3703,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "現在の評価"
+            "value": "詳しい確認データ"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Current assessment"
+            "value": "Detailed confirmation data"
           }
         }
       }
@@ -3472,73 +3780,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "報告の独立性"
+            "value": "別々の人・場所からの報告"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Source independence"
+            "value": "Reports from separate people/places"
           }
         }
       }
@@ -3626,73 +3934,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "未解決の矛盾"
+            "value": "出典同士の食い違い"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Unresolved contradictions"
+            "value": "Where sources disagree"
           }
         }
       }
@@ -3934,73 +4242,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily Sky Briefing"
+            "value": "今日のニュースまとめ"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Daily Sky Briefing"
+            "value": "Today's News Summary"
           }
         }
       }
@@ -4242,73 +4550,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI統合記事"
+            "value": "複数の情報をまとめて読む"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "AI synthesis"
+            "value": "Read the combined summary"
           }
         },
         "es": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Síntesis de IA"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "fr": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Synthèse IA"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "de": {
           "stringUnit": {
-            "state": "translated",
-            "value": "KI-Synthese"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "pt-PT": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Síntese de IA"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "zh-Hans": {
           "stringUnit": {
-            "state": "translated",
-            "value": "AI 综合"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "zh-Hant": {
           "stringUnit": {
-            "state": "translated",
-            "value": "AI 綜合"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "ko": {
           "stringUnit": {
-            "state": "translated",
-            "value": "AI 종합"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "ar": {
           "stringUnit": {
-            "state": "translated",
-            "value": "توليف بالذكاء الاصطناعي"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "hi": {
           "stringUnit": {
-            "state": "translated",
-            "value": "AI संश्लेषण"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         },
         "ru": {
           "stringUnit": {
-            "state": "translated",
-            "value": "AI-сводка"
+            "state": "needs_review",
+            "value": "Read the combined summary"
           }
         }
       }
@@ -4396,73 +4704,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "確認済みの事実"
+            "value": "このニュースで確認できること"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Confirmed facts"
+            "value": "What this news confirms"
           }
         }
       }
@@ -7399,73 +7707,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "一致している点"
+            "value": "情報が同じところ"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of agreement"
+            "value": "Where the information matches"
           }
         }
       }
@@ -7553,73 +7861,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "食い違う点"
+            "value": "情報が食い違っているところ"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Points of contradiction"
+            "value": "Where the information differs"
           }
         }
       }
@@ -13460,6 +13768,1392 @@
         }
       }
     },
+    "news.header.firstReported": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最初の報道"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "First reported"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "First reported"
+          }
+        }
+      }
+    },
+    "news.header.lastUpdated": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "最終更新"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Last updated"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Last updated"
+          }
+        }
+      }
+    },
+    "news.header.leadOnly": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@が報道"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Reported by %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Reported by %@"
+          }
+        }
+      }
+    },
+    "news.header.leadPlusOthers": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ほか%@媒体が報道"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "%@ and %@ other outlets"
+          }
+        }
+      }
+    },
+    "news.media.viewOriginalImage": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元の画像を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View original image"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original image"
+          }
+        }
+      }
+    },
+    "news.media.viewOriginalVideo": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "元の映像を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "View original video"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "View original video"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.confirmed": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "確認できたこと"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What we could confirm"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What we could confirm"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.followUp": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "続報があります"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "There is follow-up coverage"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.stillUnknown": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "まだ分からないこと"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What's still unknown"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What's still unknown"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.subtitle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "複数のニュースを短時間で理解できるまとめです"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "A quick summary combining multiple news reports"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3分でわかるまとめ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-Minute Summary"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        }
+      }
+    },
+    "news.premiumSummary.whatReported": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "報じられていること"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "What was reported"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "What was reported"
+          }
+        }
+      }
+    },
+    "news.source.action.data": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@のデータを見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See %@'s data"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        }
+      }
+    },
+    "news.source.action.official": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の発表を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See %@'s announcement"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s announcement"
+          }
+        }
+      }
+    },
+    "news.source.action.press": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の記事を読む"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read %@'s article"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read %@'s article"
+          }
+        }
+      }
+    },
+    "news.source.action.scientific": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の資料を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See %@'s data"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s data"
+          }
+        }
+      }
+    },
+    "news.source.action.social": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@の投稿を見る"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "See %@'s post"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "See %@'s post"
+          }
+        }
+      }
+    },
+    "news.today.readArticle": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "記事を読む"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Read the article"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Read the article"
+          }
+        }
+      }
+    },
     "notif.state.authorized": {
       "extractionState": "manual",
       "localizations": {
@@ -13774,73 +15468,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily Sky Briefing の全文を読むには。"
+            "value": "今日のニュースまとめの全文を読むには。"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To read the full Daily Sky Briefing."
+            "value": "To keep reading today's full news summary."
           }
         }
       }
@@ -13922,79 +15616,156 @@
         }
       }
     },
+    "paywall.context.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "この事例の「3分でわかるまとめ」の続きを読むには。"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "To keep reading this case's 3-minute summary."
+          }
+        }
+      }
+    },
     "paywall.context.synthesis": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "この事例のAI統合調査記事の続きを読むには。"
+            "value": "この事例の記事の続きを読むには。"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "To keep reading this case's AI synthesis."
+            "value": "To keep reading this case's article."
           }
         }
       }
@@ -14159,73 +15930,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "Daily Sky Briefing 全文"
+            "value": "今日のニュースまとめ 全文"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Full Daily Sky Briefing"
+            "value": "Today's News Summary, in full"
           }
         }
       }
@@ -14384,79 +16155,156 @@
         }
       }
     },
+    "paywall.feature.summary": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3分でわかるまとめ"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "3-Minute Summary"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "3-Minute Summary"
+          }
+        }
+      }
+    },
     "paywall.feature.synthesis": {
       "extractionState": "manual",
       "localizations": {
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "事例別AI統合調査記事"
+            "value": "複数の情報をまとめて読む記事"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Per-case AI synthesis"
+            "value": "The combined summary article"
           }
         }
       }
@@ -15468,73 +17316,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "統合事例"
+            "value": "まとめた事例"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Merged cases"
+            "value": "Merged"
           }
         }
       }
@@ -15545,73 +17393,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "新規報告"
+            "value": "新規ニュース"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "New reports"
+            "value": "New"
           }
         }
       }
@@ -15622,73 +17470,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "評価更新"
+            "value": "続報あり"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Reassessed"
+            "value": "Follow-up"
           }
         }
       }
@@ -19296,6 +21144,160 @@
         }
       }
     },
+    "settings.dev.apiBaseURL": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "APIのURL"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "API base URL"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "API base URL"
+          }
+        }
+      }
+    },
+    "settings.dev.apiBaseURLUnset": {
+      "extractionState": "manual",
+      "localizations": {
+        "ja": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "未設定のあいだはAPIへ接続しません（fixtureの代わりに表示することもありません）"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "fr": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "de": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "pt-PT": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "zh-Hans": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "zh-Hant": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "ko": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "ar": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "hi": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        },
+        "ru": {
+          "stringUnit": {
+            "state": "needs_review",
+            "value": "Not set — no network calls are made while empty (and fixtures are never shown in its place)"
+          }
+        }
+      }
+    },
     "settings.dev.dataSource": {
       "extractionState": "manual",
       "localizations": {
@@ -22382,73 +24384,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "出典"
+            "value": "元ニュース・資料"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Sources"
+            "value": "Original news & sources"
           }
         },
         "es": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Fuentes"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "fr": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Sources"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "de": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Quellen"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "pt-PT": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Fontes"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "zh-Hans": {
           "stringUnit": {
-            "state": "translated",
-            "value": "来源"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "zh-Hant": {
           "stringUnit": {
-            "state": "translated",
-            "value": "來源"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "ko": {
           "stringUnit": {
-            "state": "translated",
-            "value": "출처"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "ar": {
           "stringUnit": {
-            "state": "translated",
-            "value": "المصادر"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "hi": {
           "stringUnit": {
-            "state": "translated",
-            "value": "स्रोत"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         },
         "ru": {
           "stringUnit": {
-            "state": "translated",
-            "value": "Источники"
+            "state": "needs_review",
+            "value": "Original news & sources"
           }
         }
       }
@@ -22536,73 +24538,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "通信を確認して、もう一度お試しください。"
+            "value": "通信状態を確認して、もう一度お試しください。"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Check your connection and try again."
+            "value": "Please check your connection and try again."
           }
         }
       }
@@ -22613,73 +24615,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "読み込めませんでした"
+            "value": "ニュースを読み込めませんでした"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Couldn't load"
+            "value": "Couldn't load the news"
           }
         }
       }
@@ -24153,73 +26155,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "注目の事例"
+            "value": "今日の空のニュース"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Top cases"
+            "value": "Today's Sky News"
           }
         }
       }
@@ -24230,73 +26232,73 @@
         "ja": {
           "stringUnit": {
             "state": "translated",
-            "value": "昨日からの更新"
+            "value": "更新されたニュース"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "es": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "fr": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "de": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "pt-PT": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "zh-Hans": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "zh-Hant": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "ko": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "ar": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "hi": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         },
         "ru": {
           "stringUnit": {
             "state": "needs_review",
-            "value": "Since yesterday"
+            "value": "Updated News"
           }
         }
       }

@@ -48,6 +48,42 @@ final class CriticalFlowUITests: XCTestCase {
         XCTAssertTrue(app.navigationBars.buttons.firstMatch.waitForExistence(timeout: 5))
     }
 
+    /// News First completion condition (directive §15 Phase 1): the AI's
+    /// reference notes must start closed and only reveal AI-framed content
+    /// (here, the Trust Center entry that lives inside the same disclosure)
+    /// once the reader deliberately opens it.
+    func testAIReferenceDisclosureStartsCollapsedAndExpandsOnTap() {
+        let app = launch()
+        let priority = app.buttons["today.priorityCase"]
+        XCTAssertTrue(priority.waitForExistence(timeout: 10))
+        priority.tap()
+
+        let disclosure = app.descendants(matching: .any)
+            .matching(identifier: "caseDetail.aiReference.disclosure").firstMatch
+        XCTAssertTrue(disclosure.waitForExistence(timeout: 10))
+
+        let trustEntry = app.staticTexts["信頼のしくみ"]
+        XCTAssertFalse(trustEntry.exists, "AI reference content must start collapsed, not visible on first load")
+
+        disclosure.tap()
+        XCTAssertTrue(trustEntry.waitForExistence(timeout: 5), "AI reference content must open once tapped")
+    }
+
+    /// A reader must be able to reach a named, one-tap primary-source action
+    /// ("Reutersの記事を読む"-style) directly from Case Detail, above the fold
+    /// and without opening any disclosure (directive §4.3).
+    func testPrimarySourceActionIsReachableFromCaseDetail() {
+        let app = launch()
+        let priority = app.buttons["today.priorityCase"]
+        XCTAssertTrue(priority.waitForExistence(timeout: 10))
+        priority.tap()
+
+        let sourceAction = app.descendants(matching: .any)
+            .matching(NSPredicate(format: "identifier BEGINSWITH %@", "caseDetail.primarySource."))
+            .firstMatch
+        XCTAssertTrue(sourceAction.waitForExistence(timeout: 10))
+    }
+
     func testMapTabLoadsMapExperience() {
         let app = launch()
         let mapTab = tab(app, identifier: "tab.map", label: "地図")

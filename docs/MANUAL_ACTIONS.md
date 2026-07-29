@@ -77,6 +77,31 @@ Claude Codeでは実行できない**もののみ：
 
 - **M-040** LLMプロバイダーのAPIキー（サーバ側`.env`のみ。iOSへは埋め込まない）。未設定時は`FakeLLMProvider`で動作。
 
+## News First / AI Second（今回の追加分）
+
+- **M-060 Xcodeでのビルド・テスト確認（必須、M-001と同様）**
+  今回追加した`NewsFirstPresentation.swift`／`DesignSystem/Components/NewsFirst/`／
+  `CaseDetailV2View`等の再構成、`ProductionRepositoryTests.swift`（`StubURLProtocol`使用）を
+  macOS + Xcode 26で `make ios-project && make ios-build && make ios-test` を実行し確認する。
+  本セッションもLinux環境のためSwiftコンパイラ自体が実行できていない。
+- **M-061 before/afterスクリーンショット取得**
+  `ScreenshotUITests.testCaptureCaseDetail` / `testCaptureCaseDetailAIReferenceExpanded` /
+  `testCaptureToday` をSimulatorで実行し、`docs/product/NEWS_FIRST_BASELINE.md`の
+  「情報順序 before/after」節に実画像を追加する。
+- **M-062 WorldSkyPulseの視覚サイズ縮小（D-NF-005の残課題）**
+  現状は表示順序をTodayの後段へ移すのみで対応（ニュースが先に見える）。指示書が求める
+  「世界全体の数値を小さく置く」を完全に満たすには、`WorldSkyPulse`の250pt雰囲気ヒーローを
+  小型の集計行コンポーネントへ差し替える追加改修が必要。Simulatorでの見た目確認をしながら
+  進めるのが安全なため、macOS環境での作業を推奨。
+- **M-063 Local mock APIをiOSシミュレータから疎通確認**
+  `make dev-backend`（`services/api`）を起動し、Settings → 開発者 → データソースを
+  「Local API」に切り替え、表示されるAPIのURL欄に`http://127.0.0.1:8000`を入力して
+  Todayが実際にAPI経由で表示されることを確認する（Simulatorは`127.0.0.1`でホストMacに到達可）。
+- **M-064 残り10言語のNews First新規/変更コピーのネイティブレビュー**
+  今回`Localizable.xcstrings`に追加・変更した約45キー（`news.*`/`ai.reference*`/`assess.*`等）は
+  ja/enのみ`translated`、es/fr/de/pt-PT/zh-Hans/zh-Hant/ko/ar/hi/ruは英語文言の`needs_review`
+  プレースホルダのまま。D-I18N-002/B3と合わせてネイティブレビューが必要。
+
 ## V2 UI/UX（追加）
 
 - **M-050 Widget拡張ターゲットの追加（Xcode必須）**

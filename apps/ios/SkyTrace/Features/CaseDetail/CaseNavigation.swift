@@ -21,7 +21,7 @@ extension View {
 /// triggered — the gate leads with the feature the reader just reached for,
 /// then lists the rest, rather than a generic wall.
 struct PaywallContext: Identifiable {
-    enum Trigger: String { case briefing, synthesis, filters, tracking }
+    enum Trigger: String { case briefing, synthesis, filters, tracking, summary }
     let id = UUID()
     let trigger: Trigger
 
@@ -39,5 +39,5 @@ struct PaywallContext: Identifiable {
 }
 
 private extension PaywallContext.Trigger {
-    static let ordered: [PaywallContext.Trigger] = [.synthesis, .briefing, .filters, .tracking]
+    static let ordered: [PaywallContext.Trigger] = [.summary, .synthesis, .briefing, .filters, .tracking]
 }

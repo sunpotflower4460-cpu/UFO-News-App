@@ -41,6 +41,7 @@ struct BriefingDetailView: View {
                         ctaTitle: SkyStrings.t("paywall.cta"),
                         onUnlock: { paywall = PaywallContext(trigger: .briefing) })
                 }
+                disclosureFooter(briefing)
             }
             .padding(.horizontal, SkySpacing.screenEdge)
             .padding(.vertical, SkySpacing.x4)
@@ -65,7 +66,6 @@ struct BriefingDetailView: View {
 
     private func header(_ b: DailyBriefing) -> some View {
         VStack(alignment: .leading, spacing: SkySpacing.x2) {
-            AIDisclosureBadge(disclosure: b.disclosure)
             Text(b.headline).font(SkyTypography.screenHero).foregroundStyle(SkyColor.textPrimary)
             Text(b.summary).font(SkyTypography.body).foregroundStyle(SkyColor.textSecondary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -77,6 +77,17 @@ struct BriefingDetailView: View {
             .font(.caption2).foregroundStyle(SkyColor.textTertiary)
             Divider().overlay(SkyColor.borderSubtle)
         }
+    }
+
+    /// AI involvement, named once, small, at the end — never the header
+    /// (directive §16: "AI生成情報は末尾の折りたたみ").
+    private func disclosureFooter(_ b: DailyBriefing) -> some View {
+        HStack(spacing: SkySpacing.x1) {
+            AIDisclosureBadge(disclosure: b.disclosure)
+            Text(SkyStrings.t("briefing.generatedAt", SkyFormat.dateOnly(b.generatedAt)))
+        }
+        .font(.caption2).foregroundStyle(SkyColor.textTertiary)
+        .padding(.top, SkySpacing.x2)
     }
 
     private func tomorrow(_ b: DailyBriefing) -> some View {

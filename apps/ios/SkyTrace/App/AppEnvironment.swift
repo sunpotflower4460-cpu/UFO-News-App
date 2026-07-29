@@ -16,12 +16,22 @@ final class AppEnvironment {
     var dataSource: DataSourceMode {
         didSet { rebuildRepositories() }
     }
+    /// The local mock/production API's base URL. `nil` by default even when
+    /// `dataSource == .localAPI` — a reader must never see fixtures relabelled
+    /// as live news, but the reverse is equally true: `.localAPI` alone must
+    /// not start making network calls until this is explicitly set (e.g. from
+    /// the Debug-only field in Settings, or a build's launch configuration).
+    var apiBaseURL: URL? {
+        didSet { rebuildRepositories() }
+    }
 
     init(dataSource: DataSourceMode = .fixture,
+         apiBaseURL: URL? = nil,
          flags: FeatureFlags = .releaseDefaults,
          subscription: SubscriptionStore? = nil,
          library: LibraryStore = LibraryStore()) {
         self.dataSource = dataSource
+        self.apiBaseURL = apiBaseURL
         self.flags = flags
         self.library = library
         // Initialise stored existential properties before applying the selected
@@ -40,12 +50,19 @@ final class AppEnvironment {
             caseRepository = FixtureCaseRepository()
             briefingRepository = FixtureBriefingRepository()
         case .localAPI:
-            // Production must never silently fall back to demo cases. Until the
-            // URLSession-backed repositories are connected, expose an explicit
-            // unavailable state so a Release build cannot masquerade as live news.
-            feedRepository = UnconfiguredFeedRepository()
-            caseRepository = UnconfiguredCaseRepository()
-            briefingRepository = UnconfiguredBriefingRepository()
+            if let apiBaseURL {
+                let client = SkyTraceAPIClient(baseURL: apiBaseURL)
+                feedRepository = ProductionFeedRepository(client: client)
+                caseRepository = ProductionCaseRepository(client: client)
+                briefingRepository = ProductionBriefingRepository(client: client)
+            } else {
+                // Production must never silently fall back to demo cases. With
+                // no configured URL, expose an explicit unavailable state so a
+                // Release build can't masquerade fixtures as live news.
+                feedRepository = UnconfiguredFeedRepository()
+                caseRepository = UnconfiguredCaseRepository()
+                briefingRepository = UnconfiguredBriefingRepository()
+            }
         }
     }
 

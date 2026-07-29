@@ -1,9 +1,10 @@
 import SwiftUI
 
-/// V2 Today (docs/uiux 03 §3): World Sky Pulse → Daily Briefing lead → Priority
-/// Case (with reason) → Since Your Last Visit → Case Stream. Global context
-/// first, meaningful change before recency. Reachable from the debug Design
-/// Gallery during bring-up; existing Today tab is untouched.
+/// Today — News First / AI Second (SKYTRACE_NEWS_FIRST_PRODUCTION_DIRECTIVE §5):
+/// today's top news (media-first) → new/updated news → Premium daily summary →
+/// world map link. The world aggregate numbers ("何件処理したか") are placed
+/// after the news, small, and never before it — a reader should see *what*
+/// was reported before *how many* items existed.
 struct TodayV2View: View {
     @Environment(AppEnvironment.self) private var env
     @Environment(AppSettings.self) private var settings
@@ -51,6 +52,16 @@ struct TodayV2View: View {
                         Task { await model.refresh() }
                     }
                 }
+                // 1–2. 今日の主なニュース — media-first, the very first thing a
+                // reader sees, before any aggregate number or AI mention.
+                topNews(feed)
+                // 3–4. 新着ニュース / 更新されたニュース.
+                sinceLastVisit(model)
+                caseStream(feed)
+                // 5. Premium向け今日のまとめ.
+                briefingLead(feed)
+                // 6–7. 世界地図への導線・データ取得範囲・最終更新 — the aggregate
+                // world numbers come last and small, never ahead of the news.
                 WorldSkyPulse(date: feed.date, summary: feed.summary,
                               signals: WorldSkyPulse.signals(from: feed.topCases + feed.recentUpdates),
                               lastUpdated: feed.lastUpdatedAt,
@@ -62,10 +73,6 @@ struct TodayV2View: View {
                         StaleBadge(date: fetched)
                     }
                 }
-                briefingLead(feed)
-                priorityCase(feed)
-                sinceLastVisit(model)
-                caseStream(feed)
                 Text(feed.editorialNote).font(SkyTypography.supporting).italic()
                     .foregroundStyle(SkyColor.textTertiary)
             }
@@ -75,9 +82,10 @@ struct TodayV2View: View {
         .refreshable { await model.refresh() }
     }
 
-    // Daily Briefing — editorial lead, not a glass card.
+    // Daily Briefing — editorial lead, not a glass card. AI involvement is
+    // named once, in small type, never as the section's headline element.
     private func briefingLead(_ feed: TodayFeed) -> some View {
-        EditorialSection(title: SkyStrings.t("briefing.title"), systemImage: "sun.horizon",
+        EditorialSection(title: SkyStrings.t("briefing.title"), systemImage: "doc.text.image",
                          accent: SkyColor.signalViolet) {
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
                 Text(feed.briefing.headline).font(SkyTypography.cardHeadline).foregroundStyle(SkyColor.textPrimary)
@@ -87,7 +95,7 @@ struct TodayV2View: View {
                     Text(SkyStrings.t("briefing.usedCases",
                                       String(feed.briefing.usedCaseCount), String(feed.briefing.sourceCount)))
                     Spacer()
-                    AIDisclosureBadge(disclosure: feed.briefing.disclosure)
+                    Text(SkyStrings.t("ai.smallLabel"))
                 }
                 .font(.caption2).foregroundStyle(SkyColor.textTertiary)
                 // Everyone can open the briefing; BriefingDetailView shows the
@@ -104,16 +112,23 @@ struct TodayV2View: View {
         }
     }
 
-    @ViewBuilder private func priorityCase(_ feed: TodayFeed) -> some View {
+    /// "今日の空のニュース" — the day's lead news, media-first, with an
+    /// explicit "記事を読む" affordance beneath the card (directive §5.1).
+    @ViewBuilder private func topNews(_ feed: TodayFeed) -> some View {
         if let lead = feed.topCases.first {
-            EditorialSection(title: SkyStrings.t("today.topCases"), systemImage: "star") {
+            EditorialSection(title: SkyStrings.t("today.topCases"), systemImage: "newspaper") {
                 VStack(alignment: .leading, spacing: SkySpacing.x2) {
                     if let reason = lead.priorityReason {
-                        Label(reason, systemImage: "sparkles")
-                            .font(SkyTypography.metadata).foregroundStyle(SkyColor.signalWarm)
+                        Label(reason, systemImage: "clock.arrow.circlepath")
+                            .font(SkyTypography.metadata).foregroundStyle(SkyColor.textTertiary)
                     }
                     NavigationLink { CaseDetailV2View(caseID: lead.id) } label: {
-                        CaseCard(uapCase: lead, variant: .featured)
+                        VStack(alignment: .leading, spacing: SkySpacing.x2) {
+                            CaseCard(uapCase: lead, variant: .featured)
+                            Label(SkyStrings.t("news.today.readArticle"), systemImage: "arrow.right")
+                                .font(SkyTypography.supporting.weight(.semibold))
+                                .foregroundStyle(SkyColor.accentPrimary)
+                        }
                     }
                     .buttonStyle(.plain)
                     .accessibilityIdentifier("today.priorityCase")
