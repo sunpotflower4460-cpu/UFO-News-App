@@ -23,17 +23,54 @@ const STATUS_RAW = { explained:"explained", likelyExplained:"likely_explained",
 const STATUS_COLOR = { explained:"--s-explained", likelyExplained:"--s-likely",
   insufficientData:"--s-insufficient", underReview:"--s-review",
   notableUnresolved:"--s-review", disputed:"--s-disputed", withdrawn:"--s-corrected" };
+// Each status has a distinct geometric signature (mirrors the app's
+// StatusGeometry): status is carried by shape + colour + label, never colour
+// alone. The same mark is used on badges, the observation visual, map pins,
+// the legend and the timeline so a status is recognisable everywhere.
+const STATUS_GEOM = {
+  explained:"diamond", likelyExplained:"halfFilled", insufficientData:"openRingGap",
+  underReview:"openRingTick", notableUnresolved:"pointInRing", disputed:"offsetArcs",
+  withdrawn:"diamondRevision",
+};
 const STATUS_DIAMOND = { explained:1, withdrawn:1 };
 function statusInfo(name){
   const raw = STATUS_RAW[name] || name;
   return { label: L("case.status."+raw, name),
            color: `var(${STATUS_COLOR[name]||"--s-review"})`,
+           geom: STATUS_GEOM[name] || "openRingTick",
            diamond: !!STATUS_DIAMOND[name] };
+}
+
+// Inner SVG for a status geometry in a 24×24 box, stroked/filled with `c`.
+function glyphInner(geom, c){
+  switch(geom){
+    case "diamond":
+      return `<rect x="5.5" y="5.5" width="13" height="13" rx="1.6" transform="rotate(45 12 12)" fill="none" stroke="${c}" stroke-width="2"/>`;
+    case "diamondRevision":
+      return `<rect x="6" y="6" width="12" height="12" rx="1.4" transform="rotate(45 12 12)" fill="none" stroke="${c}" stroke-width="1.9"/><circle cx="18.5" cy="5.5" r="2.3" fill="${c}"/>`;
+    case "halfFilled":
+      return `<circle cx="12" cy="12" r="8" fill="none" stroke="${c}" stroke-width="1.8"/><path d="M12 4 A8 8 0 0 0 12 20 Z" fill="${c}"/>`;
+    case "openRingGap":
+      return `<path d="M12 4 A8 8 0 1 1 6.1 5.7" fill="none" stroke="${c}" stroke-width="1.8" stroke-linecap="round"/>`;
+    case "openRingTick":
+      return `<circle cx="12" cy="12" r="8" fill="none" stroke="${c}" stroke-width="1.8"/><line x1="12" y1="1.6" x2="12" y2="6" stroke="${c}" stroke-width="2" stroke-linecap="round"/>`;
+    case "pointInRing":
+      return `<circle cx="12" cy="12" r="8" fill="none" stroke="${c}" stroke-width="1.6"/><circle cx="12" cy="12" r="3.2" fill="${c}"/>`;
+    case "offsetArcs":
+      return `<path d="M4.5 9 A7.5 7.5 0 0 1 19.5 9" fill="none" stroke="${c}" stroke-width="1.9" stroke-linecap="round"/><path d="M4.5 15 A7.5 7.5 0 0 0 19.5 15" fill="none" stroke="${c}" stroke-width="1.9" stroke-linecap="round"/>`;
+    case "squareOutline":
+      return `<rect x="5" y="5" width="14" height="14" rx="2" fill="none" stroke="${c}" stroke-width="1.8"/>`;
+    default:
+      return `<circle cx="12" cy="12" r="7" fill="none" stroke="${c}" stroke-width="1.8"/>`;
+  }
+}
+function statusGlyphSVG(name, size){
+  const s = statusInfo(name);
+  return `<svg class="sglyph" width="${size}" height="${size}" viewBox="0 0 24 24" aria-hidden="true">${glyphInner(s.geom, s.color)}</svg>`;
 }
 function badge(name){
   const s = statusInfo(name);
-  const g = `<span class="glyph" style="background:${s.color}"></span>`;
-  return `<span class="badge ${s.diamond?"":"round"}" style="color:${s.color};border-color:${s.color}44;background:${s.color}14">${g}${s.label}</span>`;
+  return `<span class="badge" style="color:${s.color};border-color:${s.color}44;background:${s.color}14">${statusGlyphSVG(name,14)}${s.label}</span>`;
 }
 
 const CAT_RAW = { cameraArtifact:"camera_artifact" };
@@ -41,6 +78,18 @@ const catLabel = c => L("explanation.category."+(CAT_RAW[c]||c), c);
 const SRC_RAW = { openData:"open_data" };
 const srcLabel = t => L("source.type."+(SRC_RAW[t]||t), t);
 const roleLabel = r => L("evidence.role."+r, r);
+const ROLE_COLOR = { supports:"--s-explained", contradicts:"--s-disputed", contextualizes:"--textTertiary" };
+function srcIcon(t){
+  const p = {
+    official:'<path d="M3 9l7-5 7 5M4 9v9M16 9v9M2 20h16M7 12v4M10 12v4M13 12v4" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+    press:'<rect x="3" y="4" width="14" height="13" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M6 8h5M6 11h8M6 14h8" stroke="currentColor" stroke-width="1.3"/>',
+    scientific:'<circle cx="10" cy="10" r="2" fill="currentColor"/><ellipse cx="10" cy="10" rx="8" ry="3.4" fill="none" stroke="currentColor" stroke-width="1.3"/><ellipse cx="10" cy="10" rx="8" ry="3.4" transform="rotate(60 10 10)" fill="none" stroke="currentColor" stroke-width="1.3"/>',
+    database:'<ellipse cx="10" cy="5" rx="6" ry="2.4" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M4 5v10c0 1.3 2.7 2.4 6 2.4s6-1.1 6-2.4V5" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+    social:'<path d="M4 5h12v8H9l-4 3v-3H4z" fill="none" stroke="currentColor" stroke-width="1.4"/>',
+    openData:'<path d="M4 4h5v5H4zM11 4h5v5h-5zM4 11h5v5H4zM11 11h5v5h-5z" fill="none" stroke="currentColor" stroke-width="1.3"/>',
+  }[t] || '<circle cx="10" cy="10" r="7" fill="none" stroke="currentColor" stroke-width="1.4"/>';
+  return `<svg class="sicon" width="15" height="15" viewBox="0 0 20 20" aria-hidden="true">${p}</svg>`;
+}
 const discLabel = d => L("ai.disclosure."+({autoGenerated:"ai_auto",editorReviewed:"ai_reviewed",humanWritten:"human"}[d]||d), d);
 
 const AXES = [
@@ -114,17 +163,17 @@ function obsVisual(c, size){
     const x = 50 + Math.cos(a)*rr, y = 52 + Math.sin(a)*rr*0.7;
     dots += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1.1+(i%3)*0.5).toFixed(1)}" fill="${col}" opacity="${(0.5+ (i%4)/8).toFixed(2)}"/>`;
   }
-  const diamond = statusInfo(c.status).diamond;
-  const focal = diamond
-    ? `<rect x="44" y="36" width="12" height="12" transform="rotate(45 50 42)" fill="none" stroke="${col}" stroke-width="1.6"/>`
-    : `<circle cx="50" cy="42" r="7" fill="none" stroke="${col}" stroke-width="1.6"/><circle cx="50" cy="42" r="2" fill="${col}"/>`;
+  const focalScale = size==="F" ? 1.5 : 1.15;
+  const tx = (50 - 12*focalScale).toFixed(2), ty = (42 - 12*focalScale).toFixed(2);
+  const focal = `<g transform="translate(${tx},${ty}) scale(${focalScale})">${glyphInner(statusInfo(c.status).geom, col)}</g>`;
+  const uid = (c.id||"") + size;
   return `<svg viewBox="0 0 100 84" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%">
-    <defs><linearGradient id="g${size}" x1="0" y1="0" x2="0" y2="1">
+    <defs><linearGradient id="g${uid}" x1="0" y1="0" x2="0" y2="1">
       <stop offset="0" stop-color="#0b1621"/><stop offset="1" stop-color="#070b14"/></linearGradient>
-      <radialGradient id="h${size}" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="${col}" stop-opacity="0.28"/><stop offset="70%" stop-color="${col}" stop-opacity="0"/></radialGradient></defs>
-    <rect width="100" height="84" fill="url(#g${size})"/>
-    <ellipse cx="50" cy="42" rx="46" ry="30" fill="url(#h${size})"/>
+      <radialGradient id="h${uid}" cx="50%" cy="42%" r="60%">
+      <stop offset="0" stop-color="${col}" stop-opacity="0.30"/><stop offset="70%" stop-color="${col}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="100" height="84" fill="url(#g${uid})"/>
+    <ellipse cx="50" cy="42" rx="46" ry="30" fill="url(#h${uid})"/>
     ${dots}${focal}</svg>`;
 }
 
@@ -183,13 +232,13 @@ function screenMap(){
   for(let lon=-150;lon<=150;lon+=30){ const x=(lon+180)/360*W; grat+=`<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="#16283c" stroke-width="1"/>`; }
   for(let lat=-60;lat<=60;lat+=30){ const y=(90-lat)/180*H; grat+=`<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="#16283c" stroke-width="1"/>`; }
   const eqY=(90-0)/180*H;
-  const pins = shown.map(c=>{const p=proj(c);const col=statusInfo(c.status).color;
-    return `<div class="pin" style="left:${(p.x/W*100)}%;top:${(p.y/H*100)}%;background:${col}" title="${esc(c.title)}" onclick="openCase('${c.id}')"></div>`;}).join("");
+  const pins = shown.map(c=>{const p=proj(c);
+    return `<div class="pin" style="left:${(p.x/W*100)}%;top:${(p.y/H*100)}%" title="${esc(c.title)}" onclick="openCase('${c.id}')">${statusGlyphSVG(c.status,16)}</div>`;}).join("");
   const list = shown.map(c=>caseCard(c)).join("") || `<div class="empty">この条件の事例はありません</div>`;
   const legendStatuses = ["explained","likelyExplained","underReview","notableUnresolved","insufficientData","disputed"];
   const legend = `<div class="legend">` + legendStatuses.map(s=>{
     const info = statusInfo(s);
-    return `<span class="item"><span class="g ${info.diamond?"":"round"}" style="background:${info.color}"></span>${info.label}</span>`;
+    return `<span class="item">${statusGlyphSVG(s,15)}<span style="color:${info.color}">${info.label}</span></span>`;
   }).join("") + `</div>`;
   return `<div class="filterbar">${bar}</div>
     <div class="mapwrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
@@ -259,6 +308,36 @@ function scoreGrid(sc){
   }).join("") + `</div>`;
 }
 
+// A distinctive 4-axis "assessment compass": each axis fills its quadrant from
+// the centre outward by its value. Quick to read, and unmistakably SkyTrace.
+function scoreQuadrant(sc){
+  if(!sc) return "";
+  const C=88, MAX=64; // center, max reach
+  const quad = [
+    ["evidenceQuality", "--axis-evidence", -1, -1, "証拠品質"],
+    ["independence",    "--axis-independence", 1, -1, "独立報告性"],
+    ["knownPhenomenaMatch", "--axis-known", -1, 1, "既知現象一致度"],
+    ["unresolvedness",  "--axis-unresolved", 1, 1, "未解明度"],
+  ];
+  let cells = "", labels = "";
+  for(const [k,cvar,dx,dy,lab] of quad){
+    const v = sc[k], reach = (v/100)*MAX;
+    const x0 = dx<0 ? C-reach : C, y0 = dy<0 ? C-reach : C;
+    const outX0 = dx<0 ? C-MAX : C, outY0 = dy<0 ? C-MAX : C;
+    cells += `<rect x="${outX0}" y="${outY0}" width="${MAX}" height="${MAX}" fill="none" stroke="rgba(255,255,255,.06)"/>`;
+    cells += `<rect x="${x0}" y="${y0}" width="${reach}" height="${reach}" fill="var(${cvar})" opacity="0.55" rx="2"/>`;
+    const lx = dx<0 ? C-MAX+2 : C+MAX-2, ly = dy<0 ? C-MAX-6 : C+MAX+13;
+    labels += `<text x="${lx}" y="${ly}" fill="var(${cvar})" font-size="9" text-anchor="${dx<0?"start":"end"}">${lab} ${v}</text>`;
+  }
+  return `<div class="quadrant"><svg viewBox="0 0 176 190" width="100%">
+    ${cells}
+    <line x1="${C-MAX}" y1="${C}" x2="${C+MAX}" y2="${C}" stroke="rgba(255,255,255,.14)"/>
+    <line x1="${C}" y1="${C-MAX}" x2="${C}" y2="${C+MAX}" stroke="rgba(255,255,255,.14)"/>
+    <circle cx="${C}" cy="${C}" r="2.4" fill="var(--accent)"/>
+    ${labels}
+  </svg></div>`;
+}
+
 function articleSection(c){
   const art = DATA.articles[c.id];
   if(!art) return "";
@@ -300,11 +379,12 @@ function screenCase(){
         ${k.nonMatch.map(m=>`<span class="chip no">✗ ${esc(m)}</span>`).join("")}</div>
       ${k.limits?`<div class="st" style="margin-top:6px;color:var(--textTertiary);font-size:12px">データ制約：${esc(k.limits)}</div>`:""}
     </div>`).join("");
-  const sources = c.sources.map(s=>`<div class="source">
-      <div style="flex:1"><b style="font-size:13.5px">${esc(s.outlet)}</b>
+  const sources = c.sources.map(s=>`<div class="source" style="border-left:3px solid var(${ROLE_COLOR[s.role]||"--textTertiary"})">
+      <span class="sicon-wrap" style="color:var(--accent2)">${srcIcon(s.type)}</span>
+      <div style="flex:1;min-width:0"><b style="font-size:13.5px">${esc(s.outlet)}</b>
         <div class="st">${esc(s.title)}</div></div>
       <div style="text-align:right"><div class="st">${esc(srcLabel(s.type))}</div>
-        <div class="st">${esc(roleLabel(s.role))}</div></div></div>`).join("");
+        <div class="st" style="color:var(${ROLE_COLOR[s.role]||"--textTertiary"})">${esc(roleLabel(s.role))}</div></div></div>`).join("");
   const tl = c.timeline.map(t=>`<div class="item">
       <div class="row" style="gap:8px">${t.status?badge(t.status):""}<span class="st" style="color:var(--textTertiary);font-size:12px">${esc(rel({day:-t.daysAgo}))}</span></div>
       <div style="margin-top:4px;font-size:13.5px">${esc(t.summary)}</div>
@@ -319,7 +399,7 @@ function screenCase(){
         <span class="dot"></span><span>精度：${esc(L("location.precision."+({exact:"exact",approximate:"approximate",regionOnly:"region_only",withheld:"withheld"}[c.locationPrecision]||c.locationPrecision), c.locationPrecision))}</span></div>`
     + times
     + `<div class="assess" style="margin-top:12px">${esc(c.summary)}</div>`
-    + sec("4軸スコア", scoreGrid(c.scores) + `<div class="st" style="color:var(--textTertiary);font-size:12px">未解明度が高いことは地球外起源を意味しません。</div>`)
+    + sec("4軸スコア", scoreQuadrant(c.scores) + scoreGrid(c.scores) + `<div class="st" style="color:var(--textTertiary);font-size:12px">未解明度が高いことは地球外起源を意味しません。単一の「信ぴょう性」ではなく4つの軸で示します。</div>`)
     + sec("複数情報で一致する点", agree)
     + sec("食い違う点", contra)
     + sec("既知現象との照合", cands)
@@ -401,12 +481,22 @@ function screenHTML(){
 
 function renderScreenOnly(){ $screen().innerHTML = screenHTML(); }
 
+let _lastView = null;
 function render(){
   $nav().innerHTML = navBar();
-  $screen().innerHTML = screenHTML();
+  const sc = $screen();
+  sc.innerHTML = screenHTML();
+  // Animate on a genuine view change (tab switch or open/close detail), not on
+  // in-place updates like live search, and never when reduced motion is set.
+  const view = state.caseID ? ("case:"+state.caseID) : ("tab:"+state.tab);
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(view !== _lastView && !reduce){
+    sc.classList.remove("enter"); void sc.offsetWidth; sc.classList.add("enter");
+  }
+  _lastView = view;
   document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t.dataset.tab===state.tab && !state.caseID));
   document.getElementById("sheetHost").innerHTML = paywallSheet();
-  if(!state.caseID) $screen().scrollTop = 0;
+  if(!state.caseID) sc.scrollTop = 0;
 }
 
 function starfield(){
