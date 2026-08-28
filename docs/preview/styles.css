@@ -37,6 +37,63 @@ a{color:var(--accent);text-decoration:none}
   box-shadow:0 0 0 10px #05070d, 0 24px 70px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.05);
   display:flex;flex-direction:column;
 }
+
+/* Cosmic backdrop — subtle so evidence stays legible (CLAUDE.md §14) */
+.cosmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(110,92,200,.18), rgba(110,92,200,0) 55%),
+    radial-gradient(90% 60% at 90% 8%, rgba(63,169,201,.16), rgba(63,169,201,0) 60%),
+    radial-gradient(100% 70% at 0% 100%, rgba(95,212,200,.10), rgba(95,212,200,0) 55%);}
+.cosmos .stars{position:absolute;inset:-20% -20% -20% -20%;background-repeat:repeat}
+.cosmos .s1{animation:drift 120s linear infinite}
+.cosmos .s2{animation:drift 200s linear infinite reverse;opacity:.7}
+.cosmos .aurora{position:absolute;left:-20%;right:-20%;top:-10%;height:60%;
+  background:radial-gradient(60% 60% at 30% 40%, rgba(126,230,220,.10), rgba(126,230,220,0) 70%),
+             radial-gradient(50% 50% at 75% 30%, rgba(120,150,242,.10), rgba(120,150,242,0) 70%);
+  filter:blur(8px);animation:auroraShift 26s ease-in-out infinite alternate}
+@keyframes drift{from{transform:translateY(0)}to{transform:translateY(60px)}}
+@keyframes auroraShift{from{transform:translateX(-14px)}to{transform:translateX(14px)}}
+.screen,.nav,.statusbar,.tabbar{position:relative;z-index:1}
+
+/* Launch splash — brief title on startup */
+.splash{position:absolute;inset:0;z-index:40;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(120% 90% at 50% 34%, #0d1a2c 0%, #060a12 60%, #04070e 100%);
+  transition:opacity .55s ease, visibility .55s;overflow:hidden}
+.splash.hide{opacity:0;visibility:hidden}
+.splash-sky{position:absolute;inset:0;opacity:.9;
+  background:radial-gradient(45% 40% at 50% 30%, rgba(126,230,220,.14), rgba(126,230,220,0) 70%),
+             radial-gradient(60% 50% at 70% 80%, rgba(110,92,200,.16), rgba(110,92,200,0) 70%)}
+.splash-orb{position:absolute;top:26%;left:50%;width:220px;height:220px;transform:translate(-50%,-50%);border-radius:50%;
+  background:radial-gradient(circle at 50% 46%, rgba(127,230,220,0) 40%, rgba(127,230,220,.5) 46%, rgba(127,230,220,0) 56%);
+  filter:blur(1px);animation:pulse 3.2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.55;transform:translate(-50%,-50%) scale(1)}50%{opacity:.9;transform:translate(-50%,-50%) scale(1.06)}}
+.splash-mark{position:relative;text-align:center;padding:24px;animation:rise .8s cubic-bezier(.2,.8,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.splash-glyph{margin-bottom:14px;filter:drop-shadow(0 0 16px rgba(127,230,220,.5))}
+.splash-title{font-size:40px;font-weight:800;letter-spacing:3px;
+  background:linear-gradient(180deg,#F4F7FB,#9FE9E0);-webkit-background-clip:text;background-clip:text;color:transparent}
+.splash-tag{margin-top:10px;color:#A9B5C7;font-size:12.5px;max-width:260px;line-height:1.7}
+
+@media (prefers-reduced-motion: reduce){
+  .cosmos .s1,.cosmos .s2,.cosmos .aurora,.splash-orb,.splash-mark{animation:none !important}
+  .splash{transition:opacity .2s ease, visibility .2s}
+}
+
+/* Case lead visual (observation image) on cards */
+.thumb{border-radius:14px;overflow:hidden;background:#070b14;border:1px solid var(--border);flex:0 0 auto}
+.thumb svg{display:block}
+.card .lead-lg{width:100%;height:132px;border-radius:14px;overflow:hidden;margin-bottom:10px;border:1px solid var(--border)}
+.card .lead-lg svg{width:100%;height:100%}
+.card.withthumb{display:flex;gap:12px;align-items:stretch}
+.card.withthumb .thumb{width:74px;height:74px}
+.card.withthumb .cbody{flex:1;min-width:0}
+
+/* Status legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px 12px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin:8px 0}
+.legend .item{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--textSecondary)}
+.legend .g{width:9px;height:9px;border-radius:2px;transform:rotate(45deg)}
+.legend .g.round{border-radius:50%;transform:none}
+.section-sub{color:var(--textTertiary);font-size:12px;margin:-4px 2px 8px;line-height:1.6}
 .statusbar{height:28px;flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;padding:6px 26px 0;font-size:12px;color:var(--textSecondary)}
 .notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:120px;height:26px;background:#05070d;border-radius:0 0 16px 16px;z-index:5}
 

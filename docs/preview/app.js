@@ -94,14 +94,61 @@ function briefingCard(){
     ${free}${body}</div>`;
 }
 
-function caseCard(c){
-  return `<div class="card" onclick="openCase('${c.id}')">
-    <div class="row">${badge(c.status)}<span style="flex:1"></span>
-      <span class="st" style="color:var(--textTertiary);font-size:12px">${esc(rel(c.updatedAt))}</span></div>
-    <div class="case-title">${esc(c.title)}</div>
-    <p class="case-sum">${esc(clip(c.summary,96))}</p>
-    <div class="meta"><span>${esc(regionLabel(c))}</span><span class="dot"></span>
-      <span>出典 ${c.sourceCount}</span><span class="dot"></span><span>独立 ${c.independentReportCount}</span></div>
+// Observation lead visual (image-free, rights-safe) tinted by status + seeded by
+// the case, echoing the app's ObservationGlyph / CaseLeadVisual. If a case ever
+// carries a rights-cleared image it is shown instead (media[].url).
+function clearedImage(c){
+  const m = (c.media||[]).find(x=>x && x.url && x.inline);
+  return m ? m.url : null;
+}
+function obsVisual(c, size){
+  const img = clearedImage(c);
+  if(img) return `<img src="${esc(img)}" alt="" style="width:100%;height:100%;object-fit:cover">`;
+  const col = statusInfo(c.status).color;
+  const h = isqrt((c.id||"").length + (c.title||"").length + c.status.length);
+  const n = Math.max(3, Math.min(9, (c.shapeTags||[]).length + 3));
+  let dots = "";
+  for(let i=0;i<n;i++){
+    const a = h*6.28 + i*(6.28/n);
+    const rr = 16 + (i%3)*8;
+    const x = 50 + Math.cos(a)*rr, y = 52 + Math.sin(a)*rr*0.7;
+    dots += `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(1.1+(i%3)*0.5).toFixed(1)}" fill="${col}" opacity="${(0.5+ (i%4)/8).toFixed(2)}"/>`;
+  }
+  const diamond = statusInfo(c.status).diamond;
+  const focal = diamond
+    ? `<rect x="44" y="36" width="12" height="12" transform="rotate(45 50 42)" fill="none" stroke="${col}" stroke-width="1.6"/>`
+    : `<circle cx="50" cy="42" r="7" fill="none" stroke="${col}" stroke-width="1.6"/><circle cx="50" cy="42" r="2" fill="${col}"/>`;
+  return `<svg viewBox="0 0 100 84" preserveAspectRatio="xMidYMid slice" style="width:100%;height:100%">
+    <defs><linearGradient id="g${size}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0b1621"/><stop offset="1" stop-color="#070b14"/></linearGradient>
+      <radialGradient id="h${size}" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="${col}" stop-opacity="0.28"/><stop offset="70%" stop-color="${col}" stop-opacity="0"/></radialGradient></defs>
+    <rect width="100" height="84" fill="url(#g${size})"/>
+    <ellipse cx="50" cy="42" rx="46" ry="30" fill="url(#h${size})"/>
+    ${dots}${focal}</svg>`;
+}
+
+function caseCard(c, opts={}){
+  if(opts.featured){
+    return `<div class="card" onclick="openCase('${c.id}')">
+      <div class="lead-lg">${obsVisual(c,"F")}</div>
+      <div class="row">${badge(c.status)}<span style="flex:1"></span>
+        <span class="st" style="color:var(--textTertiary);font-size:12px">${esc(rel(c.updatedAt))}</span></div>
+      <div class="case-title">${esc(c.title)}</div>
+      <p class="case-sum">${esc(clip(c.summary,110))}</p>
+      <div class="meta"><span>${esc(regionLabel(c))}</span><span class="dot"></span>
+        <span>出典 ${c.sourceCount}</span><span class="dot"></span><span>独立 ${c.independentReportCount}</span></div>
+    </div>`;
+  }
+  return `<div class="card withthumb" onclick="openCase('${c.id}')">
+    <div class="thumb">${obsVisual(c,"S")}</div>
+    <div class="cbody">
+      <div class="row">${badge(c.status)}<span style="flex:1"></span>
+        <span class="st" style="color:var(--textTertiary);font-size:12px">${esc(rel(c.updatedAt))}</span></div>
+      <div class="case-title" style="font-size:15px;margin:6px 0 3px">${esc(c.title)}</div>
+      <div class="meta"><span>${esc(regionLabel(c))}</span><span class="dot"></span>
+        <span>出典 ${c.sourceCount}</span><span class="dot"></span><span>独立 ${c.independentReportCount}</span></div>
+    </div>
   </div>`;
 }
 const clip = (s,n)=> s && s.length>n ? s.slice(0,n)+"…" : (s||"");
@@ -110,9 +157,15 @@ function regionLabel(c){ return [c.localityName, c.regionName].filter(Boolean)[0
 function screenToday(){
   const top = DATA.topCaseIDs.map(id=>CASES[id]).filter(Boolean);
   const updates = DATA.cases.filter(c => c.timeline && c.timeline.some(t=>t.daysAgo<=1));
+  const featured = top.length ? caseCard(top[0], {featured:true}) : "";
+  const rest = top.slice(1).map(c=>caseCard(c)).join("");
   return heroToday() + briefingCard()
-    + `<div class="section-title">今日の注目事例</div>` + top.map(caseCard).join("")
-    + `<div class="section-title">更新された事例</div>` + updates.map(caseCard).join("");
+    + `<div class="section-title">今日の注目事例</div>`
+    + `<div class="section-sub">観測の様子を表すビジュアル付き。権利許諾済みの画像がある事例はその画像を表示します。</div>`
+    + featured + rest
+    + `<div class="section-title">更新された事例</div>`
+    + `<div class="section-sub">前回より評価や証拠が変わった事例です。</div>`
+    + updates.map(c=>caseCard(c)).join("");
 }
 
 // ---- Map ----
@@ -132,14 +185,21 @@ function screenMap(){
   const eqY=(90-0)/180*H;
   const pins = shown.map(c=>{const p=proj(c);const col=statusInfo(c.status).color;
     return `<div class="pin" style="left:${(p.x/W*100)}%;top:${(p.y/H*100)}%;background:${col}" title="${esc(c.title)}" onclick="openCase('${c.id}')"></div>`;}).join("");
-  const list = shown.map(caseCard).join("") || `<div class="empty">この条件の事例はありません</div>`;
+  const list = shown.map(c=>caseCard(c)).join("") || `<div class="empty">この条件の事例はありません</div>`;
+  const legendStatuses = ["explained","likelyExplained","underReview","notableUnresolved","insufficientData","disputed"];
+  const legend = `<div class="legend">` + legendStatuses.map(s=>{
+    const info = statusInfo(s);
+    return `<span class="item"><span class="g ${info.diamond?"":"round"}" style="background:${info.color}"></span>${info.label}</span>`;
+  }).join("") + `</div>`;
   return `<div class="filterbar">${bar}</div>
     <div class="mapwrap"><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
       <rect width="${W}" height="${H}" fill="url(#sky)"/>
       <defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1621"/><stop offset="1" stop-color="#070d16"/></linearGradient></defs>
       ${grat}<line x1="0" y1="${eqY}" x2="${W}" y2="${eqY}" stroke="#22384f" stroke-width="1.5" stroke-dasharray="4 4"/>
     </svg>${pins}</div>
-    <div class="meta" style="margin:2px 2px 8px"><span>世界地図（MapKitのプレビュー簡易表示）</span><span class="dot"></span><span>${shown.length}件</span></div>
+    <div class="meta" style="margin:2px 2px 6px"><span>世界地図（MapKitのプレビュー簡易表示）</span><span class="dot"></span><span>${shown.length}件</span></div>
+    ${legend}
+    <div class="section-sub">ピンの色と形は状態を表します。位置が公開できない事例は地図に表示されません。</div>
     ${list}`;
 }
 
@@ -150,7 +210,7 @@ function screenResearch(){
   if(q){ const lc=q.toLowerCase(); list = list.filter(c =>
     [c.title,c.summary,c.regionName,c.localityName,c.countryCode,(c.shapeTags||[]).join(" ")]
       .filter(Boolean).some(s=>s.toLowerCase().includes(lc))); }
-  const body = list.length ? list.map(caseCard).join("") : `<div class="empty">「${esc(q)}」に一致する事例はありません</div>`;
+  const body = list.length ? list.map(c=>caseCard(c)).join("") : `<div class="empty">「${esc(q)}」に一致する事例はありません</div>`;
   const tagset = [...new Set(DATA.cases.flatMap(c=>c.shapeTags||[]))].slice(0,10);
   const tags = tagset.map(t=>`<button class="fchip ${state.query===t?"active":""}" onclick="setQuery('${esc(t)}')">${esc(t)}</button>`).join("");
   return `<input class="search" placeholder="事例を検索（例：東京、光点、火球）" value="${esc(state.query)}" oninput="onSearch(this.value)">
@@ -349,12 +409,39 @@ function render(){
   if(!state.caseID) $screen().scrollTop = 0;
 }
 
+function starfield(){
+  const host = document.getElementById("cosmos");
+  if(!host) return;
+  const layer = (n, rmin, rmax, op) => {
+    let dots = "";
+    for(let i=0;i<n;i++){
+      const x=(Math.sin(i*97.13)*0.5+0.5)*100, y=(Math.cos(i*57.31)*0.5+0.5)*100;
+      const r=(rmin+((i*isqrt(i))%1)*(rmax-rmin)).toFixed(2);
+      dots += `<circle cx="${x.toFixed(2)}%" cy="${y.toFixed(2)}%" r="${r}" fill="#CED8EC" opacity="${(op*(0.4+((i*13)%10)/16)).toFixed(2)}"/>`;
+    }
+    return `<svg class="stars" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">${dots}</svg>`;
+  };
+  host.innerHTML = `<div class="aurora"></div>
+    <div class="s1">${layer(46,0.5,1.2,0.9)}</div>
+    <div class="s2">${layer(30,0.6,1.6,0.7)}</div>`;
+}
+function isqrt(i){ const s=Math.sin(i*12.9898)*43758.5453; return s-Math.floor(s); }
+
+function hideSplash(){
+  const el = document.getElementById("splash");
+  if(!el) return;
+  const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  setTimeout(()=>el.classList.add("hide"), reduce ? 600 : 1300);
+}
+
 function boot(data){
   DATA = data;
   DATA.cases.forEach(c=>CASES[c.id]=c);
   document.getElementById("tabbar").innerHTML = TABS.map(([id,,lab,svg])=>
     `<button class="tab" data-tab="${id}" onclick="setTab('${id}')"><svg viewBox="0 0 24 24">${svg}</svg>${L(TABS.find(t=>t[0]===id)[1],lab)}</button>`).join("");
+  starfield();
   render();
+  hideSplash();
 }
 
 fetch("data.json").then(r=>r.json()).then(boot).catch(e=>{
