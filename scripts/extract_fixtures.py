@@ -375,8 +375,12 @@ def main() -> int:
     out = args.out if args.out.is_absolute() else ROOT / args.out
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(doc, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        shown = out.relative_to(ROOT)
+    except ValueError:
+        shown = out
     print(f"Extracted {len(cases)} cases, {len(articles)} articles, "
-          f"{len(labels)} labels → {out.relative_to(ROOT)}")
+          f"{len(labels)} labels → {shown}")
     return 0 if len(cases) == 9 else 1
 
 
