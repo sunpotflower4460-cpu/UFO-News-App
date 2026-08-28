@@ -124,7 +124,7 @@ w("{")
 w("\tarchiveVersion = 1;")
 w("\tclasses = {")
 w("\t};")
-w("\tobjectVersion = 56;")
+w("\tobjectVersion = 77;")
 w("\tobjects = {")
 
 # PBXBuildFile
@@ -506,7 +506,7 @@ scheme = f'''<?xml version="1.0" encoding="UTF-8"?>
       <BuildableProductRunnable runnableDebuggingMode="0">
          {buildable(APP_TARGET, APP, APP + ".app")}
       </BuildableProductRunnable>
-      <StoreKitConfigurationFileReference identifier="../{APP}.storekit"></StoreKitConfigurationFileReference>
+      <StoreKitConfigurationFileReference identifier="../../{APP}.storekit"></StoreKitConfigurationFileReference>
    </LaunchAction>
    <ProfileAction buildConfiguration="Release" shouldUseLaunchSchemeArgsEnv="YES" savedToolIdentifier="" useCustomWorkingDirectory="NO" debugDocumentVersioning="YES">
       <BuildableProductRunnable runnableDebuggingMode="0">
