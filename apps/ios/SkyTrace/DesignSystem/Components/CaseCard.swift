@@ -21,8 +21,7 @@ struct CaseCard: View {
 
     private var featured: some View {
         VStack(alignment: .leading, spacing: 0) {
-            ObservationGlyph(seed: seed)
-                .frame(height: 132)
+            leadVisual(height: 132)
             VStack(alignment: .leading, spacing: SkySpacing.x2) {
                 topRow
                 Text(uapCase.title).font(SkyTypography.cardHeadline.weight(.semibold))
@@ -56,8 +55,9 @@ struct CaseCard: View {
 
     private var compact: some View {
         HStack(spacing: SkySpacing.x3) {
-            VStack { CaseStatusGlyph(status: uapCase.v2Status, size: 22); Spacer(minLength: 0) }
+            leadThumb(size: 54)
             VStack(alignment: .leading, spacing: SkySpacing.x1) {
+                CaseStatusLabel(status: uapCase.v2Status)
                 Text(uapCase.title).font(SkyTypography.supporting.weight(.semibold))
                     .foregroundStyle(SkyColor.textPrimary).lineLimit(2)
                 HStack(spacing: SkySpacing.x2) {
@@ -111,6 +111,58 @@ struct CaseCard: View {
     }
 
     private var seed: Int { abs(uapCase.id.hashValue) % 100 }
+
+    /// The first rights-cleared, inline-displayable media for this case, if any.
+    /// Rights-unknown media is never hosted, so those cases fall back to the
+    /// abstract observation visual (CLAUDE.md §7).
+    private var inlineMedia: MediaAsset? {
+        uapCase.media.first { $0.canDisplayInline && $0.previewURL != nil }
+    }
+
+    /// Banner lead used on the featured card: the cleared source image when the
+    /// case has one, otherwise the abstract, status-tinted observation visual.
+    @ViewBuilder private func leadVisual(height: CGFloat) -> some View {
+        if let url = inlineMedia?.previewURL {
+            AsyncImage(url: url) { phase in
+                if case .success(let image) = phase {
+                    image.resizable().scaledToFill()
+                } else {
+                    ObservationGlyph(seed: seed)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: height)
+            .clipped()
+            .accessibilityHidden(true)
+        } else {
+            ObservationGlyph(seed: seed)
+                .frame(height: height)
+                .accessibilityHidden(true)
+        }
+    }
+
+    /// Small square thumbnail used on list rows so a case's image (or its
+    /// observation visual) is visible from Home at a glance.
+    @ViewBuilder private func leadThumb(size: CGFloat) -> some View {
+        Group {
+            if let url = inlineMedia?.previewURL {
+                AsyncImage(url: url) { phase in
+                    if case .success(let image) = phase {
+                        image.resizable().scaledToFill()
+                    } else {
+                        ObservationGlyph(seed: seed)
+                    }
+                }
+            } else {
+                ObservationGlyph(seed: seed)
+            }
+        }
+        .frame(width: size, height: size)
+        .clipShape(RoundedRectangle(cornerRadius: SkyRadius.card, style: .continuous))
+        .overlay(RoundedRectangle(cornerRadius: SkyRadius.card, style: .continuous)
+            .strokeBorder(SkyColor.borderSubtle, lineWidth: 0.5))
+        .accessibilityHidden(true)
+    }
 }
 
 /// Builds the combined accessibility label, e.g.
