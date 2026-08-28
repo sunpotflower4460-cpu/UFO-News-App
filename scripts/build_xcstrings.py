@@ -52,11 +52,23 @@ def main() -> int:
         }
         strings[key] = {"extractionState": "manual", "localizations": loc}
 
+    # Guard: the SkyStrings.swift Pair table was removed once the migration to
+    # the String Catalog completed (the catalog is now the source of truth and
+    # carries seeded translations for TARGET_LANGS). Parsing zero keys means the
+    # table is gone — writing here would clobber the catalog down to ja+en and
+    # destroy every seeded translation. Refuse to write in that state.
+    if not strings:
+        print(f"No `Pair` entries found in {SRC.relative_to(ROOT)}; the in-code "
+              "table has already been migrated to the String Catalog. Refusing "
+              f"to overwrite {OUT.relative_to(ROOT)} (would wipe seeded "
+              "translations).", file=sys.stderr)
+        return 1
+
     catalog = {"sourceLanguage": "ja", "strings": dict(sorted(strings.items())), "version": "1.0"}
     OUT.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(strings)} keys → {OUT.relative_to(ROOT)}")
     print(f"Declared languages: {', '.join(TARGET_LANGS)} (ja+en populated)")
-    return 0 if strings else 1
+    return 0
 
 
 if __name__ == "__main__":
