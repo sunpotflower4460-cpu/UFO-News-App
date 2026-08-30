@@ -1,0 +1,17 @@
+{
+  // Cloudflare Workers Builds is connected to this repository at the account
+  // level and deploys a Worker named "ufo" on every push. The repo has no
+  // server-side Worker, so this configures a static-assets-only Worker that
+  // serves the public SkyTrace pages under docs/ (the bilingual legal/support
+  // site at /site/ and the interactive app preview at /preview/). This makes
+  // the Workers build succeed without introducing any runtime code.
+  //
+  // Docs: https://developers.cloudflare.com/workers/static-assets/
+  "name": "ufo",
+  "compatibility_date": "2024-11-01",
+  "assets": {
+    "directory": "./docs",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
