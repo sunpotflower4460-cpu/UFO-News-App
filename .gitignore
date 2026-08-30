@@ -36,6 +36,9 @@ __pycache__/
 node_modules/
 .next/
 
+# Cloudflare Wrangler (local cache/build state)
+.wrangler/
+
 # Logs / scratch
 *.log
 /scratch/
