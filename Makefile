@@ -14,6 +14,22 @@ help:
 	@echo "  make ios-test      Run unit + UI tests"
 	@echo "  make open          Open the Xcode project"
 	@echo "  make lint          Run SwiftLint if installed"
+	@echo "  make verify        Run the Linux pre-build verification harness"
+	@echo "  make fixtures      Extract demo fixtures -> docs/preview/data.json"
+	@echo "  make preview       Extract fixtures and serve the interactive web preview"
+
+.PHONY: verify
+verify:
+	python3 scripts/preflight.py
+
+.PHONY: fixtures
+fixtures:
+	python3 scripts/extract_fixtures.py
+
+.PHONY: preview
+preview: fixtures
+	@echo "Serving interactive preview at http://localhost:8001/preview/ (Ctrl-C to stop)"
+	@cd docs && python3 -m http.server 8001
 
 .PHONY: ios-project
 ios-project:

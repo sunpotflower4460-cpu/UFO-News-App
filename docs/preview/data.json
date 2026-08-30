@@ -1,0 +1,1351 @@
+{
+  "anchor": "2026-07-13T22:40:00",
+  "generatedFrom": "apps/ios/SkyTrace/Data/Fixtures (Swift source of truth)",
+  "labels": {
+    "ai.disclosure.ai_auto": "AI統合・自動生成",
+    "ai.disclosure.ai_reviewed": "AI統合・編集確認済み",
+    "ai.disclosure.human": "人間による編集記事",
+    "case.status.disputed": "争点あり",
+    "case.status.explained": "説明済み",
+    "case.status.insufficient_data": "情報不足",
+    "case.status.likely_explained": "説明候補あり",
+    "case.status.notable_unresolved": "注目・未解決",
+    "case.status.under_review": "調査継続",
+    "case.status.withdrawn": "取り下げ",
+    "evidence.role.contextualizes": "文脈",
+    "evidence.role.contradicts": "反証",
+    "evidence.role.supports": "支持",
+    "explanation.category.aircraft": "航空機",
+    "explanation.category.astronomical": "天体",
+    "explanation.category.camera_artifact": "カメラ由来",
+    "explanation.category.drone": "ドローン",
+    "explanation.category.fireball": "火球",
+    "explanation.category.other": "その他",
+    "explanation.category.rocket": "ロケット・再突入",
+    "explanation.category.satellite": "人工衛星",
+    "explanation.category.searchlight": "サーチライト",
+    "explanation.category.weather": "気象",
+    "location.precision.approximate": "おおよその位置",
+    "location.precision.exact": "正確な位置",
+    "location.precision.region_only": "地域のみ",
+    "location.precision.withheld": "位置非公開",
+    "map.altList": "一覧で見る",
+    "map.approximateNote": "おおよその位置",
+    "map.filter.more": "詳細フィルター",
+    "map.filter.period": "期間",
+    "map.filter.status": "状態",
+    "map.filter.unresolved": "未解明度",
+    "map.focusHint": "地図タブでこの事例を表示",
+    "map.results": "%@件を表示",
+    "map.title": "地図",
+    "research.clearFilters": "条件をクリア",
+    "research.clearRecent": "消去",
+    "research.collections": "注目コレクション",
+    "research.filtersTitle": "フィルター",
+    "research.plusDeepDives": "Plus深掘り",
+    "research.recent": "最近見た事例",
+    "research.recentSearches": "最近の検索",
+    "research.saved": "保存済み",
+    "research.searchPrompt": "地域・状態・形状で検索",
+    "research.title": "探す",
+    "research.updatedThisWeek": "今週更新された事例",
+    "settings.appearance.dark": "ダーク",
+    "settings.appearance.light": "ライト",
+    "settings.appearance.system": "システムに従う",
+    "settings.cache.confirmMessage": "最近見た事例の履歴だけを消去します。ブックマークは残ります。",
+    "settings.cache.confirmTitle": "最近見た事例を消去しますか？",
+    "settings.cache.count": "%@件",
+    "settings.cache.note": "ブックマークは消去されません（別操作）。",
+    "settings.cache.recents": "最近見た事例",
+    "settings.clearCache": "キャッシュを消去",
+    "settings.dev.api": "Local API",
+    "settings.dev.dataSource": "データソース",
+    "settings.dev.entitlement": "購読状態を上書き",
+    "settings.dev.fixture": "Fixture",
+    "settings.dev.previewState": "状態プレビュー",
+    "settings.manage": "サブスクリプションを管理",
+    "settings.notif.daily": "Daily Briefing",
+    "settings.notif.deniedNote": "通知はシステム設定でオフになっています。設定アプリから許可できます。",
+    "settings.notif.enable": "通知を有効にする",
+    "settings.notif.major": "重要な更新",
+    "settings.notif.openSettings": "システム設定を開く",
+    "settings.notif.primer": "通知は静かに設計されています。煽らず、重要な更新だけをお届けします。",
+    "settings.notif.region": "地域ウォッチ",
+    "settings.notif.saved": "保存事例の更新",
+    "settings.notif.status": "通知の許可",
+    "settings.refresh.auto": "自動で更新",
+    "settings.refresh.interval": "更新間隔",
+    "settings.refresh.interval.min15": "15分",
+    "settings.refresh.interval.min2": "2分",
+    "settings.refresh.interval.min5": "5分",
+    "settings.refresh.note": "アプリに戻ったときと、開いている間は一定間隔で最新情報を取得します。",
+    "settings.restore": "購入を復元",
+    "settings.section.about": "このアプリについて",
+    "settings.section.appearance": "表示",
+    "settings.section.data": "データ・オフライン",
+    "settings.section.developer": "開発者（Debug）",
+    "settings.section.editorial": "編集・AI方針",
+    "settings.section.legal": "プライバシー・規約",
+    "settings.section.notifications": "通知",
+    "settings.section.refresh": "自動更新",
+    "settings.section.subscription": "購読",
+    "settings.section.support": "サポート",
+    "settings.title": "設定",
+    "source.type.database": "専門データベース",
+    "source.type.official": "公式",
+    "source.type.open_data": "オープンデータ",
+    "source.type.press": "報道",
+    "source.type.scientific": "科学",
+    "source.type.social": "一般報告",
+    "tab.map": "地図",
+    "tab.research": "探す",
+    "tab.settings": "設定",
+    "tab.today": "今日",
+    "today.heroTitle": "今日、世界の空で報告されたこと",
+    "today.mergeSummary": "取得できた情報源内で、%@件の報告を%@の事象に統合しました。",
+    "today.savedUpdates": "保存事例の更新",
+    "today.summary.explained": "説明候補優勢",
+    "today.summary.insufficient": "情報不足",
+    "today.summary.merged": "統合事象",
+    "today.summary.notable": "注目・未解決",
+    "today.summary.reports": "新規報告",
+    "today.title": "今日",
+    "today.topCases": "注目の事例",
+    "today.updates": "昨日からの更新"
+  },
+  "summary": {
+    "newReportCount": 12,
+    "mergedCaseCount": 6,
+    "likelyExplainedCount": 3,
+    "insufficientDataCount": 1,
+    "notableUnresolvedCount": 1
+  },
+  "briefing": {
+    "headline": "今日の空：北海の高速光点に新映像、東京湾の灯火は航空機の可能性",
+    "summary": "取得できた情報源内で、12件の報告を6つの事象に統合しました。北海の注目事例に2件目の映像が加わり独立報告が3件に。東京湾の灯火は航空機の可能性が高いと更新。金星の誤認1件を説明済みに。",
+    "tableOfContents": [
+      "北海：高速光点に新しい映像",
+      "東京湾：3つの灯火の検討",
+      "説明が進んだ事例",
+      "新しい公式資料",
+      "観測上の注意"
+    ],
+    "blocks": [
+      {
+        "kind": "heading",
+        "text": "今日の要点",
+        "gated": false
+      },
+      {
+        "kind": "fact",
+        "text": "北海沿岸の注目事例に2件目の連続映像が加わり、独立報告は3件になった。既知現象では現時点で十分に説明できていない。",
+        "gated": true
+      },
+      {
+        "kind": "fact",
+        "text": "東京湾岸で報告された3つの灯火は、時刻と灯火配置から航空機の可能性が高いと更新された。",
+        "gated": true
+      },
+      {
+        "kind": "fact",
+        "text": "アリゾナの明るい一点は金星の誤認として説明済みに分類した。",
+        "gated": true
+      },
+      {
+        "kind": "heading",
+        "text": "観測上の注意",
+        "gated": true
+      },
+      {
+        "kind": "fact",
+        "text": "夕方の西の低空では、金星が『動かない明るい光』として誤認されやすい時期が続く。",
+        "gated": true
+      }
+    ],
+    "sourceCount": 21,
+    "usedCaseCount": 6,
+    "readingMinutes": 5,
+    "disclosure": "editorReviewed",
+    "tomorrowWatch": [
+      "北海事例のレーダー記録の有無",
+      "東京湾の追加映像"
+    ]
+  },
+  "topCaseIDs": [
+    "case_north_sea_notable",
+    "case_tokyo_bay_lights",
+    "case_queensland_fireball",
+    "case_starlink_atacama"
+  ],
+  "cases": [
+    {
+      "var": "starlink",
+      "id": "case_starlink_atacama",
+      "slug": "atacama-light-train",
+      "title": "アタカマ砂漠で観測された整列する光の列",
+      "summary": "複数の観測者が、夜空を等間隔で移動する20個以上の光点を報告。撮影時刻と方角は、直近のStarlink打ち上げ後の可視パスと高い精度で一致した。既知現象一致度が高く、説明済みと判断。",
+      "status": "explained",
+      "countryCode": "CL",
+      "regionName": "アントファガスタ州",
+      "localityName": "アタカマ砂漠",
+      "latitude": -23.65,
+      "longitude": -70.4,
+      "locationPrecision": "approximate",
+      "sourceCount": 6,
+      "independentReportCount": 3,
+      "currentAssessment": "現時点の証拠は、直近の衛星打ち上げによる可視パスで十分に説明できる。異常な運動を示す独立した客観データは確認されていない。",
+      "occurredAtStart": {
+        "day": -3,
+        "hour": 21,
+        "minute": 12
+      },
+      "occurredAtEnd": {
+        "day": -3,
+        "hour": 21,
+        "minute": 18
+      },
+      "publishedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -1,
+        "hour": 14,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -1,
+        "hour": 14,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 74,
+        "independence": 66,
+        "knownPhenomenaMatch": 92,
+        "unresolvedness": 12
+      },
+      "shapeTags": [
+        "光点",
+        "整列",
+        "移動"
+      ],
+      "agreements": [
+        "光点は一定間隔で同一方向へ移動していた",
+        "観測時刻は現地21:12前後で複数報告が一致"
+      ],
+      "contradictions": [
+        "光点の数は「約20」から「40以上」まで報告に幅がある"
+      ],
+      "missingInformation": [
+        "個々の光点の角速度を測定した映像は未入手",
+        "三脚固定・タイムスタンプ付きの連続映像"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "satellite",
+          "label": "Starlink衛星列",
+          "matchScore": 92,
+          "match": [
+            "打ち上げ後の可視パスと時刻・方角が一致",
+            "等間隔・等速の移動",
+            "点滅せず一定光度"
+          ],
+          "nonMatch": [
+            "一部報告の「40以上」は列の重複観測の可能性"
+          ],
+          "limits": "使用した公開軌道要素は観測の18時間前取得。",
+          "excluded": false
+        },
+        {
+          "category": "aircraft",
+          "label": "航空機編隊",
+          "matchScore": 8,
+          "match": [],
+          "nonMatch": [
+            "点滅灯がない",
+            "等間隔すぎる"
+          ],
+          "limits": null,
+          "excluded": true
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "Observatorio Regional",
+          "type": "scientific",
+          "title": "夜間可視衛星パスの記録",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "Diario del Norte",
+          "type": "press",
+          "title": "住民が報告した『光の列』",
+          "role": "supports"
+        },
+        {
+          "id": "s3",
+          "outlet": "CelesTrak (public TLE)",
+          "type": "openData",
+          "title": "公開軌道要素データセット",
+          "role": "supports"
+        },
+        {
+          "id": "s4",
+          "outlet": "SNS投稿（手掛かり）",
+          "type": "social",
+          "title": "夜空の光点の短い動画",
+          "role": "contextualizes"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 2,
+          "summary": "初報を公開。衛星照合を保留として調査継続に設定",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 1,
+          "summary": "公開軌道要素との照合が完了し、説明済みへ更新",
+          "status": "explained",
+          "scoreNote": "既知現象一致度 58 → 92"
+        }
+      ]
+    },
+    {
+      "var": "tokyoAircraft",
+      "id": "case_tokyo_bay_lights",
+      "slug": "tokyo-bay-hovering-lights",
+      "title": "東京湾上空で停止して見えた3つの灯火",
+      "summary": "湾岸エリアの複数地点から、低速で移動しほぼ停止して見えた3つの灯火が報告された。進入経路・時刻は羽田周辺の航空交通と整合的で、航空機の可能性が高いが、確定には角速度データが不足。",
+      "status": "likelyExplained",
+      "countryCode": "JP",
+      "regionName": "東京都",
+      "localityName": "東京湾岸",
+      "latitude": 35.58,
+      "longitude": 139.86,
+      "locationPrecision": "approximate",
+      "sourceCount": 5,
+      "independentReportCount": 2,
+      "currentAssessment": "航空機の可能性が最も高いが、『停止』という主観的印象を裏づけ／反証する客観的な角速度データが不足しており、確定は保留する。",
+      "occurredAtStart": {
+        "day": -1,
+        "hour": 19,
+        "minute": 48
+      },
+      "occurredAtEnd": {
+        "day": -1,
+        "hour": 20,
+        "minute": 5
+      },
+      "publishedAt": {
+        "day": -1,
+        "hour": 22,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": 0,
+        "hour": 22,
+        "minute": 40
+      },
+      "updatedAt": {
+        "day": 0,
+        "hour": 22,
+        "minute": 40
+      },
+      "scores": {
+        "evidenceQuality": 52,
+        "independence": 58,
+        "knownPhenomenaMatch": 71,
+        "unresolvedness": 34
+      },
+      "shapeTags": [
+        "光点",
+        "三角配置",
+        "低速"
+      ],
+      "agreements": [
+        "3つの灯火が三角形の配置で観測された",
+        "時刻は19:48〜20:05に集中"
+      ],
+      "contradictions": [
+        "「停止していた」報告と「ゆっくり東へ移動」報告が併存"
+      ],
+      "missingInformation": [
+        "灯火の角速度を測る固定カメラ映像",
+        "同時刻の航空交通の独立記録",
+        "複数地点からの同期タイムスタンプ映像"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "aircraft",
+          "label": "着陸進入中の航空機",
+          "matchScore": 71,
+          "match": [
+            "時刻が主要空港の進入時間帯と一致",
+            "灯火の配置が着陸灯・翼端灯と整合"
+          ],
+          "nonMatch": [
+            "「完全停止」の主観報告は視線方向の錯覚で説明が必要"
+          ],
+          "limits": "商用航空機の軌跡データは本デモでは未接続。",
+          "excluded": false
+        },
+        {
+          "category": "drone",
+          "label": "ドローン編隊",
+          "matchScore": 22,
+          "match": [
+            "低空・低速"
+          ],
+          "nonMatch": [
+            "同期した点滅パターンの証拠なし"
+          ],
+          "limits": null,
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "湾岸ローカル紙",
+          "type": "press",
+          "title": "『空に止まる光』の目撃相次ぐ",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "地域FM",
+          "type": "press",
+          "title": "リスナーからの目撃提供",
+          "role": "supports"
+        },
+        {
+          "id": "s3",
+          "outlet": "個人観測ブログ",
+          "type": "social",
+          "title": "東京湾の灯火・観測メモ",
+          "role": "contextualizes"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 1,
+          "summary": "初報を公開、調査継続",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 0,
+          "summary": "航空交通時間帯との整合から説明候補ありへ",
+          "status": "likelyExplained",
+          "scoreNote": "既知現象一致度 44 → 71"
+        }
+      ]
+    },
+    {
+      "var": "arizonaVenus",
+      "id": "case_arizona_bright_object",
+      "slug": "arizona-western-sky-object",
+      "title": "アリゾナ西の空で輝いた動かない一点",
+      "summary": "日没後の西の低空で、明るく瞬く一点が約40分間観測された。方位・高度・時刻は金星の位置と精密に一致し、明滅は地平線付近の大気シンチレーションで説明できる。",
+      "status": "explained",
+      "countryCode": "US",
+      "regionName": "アリゾナ州",
+      "localityName": null,
+      "latitude": 33.45,
+      "longitude": -112.07,
+      "locationPrecision": "regionOnly",
+      "sourceCount": 3,
+      "independentReportCount": 1,
+      "currentAssessment": "金星の誤認で高い確度で説明できる。説明済みだが、身近な誤認例として記録に残す価値がある。",
+      "occurredAtStart": {
+        "day": -5,
+        "hour": 19,
+        "minute": 30
+      },
+      "occurredAtEnd": {
+        "day": -5,
+        "hour": 20,
+        "minute": 10
+      },
+      "publishedAt": {
+        "day": -4,
+        "hour": 8,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -4,
+        "hour": 12,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -4,
+        "hour": 12,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 38,
+        "independence": 30,
+        "knownPhenomenaMatch": 95,
+        "unresolvedness": 8
+      },
+      "shapeTags": [
+        "光点",
+        "静止",
+        "瞬き"
+      ],
+      "agreements": [
+        "西の低空で瞬く明るい一点、移動せず"
+      ],
+      "contradictions": [],
+      "missingInformation": [
+        "望遠での拡大映像は未入手",
+        "方位計付きの写真"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "astronomical",
+          "label": "金星（宵の明星）",
+          "matchScore": 95,
+          "match": [
+            "方位・高度・時刻が金星の計算位置と一致",
+            "40分かけてゆっくり沈む挙動"
+          ],
+          "nonMatch": [],
+          "limits": "観測地点は地域中心で近似。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "地域ニュースサイト",
+          "type": "press",
+          "title": "『西の空の謎の光』への問い合わせ",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "天文同好会",
+          "type": "scientific",
+          "title": "金星位置の計算メモ",
+          "role": "supports"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 4,
+          "summary": "天体照合により説明済みで公開",
+          "status": "explained",
+          "scoreNote": null
+        }
+      ]
+    },
+    {
+      "var": "hokkaidoSingle",
+      "id": "case_hokkaido_single",
+      "slug": "hokkaido-east-single-report",
+      "title": "北海道東部で報告された単独の橙色光",
+      "summary": "一名の観測者が、林の上空を数秒間ゆっくり移動した橙色の光を報告。映像・写真はなく、他の独立報告も現時点で確認できていない。評価に必要な情報が不足している。",
+      "status": "insufficientData",
+      "countryCode": "JP",
+      "regionName": "北海道",
+      "localityName": "道東",
+      "latitude": 43.33,
+      "longitude": 145.58,
+      "locationPrecision": "regionOnly",
+      "sourceCount": 1,
+      "independentReportCount": 1,
+      "currentAssessment": "現時点では情報が不足しており、既知現象で説明することも未解明とすることもできない。追加の独立情報を待つ。",
+      "occurredAtStart": {
+        "day": -2,
+        "hour": 3,
+        "minute": 20
+      },
+      "occurredAtEnd": {
+        "day": -2,
+        "hour": 3,
+        "minute": 24
+      },
+      "publishedAt": {
+        "day": -1,
+        "hour": 11,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -1,
+        "hour": 11,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -1,
+        "hour": 11,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 18,
+        "independence": 12,
+        "knownPhenomenaMatch": 22,
+        "unresolvedness": 30
+      },
+      "shapeTags": [
+        "光点",
+        "橙色",
+        "移動"
+      ],
+      "agreements": [],
+      "contradictions": [],
+      "missingInformation": [
+        "映像・写真が一切ない",
+        "第二の独立した目撃者が未確認",
+        "正確な方角・仰角が不明",
+        "同時刻・同地域の他の目撃報告",
+        "近隣の固定カメラ映像"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "fireball",
+          "label": "火球・流星",
+          "matchScore": 22,
+          "match": [
+            "短時間・移動する光"
+          ],
+          "nonMatch": [
+            "『ゆっくり』という記述は典型的な火球と一致しにくい"
+          ],
+          "limits": "映像がなく角速度・継続時間を検証できない。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "読者投稿フォーム",
+          "type": "social",
+          "title": "道東での目撃メモ",
+          "role": "contextualizes"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 1,
+          "summary": "単独報告として記録。情報不足のため評価を保留",
+          "status": "insufficientData",
+          "scoreNote": null
+        }
+      ]
+    },
+    {
+      "var": "northSeaNotable",
+      "id": "case_north_sea_notable",
+      "slug": "north-sea-multi-station",
+      "title": "北海上空で複数地点が捉えた高速の光点",
+      "summary": "沿岸の3つの離れた地点から、通常の航空機より速く見える光点が報告され、うち2件は連続映像を伴う。既知現象との一致は限定的で、良質な証拠を残しつつ未解明部分がある注目事例。",
+      "status": "notableUnresolved",
+      "countryCode": "NO",
+      "regionName": "北海沿岸",
+      "localityName": null,
+      "latitude": 57.1,
+      "longitude": 2.1,
+      "locationPrecision": "approximate",
+      "sourceCount": 8,
+      "independentReportCount": 3,
+      "currentAssessment": "複数の独立地点と映像という比較的良質な証拠がある一方、既知現象では現時点で十分に説明できない。未解明部分が残るが、これは地球外起源を意味しない。",
+      "occurredAtStart": {
+        "day": -4,
+        "hour": 22,
+        "minute": 10
+      },
+      "occurredAtEnd": {
+        "day": -4,
+        "hour": 22,
+        "minute": 19
+      },
+      "publishedAt": {
+        "day": -3,
+        "hour": 10,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": 0,
+        "hour": 15,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": 0,
+        "hour": 15,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 71,
+        "independence": 78,
+        "knownPhenomenaMatch": 34,
+        "unresolvedness": 62
+      },
+      "shapeTags": [
+        "光点",
+        "高速",
+        "水平移動"
+      ],
+      "agreements": [
+        "3つの離れた地点で同時間帯に観測",
+        "2件の映像で光点の高速な水平移動が確認できる"
+      ],
+      "contradictions": [
+        "推定される高度が報告間で大きく異なる"
+      ],
+      "missingInformation": [
+        "3地点の映像の正確な時刻同期",
+        "レーダー記録の独立確認",
+        "三角測量に足る精密な方位データ",
+        "公的なレーダー・航跡情報"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "aircraft",
+          "label": "軍用機・訓練飛行",
+          "matchScore": 34,
+          "match": [
+            "高速移動"
+          ],
+          "nonMatch": [
+            "点滅灯が確認できない",
+            "既知の飛行情報と時刻が合わない"
+          ],
+          "limits": "軍事飛行情報は本デモでは参照不可。",
+          "excluded": false
+        },
+        {
+          "category": "satellite",
+          "label": "衛星フレア",
+          "matchScore": 18,
+          "match": [
+            "明るい一過性の光"
+          ],
+          "nonMatch": [
+            "水平移動が長すぎる"
+          ],
+          "limits": null,
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "沿岸監視ボランティア",
+          "type": "social",
+          "title": "北海の高速光点・観測ログ",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "地域公共放送",
+          "type": "press",
+          "title": "複数地点で謎の光点",
+          "role": "supports"
+        },
+        {
+          "id": "s3",
+          "outlet": "アマチュア天文家",
+          "type": "scientific",
+          "title": "連続フレーム解析メモ",
+          "role": "supports"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 3,
+          "summary": "3地点報告を統合して公開",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 1,
+          "summary": "2件目の映像を追加、独立報告数を3に更新",
+          "status": "",
+          "scoreNote": "独立報告性 60 → 78"
+        },
+        {
+          "daysAgo": 0,
+          "summary": "衛星・航空照合では説明しきれず、注目・未解決へ",
+          "status": "notableUnresolved",
+          "scoreNote": null
+        }
+      ]
+    },
+    {
+      "var": "queenslandFireball",
+      "id": "case_queensland_fireball",
+      "slug": "queensland-green-streak",
+      "title": "クイーンズランドを横切った緑色の閃光",
+      "summary": "広範囲で目撃された緑色の閃光。当初は正体不明だったが、後日、公的な火球データベースの記録および複数の車載カメラ映像と一致し、火球（大火球）と判明した。",
+      "status": "explained",
+      "countryCode": "AU",
+      "regionName": "クイーンズランド州",
+      "localityName": "ブリスベン周辺",
+      "latitude": -27.47,
+      "longitude": 153.02,
+      "locationPrecision": "approximate",
+      "sourceCount": 7,
+      "independentReportCount": 4,
+      "currentAssessment": "後日判明した典型的な火球の例。当初の『未解明』が新情報で更新される過程そのものが記録として価値を持つ。",
+      "occurredAtStart": {
+        "day": -6,
+        "hour": 2,
+        "minute": 5
+      },
+      "occurredAtEnd": {
+        "day": -6,
+        "hour": 2,
+        "minute": 5
+      },
+      "publishedAt": {
+        "day": -5,
+        "hour": 7,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 80,
+        "independence": 72,
+        "knownPhenomenaMatch": 90,
+        "unresolvedness": 10
+      },
+      "shapeTags": [
+        "閃光",
+        "緑色",
+        "高速"
+      ],
+      "agreements": [
+        "緑色の閃光が短時間、空を横切った",
+        "複数の車載カメラが同時刻に記録"
+      ],
+      "contradictions": [],
+      "missingInformation": [
+        "隕石片の回収は未報告",
+        "地上での落下痕・回収報告"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "fireball",
+          "label": "大火球（ボリード）",
+          "matchScore": 90,
+          "match": [
+            "公的火球データの記録と時刻・地域が一致",
+            "緑色は金属燃焼と整合",
+            "車載カメラの軌跡が一致"
+          ],
+          "nonMatch": [],
+          "limits": "初期の目撃時刻には±数分の幅がある。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "全国紙",
+          "type": "press",
+          "title": "夜空を横切った緑の光",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "ドライブレコーダー投稿",
+          "type": "social",
+          "title": "車載カメラの記録（手掛かり）",
+          "role": "contextualizes"
+        },
+        {
+          "id": "s3",
+          "outlet": "公的火球データベース",
+          "type": "official",
+          "title": "火球イベント記録",
+          "role": "supports"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 5,
+          "summary": "正体不明の閃光として公開",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 2,
+          "summary": "公的火球データと車載映像が一致、火球と確定",
+          "status": "explained",
+          "scoreNote": "既知現象一致度 55 → 90"
+        }
+      ]
+    },
+    {
+      "var": "saoPauloDisputed",
+      "id": "case_sao_paulo_disputed",
+      "slug": "sao-paulo-time-conflict",
+      "title": "サンパウロ上空の発光体、出典で時刻が矛盾",
+      "summary": "同一とされる発光体について、複数の報道が異なる発生時刻を伝えている。時刻の食い違いが大きく、単一事象なのか別々の現象なのかを含め、情報間の重大な矛盾がある。",
+      "status": "disputed",
+      "countryCode": "BR",
+      "regionName": "サンパウロ州",
+      "localityName": "サンパウロ",
+      "latitude": -23.55,
+      "longitude": -46.63,
+      "locationPrecision": "approximate",
+      "sourceCount": 5,
+      "independentReportCount": 2,
+      "currentAssessment": "出典間の時刻・方向の矛盾が大きく、同一事象かどうかも確定できない。矛盾を解消できる一次情報が必要。",
+      "occurredAtStart": {
+        "day": -3,
+        "hour": 20,
+        "minute": 0
+      },
+      "occurredAtEnd": {
+        "day": -3,
+        "hour": 23,
+        "minute": 0
+      },
+      "publishedAt": {
+        "day": -2,
+        "hour": 12,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -1,
+        "hour": 16,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -1,
+        "hour": 16,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 44,
+        "independence": 40,
+        "knownPhenomenaMatch": 30,
+        "unresolvedness": 40
+      },
+      "shapeTags": [
+        "発光体",
+        "移動"
+      ],
+      "agreements": [
+        "市内上空で明るい発光体が観測された点は一致"
+      ],
+      "contradictions": [
+        "発生時刻が『20:00頃』と『22:40頃』で約2時間半食い違う",
+        "移動方向が北向きと南向きで逆に報じられている"
+      ],
+      "missingInformation": [
+        "各報道の一次情報源と正確なタイムスタンプ",
+        "タイムスタンプの検証可能な原映像"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "rocket",
+          "label": "ロケット打ち上げ・燃料放出",
+          "matchScore": 30,
+          "match": [
+            "広範囲で見える明るい発光"
+          ],
+          "nonMatch": [
+            "時刻の矛盾が大きく照合できない"
+          ],
+          "limits": "時刻が確定できないため照合の信頼度が低い。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "報道A",
+          "type": "press",
+          "title": "夜空に輝く物体、20時ごろ出現",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "報道B",
+          "type": "press",
+          "title": "深夜の発光体に問い合わせ相次ぐ",
+          "role": "supports"
+        },
+        {
+          "id": "s3",
+          "outlet": "SNSまとめ",
+          "type": "social",
+          "title": "目撃投稿の集約（手掛かり）",
+          "role": "contextualizes"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 2,
+          "summary": "複数報道を統合して公開",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 1,
+          "summary": "時刻・方向の重大な矛盾を確認、争点ありへ",
+          "status": "disputed",
+          "scoreNote": null
+        }
+      ]
+    },
+    {
+      "var": "manilaWithdrawn",
+      "id": "case_manila_withdrawn",
+      "slug": "manila-reposted-clip",
+      "title": "マニラの『UFO動画』、転載と判明し取り下げ",
+      "summary": "拡散した動画は当初マニラ上空の新規報告とされたが、追跡の結果、数年前に別の国で撮影・公開された映像の転載であることが判明した。新規事象としては取り下げた。",
+      "status": "withdrawn",
+      "countryCode": "PH",
+      "regionName": "メトロ・マニラ",
+      "localityName": null,
+      "latitude": 14.6,
+      "longitude": 120.98,
+      "locationPrecision": "withheld",
+      "sourceCount": 4,
+      "independentReportCount": 0,
+      "currentAssessment": "新規のUAP事象ではなく、過去映像の転載。取り下げても記録と監査履歴は消さず、誤情報の事例として保持する。",
+      "occurredAtStart": null,
+      "occurredAtEnd": null,
+      "publishedAt": {
+        "day": -2,
+        "hour": 13,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -1,
+        "hour": 10,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -1,
+        "hour": 10,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 20,
+        "independence": 8,
+        "knownPhenomenaMatch": 15,
+        "unresolvedness": 5
+      },
+      "shapeTags": [
+        "転載",
+        "動画"
+      ],
+      "agreements": [],
+      "contradictions": [
+        "『マニラで昨夜撮影』という説明と、原動画の公開日が数年前で矛盾"
+      ],
+      "missingInformation": [
+        "（新規事象としては不要）原投稿者の確認のみ"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "cameraArtifact",
+          "label": "過去映像の転載",
+          "matchScore": 88,
+          "match": [
+            "逆画像検索で数年前の原投稿を特定",
+            "同一のフレームとメタデータ"
+          ],
+          "nonMatch": [],
+          "limits": "原投稿の撮影地は本デモでは非公開。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "ファクトチェック記事",
+          "type": "press",
+          "title": "拡散動画は過去映像の転載",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "逆画像検索の記録",
+          "type": "openData",
+          "title": "原投稿の照合メモ",
+          "role": "supports"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 2,
+          "summary": "拡散中の動画として仮登録",
+          "status": "underReview",
+          "scoreNote": null
+        },
+        {
+          "daysAgo": 1,
+          "summary": "原投稿を特定、転載と確認し取り下げ",
+          "status": "withdrawn",
+          "scoreNote": null
+        }
+      ]
+    },
+    {
+      "var": "aaroArchive",
+      "id": "case_official_archive",
+      "slug": "official-archive-resolution",
+      "title": "公式アーカイブ：過去の海上観測、機器要因で決着",
+      "summary": "公的機関が過去の海上での観測記録を再解析し、赤外センサーの視差効果（パララックス）による見かけの高速運動だったと結論づけた公開資料の要約。一次資料へのリンクを付す。",
+      "status": "explained",
+      "countryCode": "US",
+      "regionName": "太平洋沖",
+      "localityName": null,
+      "latitude": 31.9,
+      "longitude": -117.3,
+      "locationPrecision": "regionOnly",
+      "sourceCount": 2,
+      "independentReportCount": 1,
+      "currentAssessment": "公的資料に基づき、機器要因で説明できる。一次資料の要約であり、原本リンクを必ず参照できる。",
+      "occurredAtStart": {
+        "day": -40,
+        "hour": 15,
+        "minute": 0
+      },
+      "occurredAtEnd": {
+        "day": -40,
+        "hour": 15,
+        "minute": 3
+      },
+      "publishedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "lastVerifiedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "updatedAt": {
+        "day": -2,
+        "hour": 9,
+        "minute": 0
+      },
+      "scores": {
+        "evidenceQuality": 68,
+        "independence": 40,
+        "knownPhenomenaMatch": 86,
+        "unresolvedness": 14
+      },
+      "shapeTags": [
+        "赤外",
+        "高速",
+        "機器要因"
+      ],
+      "agreements": [
+        "赤外映像に高速で動く物体が写っている"
+      ],
+      "contradictions": [],
+      "missingInformation": [
+        "当時のレーダー生データの完全公開",
+        "独立した第三者による再解析"
+      ],
+      "explanationCandidates": [
+        {
+          "category": "cameraArtifact",
+          "label": "センサーのパララックス効果",
+          "matchScore": 86,
+          "match": [
+            "カメラの旋回と物体の見かけ速度が対応",
+            "距離推定と整合"
+          ],
+          "nonMatch": [
+            "肉眼の同時観測記録は限定的"
+          ],
+          "limits": "公開された解析範囲に基づく。",
+          "excluded": false
+        }
+      ],
+      "sources": [
+        {
+          "id": "s1",
+          "outlet": "公的分析機関",
+          "type": "official",
+          "title": "過去観測記録の再解析レポート（公開版）",
+          "role": "supports"
+        },
+        {
+          "id": "s2",
+          "outlet": "科学系メディア",
+          "type": "press",
+          "title": "再解析の解説記事",
+          "role": "contextualizes"
+        }
+      ],
+      "timeline": [
+        {
+          "daysAgo": 2,
+          "summary": "公的機関の再解析結果を要約して公開",
+          "status": "explained",
+          "scoreNote": null
+        }
+      ]
+    }
+  ],
+  "articles": {
+    "case_starlink_atacama": {
+      "headline": "アタカマの『光の列』は、衛星の可視パスで説明できる",
+      "dek": "複数地点の報告を、公開軌道要素と照合した。",
+      "versionNumber": 2,
+      "readingMinutes": 3,
+      "disclosure": "editorReviewed",
+      "correctionNote": null,
+      "blocks": [
+        {
+          "kind": "heading",
+          "text": "何が報告されたか",
+          "gated": false
+        },
+        {
+          "kind": "fact",
+          "text": "現地時刻21:12前後、アタカマ砂漠周辺の複数の観測者が、等間隔で同一方向へ移動する20個以上の光点を報告した。",
+          "gated": false
+        },
+        {
+          "kind": "heading",
+          "text": "既知現象との照合",
+          "gated": true
+        },
+        {
+          "kind": "fact",
+          "text": "観測時刻と方角は、直近の衛星打ち上げ後の可視パスと高い精度で一致した。等間隔・等速で点滅しない挙動は、軌道上に並んだ衛星列の特徴と整合する。",
+          "gated": true
+        },
+        {
+          "kind": "inference",
+          "text": "一部報告の『40以上』という数は、列の一部を二重に数えた可能性が高い。",
+          "gated": true,
+          "confidence": 0.7
+        },
+        {
+          "kind": "unknown",
+          "text": "個々の光点の角速度を精密に測定した映像は入手できていない。",
+          "gated": true
+        },
+        {
+          "kind": "heading",
+          "text": "現時点の判断",
+          "gated": true
+        },
+        {
+          "kind": "fact",
+          "text": "現在の証拠は衛星の可視パスで十分に説明でき、異常な運動を示す独立した客観データは確認されていない。",
+          "gated": true
+        }
+      ]
+    },
+    "case_north_sea_notable": {
+      "headline": "北海の高速光点：良質な証拠と、残る未解明",
+      "dek": "3地点の独立報告を統合し、衛星・航空データと照合した。",
+      "versionNumber": 3,
+      "readingMinutes": 4,
+      "disclosure": "autoGenerated",
+      "correctionNote": "独立報告数を2から3へ更新（映像追加）。",
+      "blocks": [
+        {
+          "kind": "heading",
+          "text": "何が報告されたか",
+          "gated": false
+        },
+        {
+          "kind": "fact",
+          "text": "現地22:10〜22:19、北海沿岸の3つの離れた地点から、通常の航空機より速く見える光点が報告された。うち2件は連続映像を伴う。",
+          "gated": false
+        },
+        {
+          "kind": "heading",
+          "text": "照合の結果",
+          "gated": true
+        },
+        {
+          "kind": "fact",
+          "text": "確認できた衛星の可視パスおよび一般の航空情報の範囲では、時刻・運動を十分に説明する候補は見つからなかった。",
+          "gated": true
+        },
+        {
+          "kind": "inference",
+          "text": "推定高度が報告間で大きく異なることは、視距離の誤差か、複数物体を同一視した可能性を示唆する。",
+          "gated": true,
+          "confidence": 0.55
+        },
+        {
+          "kind": "unknown",
+          "text": "3地点の映像の正確な時刻同期と、独立したレーダー記録は確認できていない。",
+          "gated": true
+        },
+        {
+          "kind": "heading",
+          "text": "現時点の判断",
+          "gated": true
+        },
+        {
+          "kind": "fact",
+          "text": "複数の独立地点と映像という比較的良質な証拠がある一方、既知現象では現時点で十分に説明できない。未解明部分が残るが、これは地球外起源を意味しない。",
+          "gated": true
+        }
+      ]
+    },
+    "case_tokyo_bay_lights": {
+      "headline": "東京湾の『止まる光』：航空機の可能性が高い",
+      "dek": "湾岸の複数報告を、時刻と灯火配置から検討した。",
+      "versionNumber": 1,
+      "readingMinutes": 2,
+      "disclosure": "autoGenerated",
+      "correctionNote": null,
+      "blocks": [
+        {
+          "kind": "heading",
+          "text": "何が報告されたか",
+          "gated": false
+        },
+        {
+          "kind": "fact",
+          "text": "現地19:48〜20:05、東京湾岸の複数地点から、三角形に配置された3つの灯火が報告された。",
+          "gated": false
+        },
+        {
+          "kind": "heading",
+          "text": "検討",
+          "gated": true
+        },
+        {
+          "kind": "fact",
+          "text": "時刻は主要空港の進入時間帯と一致し、灯火の配置は着陸灯・翼端灯と整合する。",
+          "gated": true
+        },
+        {
+          "kind": "inference",
+          "text": "『完全に停止していた』という印象は、観測者へほぼ正対して進入する航空機で生じやすい視線方向の錯覚で説明できる。",
+          "gated": true,
+          "confidence": 0.6
+        },
+        {
+          "kind": "unknown",
+          "text": "灯火の角速度を測る固定カメラ映像と、同時刻の航空交通の独立記録は不足している。",
+          "gated": true
+        }
+      ]
+    }
+  }
+}

@@ -63,15 +63,76 @@ struct SkyTraceApp: App {
     }
 }
 
-/// Chooses between Welcome and the main tab experience.
+/// Chooses between Welcome and the main tab experience, with a brief launch
+/// title shown over it on cold start.
 struct RootView: View {
     @Environment(AppSettings.self) private var settings
+    @State private var showLaunch = true
 
     var body: some View {
-        if settings.hasCompletedWelcome {
-            RootTabView()
-        } else {
-            WelcomeFlow()
+        ZStack {
+            Group {
+                if settings.hasCompletedWelcome {
+                    RootTabView()
+                } else {
+                    WelcomeFlow()
+                }
+            }
+            if showLaunch {
+                LaunchTitleView()
+                    .transition(.opacity)
+                    .zIndex(1)
+                    .task {
+                        // A brief brand moment on launch, then reveal the app.
+                        try? await Task.sleep(nanoseconds: 1_200_000_000)
+                        withAnimation(.easeOut(duration: 0.5)) { showLaunch = false }
+                    }
+            }
+        }
+    }
+}
+
+/// The launch title: the SkyTrace mark and tagline over an atmospheric backdrop,
+/// shown briefly on cold start and then faded out by `RootView`. Decorative — the
+/// mark is hidden from VoiceOver; the name is a header and the tagline is read.
+struct LaunchTitleView: View {
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var appeared = false
+
+    var body: some View {
+        ZStack {
+            LinearGradient(colors: [SkyColor.aetherZenith, SkyColor.canvas, SkyColor.atmosphereBottom],
+                           startPoint: .top, endPoint: .bottom)
+            RadialGradient(colors: [SkyColor.aetherGlow.opacity(0.28), .clear],
+                           center: UnitPoint(x: 0.5, y: 0.36), startRadius: 4, endRadius: 240)
+            VStack(spacing: SkySpacing.x3) {
+                ZStack {
+                    Circle().stroke(SkyColor.aetherGlow.opacity(0.4), lineWidth: 1)
+                        .frame(width: 96, height: 96)
+                    Circle().stroke(SkyColor.accentPrimary, lineWidth: 1.5)
+                        .frame(width: 62, height: 62)
+                    Circle().fill(SkyColor.aetherGlow).frame(width: 8, height: 8)
+                        .shadow(color: SkyColor.aetherGlow.opacity(0.7), radius: 10)
+                }
+                .scaleEffect(appeared || reduceMotion ? 1 : 0.92)
+                .accessibilityHidden(true)
+                Text(SkyStrings.t("app.name"))
+                    .font(.system(size: 40, weight: .bold, design: .rounded))
+                    .foregroundStyle(SkyColor.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                Text(SkyStrings.t("welcome.tagline"))
+                    .font(SkyTypography.supporting)
+                    .foregroundStyle(SkyColor.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, SkySpacing.x8)
+            }
+            .opacity(appeared || reduceMotion ? 1 : 0)
+            .offset(y: appeared || reduceMotion ? 0 : 8)
+        }
+        .ignoresSafeArea()
+        .task {
+            guard !reduceMotion else { return }
+            withAnimation(.easeOut(duration: 0.7)) { appeared = true }
         }
     }
 }

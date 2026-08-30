@@ -1,0 +1,25 @@
+name: Preflight (Linux verification)
+
+# Runs the repository-level checks that do not require macOS/Xcode: Python
+# tooling, resource validity, Xcode project integrity + source coverage, String
+# Catalog key coverage, legal-site links, and preview/data.json sync. This
+# catches whole classes of breakage before the macOS iOS CI runs.
+
+on:
+  push:
+    branches: [ main, "claude/**", "uiux/**", "auto-refresh/**", "i18n/**", "agent/**", "release/**", "cursor/**" ]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run preflight
+        run: python3 scripts/preflight.py

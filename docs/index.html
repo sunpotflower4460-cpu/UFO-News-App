@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SkyTrace</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230B1621'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%235FD4C8' stroke-width='1.6'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%235FD4C8'/%3E%3C/svg%3E">
+<style>
+  :root{color-scheme:dark}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    background:radial-gradient(1000px 600px at 50% -8%, #0e1a2b 0%, rgba(14,26,43,0) 60%), #070B14;
+    color:#F4F7FB;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Hiragino Sans","Noto Sans JP",sans-serif;
+    line-height:1.7;padding:32px 20px}
+  a{color:#5FD4C8;text-decoration:none}
+  .glyph{filter:drop-shadow(0 0 16px rgba(127,230,220,.5));margin-bottom:6px}
+  h1{font-size:34px;font-weight:800;letter-spacing:2px;margin:0}
+  p.tag{color:#A9B5C7;font-size:13px;max-width:420px;text-align:center;margin:4px 0 18px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:560px;width:100%}
+  .card{display:block;padding:18px;border-radius:16px;background:#0E1623;border:1px solid rgba(255,255,255,.08);transition:border-color .15s,transform .12s}
+  .card:hover{border-color:rgba(95,212,200,.5);transform:translateY(-1px)}
+  .card b{display:block;font-size:16px;color:#F4F7FB}
+  .card span{display:block;color:#A9B5C7;font-size:12.5px;margin-top:4px}
+  footer{color:#728096;font-size:12px;margin-top:24px;text-align:center}
+</style>
+</head>
+<body>
+  <div class="glyph">
+    <svg width="60" height="60" viewBox="0 0 72 72">
+      <circle cx="36" cy="36" r="20" fill="none" stroke="#7FE6DC" stroke-width="1.6"/>
+      <circle cx="36" cy="36" r="30" fill="none" stroke="#7FE6DC" stroke-opacity="0.4" stroke-width="1"/>
+      <circle cx="36" cy="36" r="3.4" fill="#7FE6DC"/>
+    </svg>
+  </div>
+  <h1>SkyTrace</h1>
+  <p class="tag">世界の空に残された、まだ名前のないものを丁寧に記録する。<br>Observational UAP news, with sources, evidence, and uncertainty.</p>
+  <div class="cards">
+    <a class="card" href="/preview/"><b>アプリプレビュー</b><span>SwiftUIアプリの操作可能なプレビュー / Interactive app preview</span></a>
+    <a class="card" href="/site/"><b>方針・法務ページ</b><span>プライバシー・利用規約・サポート ほか / Privacy, Terms, Support</span></a>
+  </div>
+  <footer>© SkyTrace. 日本語と英語で提供しています。 / Provided in Japanese and English.</footer>
+</body>
+</html>
