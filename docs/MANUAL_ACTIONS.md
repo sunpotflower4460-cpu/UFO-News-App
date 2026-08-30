@@ -23,6 +23,18 @@ Claude Codeでは実行できない**もののみ：
 6. **App Store Connect でメタデータ入力**（`docs/APP_STORE_METADATA.md` からコピペ）、
    スクリーンショット添付（6.9"/6.5"、`screenshots.yml`はPro Max優先で撮影）、App Privacy回答、
    年齢レーティング、審査提出。
+7. **Cloudflare Workers Builds（PRの `Workers Builds: ufo` チェック）**（M-030）。
+   このリポジトリには Cloudflare アカウント側で Workers Builds 連携（Worker 名 `ufo`）が接続されており、
+   push ごとに `wrangler deploy` を試みる。失敗は **0 秒・ログ空** で、リポジトリを clone する前に
+   ジョブが中断する兆候＝**アカウント／連携レベルの問題**であり、リポジトリ側の変更では直らない。
+   リポジトリ側の前提（デプロイ可能な Worker 定義）は `wrangler.jsonc`（`docs/` を静的配信）として
+   用意済み・`wrangler deploy --dry-run` で検証済み。**人間が Cloudflare ダッシュボードで**次のいずれか：
+   - **連携を使う場合**：`ufo` Worker → Settings → Builds で、Builds が有効か／ビルド分（プラン・課金）が
+     枯渇していないか／GitHub App `cloudflare-workers-and-pages` のインストール権限がこのリポジトリに
+     残っているか／branch・root directory 設定が一致するかを確認し、手動ビルドで実ログを確認する。
+     復旧すれば `wrangler.jsonc` により `docs/`（`/site/` 法務ページ・`/preview/` アプリプレビュー）が
+     `ufo` Worker として公開される（本番デプロイになる点に留意）。
+   - **連携が不要な場合**：Workers Builds 連携を解除する（この場合 `wrangler.jsonc` は削除してよい）。
 
 > それ以外（アイコン、法務サイト、URL配線、メタデータ下書き、バージョン、Privacy Manifest、
 > 自動更新、多言語、メディア権利ゲート）はコミット済み・CI green。
